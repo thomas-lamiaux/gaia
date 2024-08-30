@@ -11,7 +11,7 @@ Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
 Module Ordinals2.
-  
+
 
 (** ** Normal ordinal functional symbols *)
 
@@ -23,7 +23,7 @@ Lemma ointvP b:
   (inc z (ordinal_interval a b) <-> (a <=o z /\ z <o b)).
 Proof.
 move => ob a z; split.
-  by move => /Zo_P [zb ab]; move:(proj32 ab) => oz;split => //; apply /oltP0. 
+  by move => /Zo_P [zb ab]; move:(proj32 ab) => oz;split => //; apply /oltP0.
 by move => [az] /oltP0 [pa pb pc]; apply: Zo_i.
 Qed.
 
@@ -37,25 +37,25 @@ Qed.
 
 Lemma ointv1 b: ordinalp b -> forall a,
   inc a (ordinal_interval \1o b) <-> (\0o <o a /\ a <o b).
-Proof. 
-move => ob a; split. 
-  by move /(ointvP ob) => [/oge1P wp1 wp2]. 
+Proof.
+move => ob a; split.
+  by move /(ointvP ob) => [/oge1P wp1 wp2].
 by move => [/oge1P wp1 wp2]; apply /(ointvP ob).
 Qed.
 
-Lemma ointv_pr1 b: ordinalp b -> 
+Lemma ointv_pr1 b: ordinalp b ->
   ordinal_interval \0o b = b.
 Proof.
-move=> ob; set_extens t. 
+move=> ob; set_extens t.
   by move /(ointvP0 ob) /oltP0 => [ _ _].
-by move => tb; move:(Os_ordinal ob tb) => ot;apply /(ointvP0 ob) /oltP0. 
+by move => tb; move:(Os_ordinal ob tb) => ot;apply /(ointvP0 ob) /oltP0.
 Qed.
 
 Lemma ointv_pr2 a b z:
   inc z (ordinal_interval a b) -> ordinalp z.
-Proof. by move => /Zo_hi []. Qed. 
+Proof. by move => /Zo_hi []. Qed.
 
-Lemma ointv_sup a b: a <o b -> 
+Lemma ointv_sup a b: a <o b ->
   \osup (ordinal_interval a b) = \osup b.
 Proof.
 move => ab.
@@ -68,7 +68,7 @@ have ou:= (osb _ ub).
 case: (oleT_ee oa ou) => aux1.
   exists u;  last exact (oleR ou).
   by apply /(ointvP ob);split => //; apply /oltP0.
-by exists a => //; apply /(ointvP ob). 
+by exists a => //; apply /(ointvP ob).
 Qed.
 
 Lemma ointv_sup1 a b: a <o b -> limit_ordinal b ->
@@ -84,13 +84,13 @@ Lemma least_ordinal5 x (p: property):
    [/\ ordinalp y, (\0o <o y), ~(p y) &
     (forall z, inc z (ordinal_interval \1o y) -> p z)].
 Proof.
-move=> ox px. 
-have orx:= proj32_1 ox. 
+move=> ox px.
+have orx:= proj32_1 ox.
 pose q z :=  \0o <o z -> p z.
-have nq: ~(q x) by  move => qx; move:(qx ox). 
+have nq: ~(q x) by  move => qx; move:(qx ox).
 move: (least_ordinal3 orx nq).
-rewrite /= /q; set y := least_ordinal _ _. 
-move=> [y1 y2 y3]; split => //; first by ex_middle h; case: y2. 
+rewrite /= /q; set y := least_ordinal _ _.
+move=> [y1 y2 y3]; split => //; first by ex_middle h; case: y2.
 by move => z/(ointv1 y1) [z1 z2]; apply: y3.
 Qed.
 
@@ -100,7 +100,7 @@ Definition ofsu (f:fterm) u := forall a, u <=o a -> ordinalp (f a).
 
 Definition sincr_ofsu (f: fterm) u :=
   forall a b, u <=o a -> a <o b -> (f a) <o (f b).
-Definition sincr_ofn f x := 
+Definition sincr_ofn f x :=
   forall a b, inc a x -> inc b x -> a <o b -> (Vf f a) <o (Vf f b).
 
 Lemma ofs_sincru f u: sincr_ofsu f u -> ofsu f u.
@@ -135,39 +135,39 @@ case (oleT_ell oa ob) => cab; first by rewrite cab.
 move: (rs2 _ ob) => [c oc cv];rewrite cv.
 case (oleT_ell oc ob)=> cbb;first by rewrite cbb.
   by move: (pb _ cbb) (proj2 (i2  _ _ cbb)); rewrite cv => ->.
-by move: (i2 _ _ cab) (i1 _ _ cbb); rewrite av cv; move => h1 [/(oltNge h1)]. 
+by move: (i2 _ _ cab) (i1 _ _ cbb); rewrite av cv; move => h1 [/(oltNge h1)].
 Qed.
 
-Definition cont_ofn f x :=  
+Definition cont_ofn f x :=
    (forall a, inc a x -> limit_ordinal a ->
       Vf f a = \osup (Vfs f a)).
 
 Definition normal_function f x y:=
   [/\ function_prop f x y, sincr_ofn f x & cont_ofn f x].
 
-Definition normal_ofs1 (f: fterm) u:= 
+Definition normal_ofs1 (f: fterm) u:=
   sincr_ofsu f u /\
   (forall X, (forall x, inc x X -> u <=o x) -> nonempty X ->
-    \osup (fun_image X f) = f (\osup X)). 
+    \osup (fun_image X f) = f (\osup X)).
 
 
-Definition normal_ofu_aux (f:fterm) u:= 
-  forall a, limit_ordinal a -> u <o a -> 
+Definition normal_ofu_aux (f:fterm) u:=
+  forall a, limit_ordinal a -> u <o a ->
     f a = \osup (fun_image (ordinal_interval u a) f).
 
-Definition normal_ofs2 (f:fterm) u:= 
+Definition normal_ofs2 (f:fterm) u:=
   sincr_ofsu f u /\ normal_ofu_aux f u.
 
 Definition normal_of_aux (f:fterm) :=
   forall a, limit_ordinal a -> f a = \osup (fun_image a f).
 
 
-Definition normal_ofs (f:fterm):= 
+Definition normal_ofs (f:fterm):=
   sincr_ofs f /\  normal_of_aux f.
 
 Lemma osum_normal a: ordinalp a -> normal_ofs (fun z => a +o z).
 Proof.
-move=> oa; split; first  by move=> x y xy; apply: osum_Meqlt. 
+move=> oa; split; first  by move=> x y xy; apply: osum_Meqlt.
 move=> b lb; move: (lb) => [ob iob olbp].
 have op:= OS_sum2 oa ob.
 have osE: ordinal_set (fun_image b (osum2 a)).
@@ -190,7 +190,7 @@ Proof.
 move=> ap; split; first by move=> x y xy; apply: oprod_Meqlt.
 have oa:= proj32_1 ap.
 move=> b lb; move: (lb) => [ob iob olbp].
-have op:= OS_prod2 oa ob.  
+have op:= OS_prod2 oa ob.
 have osE: ordinal_set (fun_image b (oprod2 a)).
   apply:Os_funI => c /(Os_ordinal ob) oc; fprops.
 apply:oleA; last first.
@@ -199,7 +199,7 @@ apply:oleA; last first.
 split; [exact | by  apply:OS_sup | move => w ].
 rewrite (oprod_rec_def oa ob) => /funI_P [z /setX_P [z1 z2 z3] ->].
 have z4:= (olbp _ z3).
-have o3 := (Os_ordinal ob z3). 
+have o3 := (Os_ordinal ob z3).
 have o4:= (Os_ordinal ob z4).
 apply /setU_P; exists (a *o (osucc (Q z))).
   apply /(oltP (OS_prod2 oa o4)); rewrite (oprod2_succ oa o3).
@@ -215,7 +215,7 @@ Lemma ord_sincr_cont_propu f u:
 Proof.
 move => h hc x y ux xy.
 move: (proj32_1 xy) => oy. move: y oy xy; apply: least_ordinal2 => z sa sc.
-case: (ordinal_limA sa). 
+case: (ordinal_limA sa).
 - move => -> ha; case: (olt0 ha).
 - move=> [w ow wz]; rewrite wz; move /oltSleP => xw.
   have hx:= (h _ (oleT ux xw)).
@@ -229,18 +229,18 @@ case: (ordinal_limA sa).
   have hb:= (oltS (proj32 ux)).
   move: (psx hb) => ha; apply:(olt_leT ha).
   set E := fun_image _ _.
-  have: ordinal_set E. 
+  have: ordinal_set E.
     apply:Os_funI => a /(ointvP sa) [ua az]; exact: (proj31_1 (h _ ua)).
-  move /ord_sup_ub; apply; apply /funI_P; exists (osucc x) => //. 
+  move /ord_sup_ub; apply; apply /funI_P; exists (osucc x) => //.
   apply/ointvP => //; split  =>//;  apply: (oleT ux (proj1 hb)).
 Qed.
 
 
 Lemma ord_sincr_cont_prop f:
     (forall x, ordinalp x -> f x <o f (osucc x)) ->
-    normal_of_aux f -> 
+    normal_of_aux f ->
     sincr_ofs f.
-Proof. 
+Proof.
 move => pa pb.
 have pa1: (forall x, \0o <=o x -> f x <o f (osucc x)).
   by move => x [_ ox _]; apply: pa.
@@ -248,7 +248,7 @@ have pa2: (forall x, limit_ordinal x ->
      \0o <o x -> f x = \osup (fun_image (ordinal_interval \0o x) f)).
   move => x lx; move: (lx) => /pb -> _; rewrite ointv_pr1 //;exact:(proj31 lx).
 move => x y xy.
-exact: (ord_sincr_cont_propu pa1 pa2 (ole0x (proj31_1 xy)) xy). 
+exact: (ord_sincr_cont_propu pa1 pa2 (ole0x (proj31_1 xy)) xy).
 Qed.
 
 Lemma ord_sincr_cont_propv f x y: limit_ordinal x -> ordinalp y ->
@@ -271,11 +271,11 @@ case: (ordinal_limA sa).
   move: (proj31_1 az) => oa;move: (oltS oa) => soa.
   rewrite (pb z zx lz).
   move /limit_ordinal_P: lz=> [_ lz].
-  move: (lz _ az) => pc; apply: (olt_leT (sc _ pc soa (lx _ ax))).  
+  move: (lz _ az) => pc; apply: (olt_leT (sc _ pc soa (lx _ ax))).
   move: fpxy => [fx sf tf].
   have zz: sub z (source f) by rewrite sf; apply: (ordinal_transitive ox zx).
   apply:ord_sup_ub.
-     move => t /(Vf_image_P fx zz) [u uz ->]. 
+     move => t /(Vf_image_P fx zz) [u uz ->].
      apply: (Os_ordinal oy); rewrite - tf; Wtac.
   by apply /(Vf_image_P fx zz); exists (osucc a) => //; apply/(oltP oz).
 Qed.
@@ -290,17 +290,17 @@ split; move=> [p2 p3]; split => //.
    have [[ou ox _] _ ]:= ux; have uu := oleR ou.
    set X := (ordinal_interval u x).
    have p4: forall x, inc x X -> u <=o x by move=> y /(ointvP ox) [].
-   have p5: nonempty X by exists u; apply /ointvP. 
+   have p5: nonempty X by exists u; apply /ointvP.
    rewrite (p3 _ p4 p5 ) (ointv_sup1 ux lx) //.
 move=> X Xp neX.
 have p1:=(ofs_sincru p2).
 set Y:= (fun_image X f).
 have p4: ordinal_set Y by apply:Os_funI => z zX; apply: p1; apply: Xp.
-have p7: ordinal_set X by move=>j /Xp[]. 
+have p7: ordinal_set X by move=>j /Xp[].
 case: (inc_or_not (union X) X) => sX.
   have sf: inc (f (union X)) Y by apply /funI_P; ex_tac.
   have le1:= (ord_sup_ub p4 sf).
-  have p5: ordinalp (f (union X)) by case: le1. 
+  have p5: ordinalp (f (union X)) by case: le1.
   have p6:  (forall i, inc i Y -> i <=o (f (union X))).
     move=> i /funI_P [z zX ->].
     have h:= (ord_sup_ub p7 zX).
@@ -308,10 +308,10 @@ case: (inc_or_not (union X) X) => sX.
     by move => h2; case: (p2 _ _ (Xp _ zX) h2).
   exact:(oleA (ord_ub_sup p5 p6) le1).
 case: (ord_sup_inVlimit p7 neX) => // ls.
-have ltus: u <o \osup X.  
+have ltus: u <o \osup X.
   move: (neX) => [x xX]; apply: (ole_ltT (Xp _ xX)).
   split; [ exact: (ord_sup_ub p7 xX) | dneg w; ue ].
-rewrite (p3 _ ls ltus). 
+rewrite (p3 _ ls ltus).
 have oos :=  (proj32_1 ltus).
 have sXoi: sub X (ordinal_interval u (union X)).
   move=> t tX; apply /(ointvP oos).
@@ -325,7 +325,7 @@ apply: ord_ub_sup => //.
 move=> i /funI_P [z /(ointvP oos) [uz zsX] ->].
 move:(olt_sup p7 zsX) => [t tX zt].
 apply:(oleT (proj1 (p2 _ _ uz zt ))).
-apply: ord_sup_ub  => //; apply /funI_P; ex_tac. 
+apply: ord_sup_ub  => //; apply /funI_P; ex_tac.
 Qed.
 
 Lemma normal_ofs_equiv1 f:
@@ -363,7 +363,7 @@ have iua: inc u a by apply/(oltP oa).
 have iva: inc v a by apply/(oltP oa).
 case:(ole_eqVlt uv)=> nuv; last by  case:(pa _ _ iua iva nuv).
 have /(Os_ordinal ob) /oleR ov : inc (Vf f v) b by Wtac.
-by rewrite nuv. 
+by rewrite nuv.
 Qed.
 
 Lemma normal_function_equiv f a b X:
@@ -373,7 +373,7 @@ Lemma normal_function_equiv f a b X:
 Proof.
 move => oa ob h.
 have incf:= (normal_function_incr oa ob h).
-move: h => [[ff sf tf] pa pb] Xa nex. 
+move: h => [[ff sf tf] pa pb] Xa nex.
 have osx:= Os_sub (Os_ordinal oa) Xa.
 set y := \osup X.
 case: (equal_or_not y a) => eya; [by left | right].
@@ -399,7 +399,7 @@ symmetry; apply: ord_sup_1cofinal; first split.
   move: (olt_sup osx uy) => [z zx uz].
   have h: inc (Vf f z) (Vfs f X) by apply/(Vf_image_P ff Xsf); ex_tac.
   have /(oltP oa) za:= (Xa _ zx).
-  ex_tac; apply: (incf _ _ (proj1 uz) za). 
+  ex_tac; apply: (incf _ _ (proj1 uz) za).
 - move =>t /(Vf_image_P ff ysf) [u uX ->];apply: (Os_ordinal ob); Wtac.
 Qed.
 
@@ -430,7 +430,7 @@ case: (ordinal_limA p1).
 Qed.
 
 Lemma normal_ofs_uniqueness f g (p:fterm):
-   normal_ofs f -> normal_ofs g -> 
+   normal_ofs f -> normal_ofs g ->
    (forall x,  ordinalp x -> f (osucc x) = p (f x)) ->
    (forall x,  ordinalp x -> g (osucc x) = p (g x)) ->
   (f \0o = g \0o) ->
@@ -439,9 +439,9 @@ Proof.
 move => pa pb pc pd pe y oy.
 have pa':= (normal_ofs_equiv2 OS0 pa).
 have pb':= (normal_ofs_equiv2 OS0 pb).
-have pc':(forall x, \0o <=o x -> f (osucc x) = p (f x)). 
+have pc':(forall x, \0o <=o x -> f (osucc x) = p (f x)).
   by move => x xp; apply: pc (proj32 xp).
-have pd':(forall x, \0o <=o x -> g (osucc x) = p (g x)). 
+have pd':(forall x, \0o <=o x -> g (osucc x) = p (g x)).
   move => x xp; apply: pd (proj32 xp).
 apply:(normal_ofs_uniqueness1 pa' pb' OS0 pc' pd' pe); apply:(ole0x oy).
 Qed.
@@ -450,10 +450,10 @@ Lemma normal_ofs_existence (p:fterm) a
   (osup := fun f => \osup (fun_image (domain f) (fun z => (p (Vg f z)))))
   (osupp:= fun f => Yo (domain f = \0o) a (osup f))
   (f:= transdef_ord osupp):
-  (forall x, ordinalp x -> x <o p x) -> 
+  (forall x, ordinalp x -> x <o p x) ->
   (forall x y, x <=o y -> p x <=o p y) ->
   ordinalp a ->
-  [/\ normal_ofs f, f \0o = a & 
+  [/\ normal_ofs f, f \0o = a &
    (forall x,  ordinalp x -> f (osucc x) = p (f x)) ].
 Proof.
 move => incrp pi oa.
@@ -465,7 +465,7 @@ have frec3 :forall y, \0o <o y -> f y = \osup (fun_image y (fun z => p (f z))).
 have frec4: forall x, ordinalp x -> ordinalp (f x).
   apply: least_ordinal2' => x ox hr.
   case: (ozero_dichot ox); first by move ->; ue.
-  move/frec3 => ->; apply:OS_sup  => t /funI_P [z sa ->]. 
+  move/frec3 => ->; apply:OS_sup  => t /funI_P [z sa ->].
   exact:(proj32_1 (incrp _ (hr _ sa))).
 have frec5: forall x y,  x <o y -> p (f x) <=o f y.
   move => x y xy.
@@ -473,15 +473,15 @@ have frec5: forall x y,  x <o y -> p (f x) <=o f y.
   have ixy:= (olt_i xy).
   have yp:= (ole_ltT (ole0x (proj31_1 xy)) xy).
   rewrite (frec3 _ yp); apply: ord_sup_ub;last by apply /funI_P; ex_tac.
-  by move => t /funI_P [z /(Os_ordinal oy) /frec4 /incrp [[_ h _] _] ->]. 
+  by move => t /funI_P [z /(Os_ordinal oy) /frec4 /incrp [[_ h _] _] ->].
 have frec6: forall x y,  x <o y -> (f x) <o f y.
   move => x y xy; move: (frec5 _ _ xy) => l1.
-  exact: (olt_leT (incrp _ (frec4 _ (proj31_1 xy))) l1). 
+  exact: (olt_leT (incrp _ (frec4 _ (proj31_1 xy))) l1).
 have frec7:forall x, ordinalp x -> f (osucc x) = p (f x).
   move => x ox.
   have xsx: x <o osucc x by apply: oltS.
   apply: oleA (frec5 _ _ xsx).
-  have osx:= (OS_succ ox). 
+  have osx:= (OS_succ ox).
   rewrite (frec3 _  (olt0S ox)) /osup;apply: ord_ub_sup.
   - by move:(incrp _ (frec4 _ ox)) => [[]].
   - move => t /funI_P [z zx ->]; apply: pi.
@@ -489,10 +489,10 @@ have frec7:forall x, ordinalp x -> f (osucc x) = p (f x).
     by move /(oltP ox) => /frec6 [].
 split => //; split =>// x lx; move:(proj31 lx) => ox.
 rewrite (frec3 _ (limit_pos lx)).
-have hz: forall z, inc z x -> z <o osucc z. 
-  move => z zx ;apply: (oltS (Os_ordinal ox zx)). 
+have hz: forall z, inc z x -> z <o osucc z.
+  move => z zx ;apply: (oltS (Os_ordinal ox zx)).
 apply: ord_sup_2cofinal;split; move => c /funI_P [z zx ->]; move:(hz _ zx)=> ht.
-  move:(proj33 lx _ zx) => h; exists (f (osucc z)); last by apply:frec5. 
+  move:(proj33 lx _ zx) => h; exists (f (osucc z)); last by apply:frec5.
   apply /funI_P; ex_tac.
 exists (f (osucc z)); first by apply/funI_P; ex_tac; apply: frec7 (proj31_1 ht).
 by case: (frec6 _ _ ht).
@@ -502,22 +502,22 @@ Qed.
 Lemma normal_ofs_limit1 f u x: normal_ofs1 f u -> u <o x -> limit_ordinal x ->
   limit_ordinal (f x).
 Proof.
-move=> /normal_ofs_equiv [pa pb] cux lx. 
+move=> /normal_ofs_equiv [pa pb] cux lx.
 rewrite (pb _ lx cux); move/limit_ordinal_P: (lx) => [[[_ ox _] _] pd].
 have ov := (ofs_sincru pa).
 set E :=  (fun_image (ordinal_interval u x) f).
 have ou:= proj31_1 cux; have luu:= (oleR ou).
 have uu: inc u (ordinal_interval u x) by apply/(ointvP ox).
-have oe: ordinal_set E. 
-  by apply:Os_funI => z /(ointvP ox) [uz _]; apply: ov. 
+have oe: ordinal_set E.
+  by apply:Os_funI => z /(ointvP ox) [uz _]; apply: ov.
 have ne: nonempty E by rewrite /E;exists (f u); apply /funI_P;ex_tac.
 case: (ord_sup_inVlimit oe ne) => //.
 move=> /funI_P [z /(ointvP ox) [sa /pd sb] fz].
 have lt1:= (oltS (proj32 sa)).
-have se: inc (f (osucc z)) E.  
+have se: inc (f (osucc z)) E.
   apply /funI_P; exists (osucc z)=> //;apply /(ointvP ox).
-  split => //;exact (oleT sa (proj1 lt1)). 
-move: (ord_sup_ub oe se); rewrite fz => l1. 
+  split => //;exact (oleT sa (proj1 lt1)).
+move: (ord_sup_ub oe se); rewrite fz => l1.
 case:(oltNge(pa z (osucc z) sa lt1) l1).
 Qed.
 
@@ -528,11 +528,11 @@ move => /(normal_ofs_equiv2 OS0) nf lx; apply:(normal_ofs_limit1 nf _ lx).
 by apply: limit_pos.
 Qed.
 
-Lemma normal_ofs_compose1 f fb g gb: 
+Lemma normal_ofs_compose1 f fb g gb:
   ordinalp fb -> ordinalp  gb -> fb <=o g gb ->
   normal_ofs1 f fb -> normal_ofs1 g gb -> normal_ofs1 (f \o g) gb.
 Proof.
-move => ofb ogb le1 [sa pa] [sb pb]. 
+move => ofb ogb le1 [sa pa] [sb pb].
 have aux: forall z, gb <=o z -> fb <=o g z.
   move => z zh;  apply: (oleT le1).
   have oug:= (oleR (ofs_sincru sb zh)).
@@ -551,7 +551,7 @@ rewrite -(pa _ sc nY); congr union; set_extens t; move/funI_P => [z za ->].
 move/funI_P: za => [u tX ->]; apply/funI_P; ex_tac.
 Qed.
 
-Lemma normal_ofs_compose f g: 
+Lemma normal_ofs_compose f g:
  normal_ofs f -> normal_ofs g -> normal_ofs (f \o g).
 Proof.
 move => /(normal_ofs_equiv2 OS0) pa /(normal_ofs_equiv2 OS0) pb.
@@ -563,7 +563,7 @@ Qed.
 Lemma osi_gex x f: sincr_ofs f -> ordinalp x -> x <=o (f x).
 Proof.
 move=> finc; move: x; apply: least_ordinal2 =>  x ox xp.
-case: (oleT_el ox (ofs_sincr finc ox)) => // lt1. 
+case: (oleT_el ox (ofs_sincr finc ox)) => // lt1.
 case: (oleNgt (xp _ lt1) (finc _ _ lt1)).
 Qed.
 
@@ -575,7 +575,7 @@ move=> [[ff sf tf] finc _] laxx.
 have [[ox oa _ ] _] := laxx.
 move: x ox laxx; apply: least_ordinal2 => x ox xp lxa.
 have xsf: inc x a by apply /(oltP oa).
-have ft: inc (Vf f x) a by Wtac. 
+have ft: inc (Vf f x) a by Wtac.
 have ft2: Vf f x <o a by apply/(oltP oa).
 split => //; case: (oleT_el ox (proj31_1 ft2)) => // lt1.
 case: (oleNgt (proj1 (xp (Vf f x) lt1 ft2)) (finc (Vf f x) x ft xsf lt1)).
@@ -590,7 +590,7 @@ move=> finc ox.
 have lxy:= (osi_gex finc ox).
 pose p y := x <=o (f y).
 have [pa pb pc]:= (@least_ordinal4 x p ox lxy).
-by exists (least_ordinal p x). 
+by exists (least_ordinal p x).
 Qed.
 
 
@@ -608,13 +608,13 @@ case: (oltNge (finc (f x)  x (oleT ut pa) lt1) (xp _ lt1 pa)).
 Qed.
 
 
-Lemma osum_limit x y: ordinalp x -> limit_ordinal y -> 
+Lemma osum_limit x y: ordinalp x -> limit_ordinal y ->
   limit_ordinal (x +o y).
 Proof.
-by move=> ox ly; apply:normal_ofs_limit=> //; apply: osum_normal. 
+by move=> ox ly; apply:normal_ofs_limit=> //; apply: osum_normal.
 Qed.
 
-Lemma oprod_limit x y: \0o <o x -> limit_ordinal y -> 
+Lemma oprod_limit x y: \0o <o x -> limit_ordinal y ->
   limit_ordinal (x *o y).
 Proof. by move=> ox ly; apply:normal_ofs_limit=> //; apply: oprod_normal. Qed.
 
@@ -638,7 +638,7 @@ case; first by move => [-> osa]; rewrite (osum0r oa).
 move => [c oc ->]; rewrite - (osum2_succ oa oc); exists (a +o c); fprops.
 Qed.
 
-  
+
 Lemma oprod_succP a b: ordinalp a -> ordinalp b ->
   (osuccp  (a *o b) <-> osuccp a /\ osuccp b).
 Proof.
@@ -653,12 +653,12 @@ case: (ordinal_limA oa).
   have ap: \0o <o a by move: sa => [a' /olt0S oa' ->].
   case: (ordinal_limA ob).
   + by move => bz; move: h; rewrite bz oprod0r // => /esym /osucc_nz.
-  + done. 
+  + done.
   + move => lb; move: (oprod_limit ap lb); rewrite h.
     by move/limit_ordinal_P => [ra rb]; case /oltSSP:(rb _ (oltS oc)).
 - move => /limit_ordinal_P [ap la].
   move: (oquoremP oc ap) =>  [oq or cv rs].
-  move:(osumA (OS_prod2 oa oq) or OS1). 
+  move:(osumA (OS_prod2 oa oq) or OS1).
   rewrite - cv (osucc_pr or) (osucc_pr oc) => ha.
   move: (OS_succ oc) (OS_succ or)(la _ rs) => osc osr rs'.
   have d1:odiv_pr0 (osucc c) a (oquo c a) (osucc (orem c a)) by [].
@@ -670,11 +670,11 @@ Qed.
 Lemma odiff_normal a: ordinalp a -> normal_ofs1 (odiff ^~ a) a.
 Proof.
 move => oa; apply/normal_ofs_equiv.
-have aux1:forall u v, a <=o u -> u <o v -> u -o a <o v -o a. 
+have aux1:forall u v, a <=o u -> u <o v -> u -o a <o v -o a.
   move => u v au uv; move: (oleT au (proj1 uv)) => av.
   move: (odiff_pr au) (odiff_pr av) => [ou e1] [ov e2].
   by move: uv; rewrite {1} e1 {1} e2; move /(osum_Meqltr ou ov oa).
-have aux:forall u v, a <=o u -> u <=o v -> u -o a <=o v -o a. 
+have aux:forall u v, a <=o u -> u <=o v -> u -o a <=o v -o a.
   move => u v au uv; move: (oleT au uv) => av.
   move: (odiff_pr au) (odiff_pr av) => [ou e1] [ov e2].
   by move: uv; rewrite {1} e1 {1} e2; move /(osum_Meqler ou ov oa).
@@ -690,7 +690,7 @@ have os:= (OS_sup ose).
 have le1 := (ord_ub_sup sa m1).
 case: (oleT_el sa os) => le2; first by apply:oleA.
 move: (osum_Meqlt le2 oa); rewrite - sb => eq1.
-have: inc (\osup E) E. 
+have: inc (\osup E) E.
   apply /funI_P;exists (a +o \osup E); last by symmetry; apply: odiff_pr1.
   by apply/(ointvP ox); split => //; apply:osum_Mle0.
 move => /funI_P  [y /(ointvP ox) [e1 e2] eq].
@@ -699,7 +699,7 @@ have h5 :=(oltS (proj32 e1)).
 have h6:= (aux1 _ _ e1 h5).
 have se: (inc ((osucc y) -o a) E).
    apply/funI_P; exists (osucc y) => //; apply/(ointvP ox); split => //.
-   exact: (oleT e1 (proj1 h5)). 
+   exact: (oleT e1 (proj1 h5)).
 by move: (ord_sup_ub ose se); rewrite eq => /(oltNge h6).
 Qed.
 
@@ -710,18 +710,18 @@ move => sa oa.
 have sb:= (normal_ofs_compose sa (osum_normal oa)).
 have sc:= (odiff_normal oa).
 set f1 := (odiff^~ a); set f2:= (f \o (osum2 a)).
-have h1: a <=o f2 \0o.  
+have h1: a <=o f2 \0o.
  rewrite /f2 /= (osum0r oa); exact: (osi_gex (proj1 sa) oa).
 move/normal_ofs_equiv1: sb => sb'; apply/normal_ofs_equiv1.
-exact:(normal_ofs_compose1 oa OS0 h1 sc sb'). 
+exact:(normal_ofs_compose1 oa OS0 h1 sc sb').
 Qed.
 
 Lemma normal_ofs_existence1 (p:fterm) a u:
-  (forall x, ordinalp x -> x <o p x) -> 
+  (forall x, ordinalp x -> x <o p x) ->
   (forall x y, x <=o y -> p x <=o p y) ->
   ordinalp a -> ordinalp u ->
-  exists f, 
-  [/\ normal_ofs1 f u, f u = a & 
+  exists f,
+  [/\ normal_ofs1 f u, f u = a &
    (forall x,  u <=o x -> f (osucc x) = p (f x)) ].
 Proof.
 move => ha hb oa ou.
@@ -736,7 +736,7 @@ pose f x := g (x -o u); exists f; split; last first.
   have ra:=(normal_ofs_equiv2 OS0 ga).
   have rb: \0c <=o u -o u by  rewrite (odiff_wrong leuu); apply: (oleR OS0).
   have rc := (odiff_normal ou).
-  exact:(normal_ofs_compose1  (g:= (odiff^~ u) ) OS0 ou rb ra rc). 
+  exact:(normal_ofs_compose1  (g:= (odiff^~ u) ) OS0 ou rb ra rc).
 Qed.
 
 Lemma osum_increasing5 u f: ordinalp u ->
@@ -748,13 +748,13 @@ move=> ou h.
 have osw:= (ofs_sincru h).
 set goal1 := (forall x, _).
 have pr1:goal1.
-  move=> x y ux oy. 
+  move=> x y ux oy.
   have ox:= proj32 ux.
-  move: y oy; apply: least_ordinal2 => z oz hr.  
+  move: y oy; apply: least_ordinal2 => z oz hr.
   have owx:= (osw _ ux).
   have pa t: ordinalp t -> u <=o (x +o t).
-    move=>  ot;exact: (oleT ux (osum_Mle0 ox ot)). 
-  have pb t: t <o z -> f x +o t <o f (x+o z). 
+    move=>  ot;exact: (oleT ux (osum_Mle0 ox ot)).
+  have pb t: t <o z -> f x +o t <o f (x+o z).
     move => ltz; apply: (ole_ltT (hr t ltz)).
     exact: (h _ _ (pa _ (proj31_1 ltz)) (osum_Meqlt ltz ox)).
   case: (ordinal_limA oz).
@@ -780,7 +780,7 @@ have bp: \0o <o b by apply: (olt0S ou).
 have [_ aux] := (oprod_normal bp).
 move: (aux _ omega_limit); rewrite - /c => e1; rewrite {1} e1.
 have owc: ordinalp (f c) by apply:osw.
-have H: forall z, inc z omega0 -> ordinalp (b *o z). 
+have H: forall z, inc z omega0 -> ordinalp (b *o z).
    move => z zo;exact: (OS_prod2 ob  (OS_nat zo)).
 apply: ord_ub_sup => // t /funI_P[z zo ->]; move:(H _ zo) => obz //.
 have owb: ordinalp (f b) by apply: osw.
@@ -806,7 +806,7 @@ case: (equal_or_not x (f y)) => xo.
   rewrite xo;right; exists y; split => //; apply: (oleR (proj32 xle)).
 have xlt: x <o f y by split.
 case: (ordinal_limA oy).
-    by move => ye; move: xlt; rewrite ye => xx; left.  
+    by move => ye; move: xlt; rewrite ye => xx; left.
   move => [z oz yz]; rewrite yz in oy.
   right; exists z; rewrite -yz;split => //.
   move: (oltS oz); rewrite -yz => le3.
@@ -824,7 +824,7 @@ Qed.
 
 Definition least_fixedpoint_ge (f:fterm) x y:=
  [/\ x <=o y, f y = y & (forall z, x <=o z -> f z = z -> y <=o z)].
-Definition the_least_fixedpoint_ge (f:fterm)  x := 
+Definition the_least_fixedpoint_ge (f:fterm)  x :=
   (\osup (target (induction_defined f x))).
 
 Definition fixpoints f := Zo (source f) (fun z => Vf f z = z).
@@ -836,7 +836,7 @@ Proof.
 move=> nf0 ux xfx; rewrite /the_least_fixedpoint_ge.
 have ox:= proj31 xfx.
 move: nf0 => [sif nf].
-have aux: forall t, x <=o t -> t <=o f t. 
+have aux: forall t, x <=o t -> t <=o f t.
   by move => t; apply:(osi_gexu sif ux xfx).
 move: (induction_defined_pr f x).
 set g := induction_defined f x; move=> [sg sjg gz gnz].
@@ -847,23 +847,23 @@ have pb: forall i, inc i (target g) -> x <=o i.
    move: j jsg; rewrite sg; apply: Nat_induction.
      rewrite gz; apply: (oleR ox).
    move=> n nN; rewrite (gnz _ nN) => p1.
-   exact: (oleT p1 (aux _ p1)). 
+   exact: (oleT p1 (aux _ p1)).
 have pc: (forall i, inc i (target g) -> u <=o i).
    move=> i itg; exact: (oleT ux  (pb _ itg)).
 have xi: inc x (target g) by rewrite -gz; Wtac; rewrite sg; apply:NS0.
 have ne: nonempty (target g) by exists x.
-have otg: ordinal_set (target g) by move=> t tg; case: (pb _ tg). 
+have otg: ordinal_set (target g) by move=> t tg; case: (pb _ tg).
 split => //.
 - exact:(ord_sup_ub otg xi).
-- rewrite - (nf _ pc ne). 
+- rewrite - (nf _ pc ne).
   apply: ord_sup_1cofinal; [ split | done].
     move => t /funI_P [z ztg ->].
     move: ((proj2 sjg) _ ztg) => [i isg ->].
     by rewrite sg in isg; rewrite -gnz  //; Wtac;rewrite sg; apply:NS_succ.
   move=> a atg.
   move: ((proj2 sjg) _ atg) => [i isg ->].
-  rewrite sg in isg. 
-  have wt: inc (Vf g i) (target g) by Wtac. 
+  rewrite sg in isg.
+  have wt: inc (Vf g i) (target g) by Wtac.
   exists (Vf g (csucc i)); rewrite (gnz _ isg).
      by apply /funI_P; exists (Vf g i).
   by apply: aux; apply: pb.
@@ -871,7 +871,7 @@ split => //.
   have oz: ordinalp z by case:xz.
   apply: ord_ub_sup => //.
   move=> i itg; move: ((proj2 sjg) _  itg) => [j jsg ->].
-  move: j jsg; rewrite sg; apply: Nat_induction; first by rewrite gz. 
+  move: j jsg; rewrite sg; apply: Nat_induction; first by rewrite gz.
   move=> n nN; rewrite (gnz _ nN) => p1.
   have /pc le1 : inc (Vf g n) (target g) by Wtac; ue.
   case: (equal_or_not (Vf g n) z) => h; first by rewrite h fz; apply:oleR.
@@ -879,7 +879,7 @@ split => //.
 Qed.
 
 Lemma normal_ofs_fix x f:
-  normal_ofs f -> ordinalp x -> 
+  normal_ofs f -> ordinalp x ->
   least_fixedpoint_ge f x (the_least_fixedpoint_ge f x).
 Proof.
 move => nf ox.
@@ -887,11 +887,11 @@ move/normal_ofs_equiv1:(nf)=> nf1; apply: (normal_ofs_fix1 nf1 (ole0x ox)).
 exact:(osi_gex (proj1 nf) ox).
 Qed.
 
-Lemma normal_function_fix f a x 
-  (y:= the_least_fixedpoint_ge (Vf f) x): 
+Lemma normal_function_fix f a x
+  (y:= the_least_fixedpoint_ge (Vf f) x):
   normal_function f a a ->  x <o a ->
   (y = a \/
-  [/\ x <=o y, y <o a, Vf f y = y & 
+  [/\ x <=o y, y <o a, Vf f y = y &
     (forall z, x <=o z -> z <o a -> Vf f z = z -> y <=o z)]).
 Proof.
 move=> nf lxa.
@@ -911,7 +911,7 @@ have pb: forall i, inc i (target g) -> x <=o i /\ i <o a.
    move: (aux _ p2) => [s1 s2]; split => //; apply: (oleT p1 s1).
 have osg: ordinal_set (target g) by move => i /pb [_][[]].
 have sta: sub (target g) a by move => t /pb  [_] /(oltP oa).
-have netg: nonempty (target g) by exists (Vf g \0c); Wtac; rewrite sg. 
+have netg: nonempty (target g) by exists (Vf g \0c); Wtac; rewrite sg.
 have sa: x <=o y.
   by apply :ord_sup_ub => //; rewrite - /g - gz; Wtac; rewrite sg.
 have sb: y <=o a by apply :ord_ub_sup => // i /pb [_ []].
@@ -920,7 +920,7 @@ case: (equal_or_not y a) => eya; [by left | right;split  => //; last first].
    have oz:= proj32 xz.
    apply: ord_ub_sup => //.
    move=> i itg; move: ((proj2 sjg) _  itg) => [j jsg ->].
-   move: j jsg; rewrite sg; apply: Nat_induction; first by rewrite gz. 
+   move: j jsg; rewrite sg; apply: Nat_induction; first by rewrite gz.
    move=> n nN; rewrite (gnz _ nN) => p1; rewrite - fz.
    case: (equal_or_not ( Vf g n) z) => neq; first by rewrite neq fz; apply:oleR.
    have ha: inc (Vf g n) a by apply /(oltP oa); apply: (ole_ltT p1 za).
@@ -956,9 +956,9 @@ Qed.
 
 
 Lemma next_fix_point_small1 f C x (E:= cnext C)
-  (y:= the_least_fixedpoint_ge (Vf f) x): 
+  (y:= the_least_fixedpoint_ge (Vf f) x):
   infinite_c C -> normal_function f E E -> inc x E ->
-   [/\ x <=o y, inc y E, Vf f y = y & 
+   [/\ x <=o y, inc y E, Vf f y = y &
     (forall z, x <=o z -> inc z E -> Vf f z = z -> y <=o z)].
 Proof.
 move => icE nf xE.
@@ -975,14 +975,14 @@ have ye: inc y E.
   apply: Nat_induction; first by rewrite qc.
   move => n nN /fee hr; rewrite qd //.
 have [oe _] := (pa).
-have xe: x <o E by apply/oltP. 
+have xe: x <o E by apply/oltP.
 case: (normal_function_fix nf xe); rewrite -/y.
   by move => yee; move:ye; rewrite yee; move: (ordinal_irreflexive oe).
 by move => [ta tb tc td]; split => // z xz ze; apply: td => //; apply/oltP.
 Qed.
 
 Lemma normal_fix_cofinal C (E := cnext C) f:
-   infinite_c C -> normal_function f E E -> 
+   infinite_c C -> normal_function f E E ->
    ord_cofinal (fixpoints f) E.
 Proof.
 move => icE nf.
@@ -995,9 +995,9 @@ by exists y => //; apply/Zo_P.
 Qed.
 
 
-Lemma normal_ofs_restriction f C (E := cnext C): 
+Lemma normal_ofs_restriction f C (E := cnext C):
   infinite_c  C-> normal_ofs f ->
-  (forall x, inc x E -> inc (f x) E) -> 
+  (forall x, inc x E -> inc (f x) E) ->
   normal_function (Lf f E E) E E.
 Proof.
 move => ice [nfa nfb] Esf.
@@ -1023,13 +1023,13 @@ Lemma big_ofs
   (f:= transdef_ord osupp):
   [/\ normal_ofs f, f \0o = \0o,
    (forall x,  ordinalp x -> f (osucc x) = p (f x))&
-   forall C, infinite_c C -> 
+   forall C, infinite_c C ->
        exists x, inc x (cnext C) /\ ~ (inc (f x) (cnext C)) ].
 Proof.
 have sa: (forall x, ordinalp x -> x <o p x).
   move => x ox; rewrite /p.
   have pc: cardinalp (cardinal x) by fprops.
-  have pa: cardinalp (cnext (cardinal x)) by apply: CS_cnext. 
+  have pa: cardinalp (cnext (cardinal x)) by apply: CS_cnext.
   apply /(oltP (proj1 pa)); apply /(cnextP pc); split; fprops.
 have sb: (forall x y, x <=o y -> p x <=o p y).
   move => x y xy; rewrite /p.
@@ -1043,7 +1043,7 @@ have cc:= (proj1 ic).
 have oc:= (proj1 cc).
 have cs:= (CS_cnext cc).
 have oso:=(OS_succ oc).
-split. 
+split.
    have os1 := OS1.
    apply /(cnextP cc); split => //.
    rewrite - osucc_pr // osum_cardinal // (card_card cc) csum_inf //.
@@ -1055,7 +1055,7 @@ have se: c <=o (f c) by apply: (osi_gex (proj1 pa) oc).
 have: p c <=o p (f c) by apply: sb.
 move /ocle1; rewrite - eq1 /p (card_card cc).
 rewrite (card_card cs) => h.
-exact: (cleNgt (cleT h sd) (cnext_pr2 cc)). 
+exact: (cleNgt (cleT h sd) (cnext_pr2 cc)).
 Qed.
 
 
@@ -1098,7 +1098,7 @@ have pa: forall x, x <=o y -> inc x E.
    have oc:= (proj1 (CS_cnext (proj1 icc))).
    have yc:y <o cnext c by apply/(oltP oc).
    move => x xe; apply/(oltP oc); apply:(ole_ltT xe yc).
-have pb: forall x, inc x E -> inc (a +o x) E. 
+have pb: forall x, inc x E -> inc (a +o x) E.
    by move => x xe;apply: cnext_sum.
 move: (normal_ofs_restriction icc (osum_normal oa) pb) => pc.
 by split => //x xe; rewrite /f LfV.
@@ -1120,7 +1120,7 @@ have pa: forall x, x <=o y -> inc x E.
    have oc:=(proj1 (CS_cnext (proj1 icc))).
    have yc:y <o cnext c by apply/(oltP oc).
    move => x xe; apply/(oltP oc); apply: (ole_ltT xe yc).
-have pb: forall x, inc x E -> inc (a *o x) E. 
+have pb: forall x, inc x E -> inc (a *o x) E.
    by move => x xe;apply: cnext_prod.
 have pc:= (normal_ofs_restriction icc (oprod_normal ap) pb).
 by split => //x xe; rewrite /f LfV.
@@ -1143,7 +1143,7 @@ Definition iclosed_proper (E:property) :=
 
 Lemma iclosed_ord x: ordinalp x -> iclosed_set x.
 Proof.
-move => ox. 
+move => ox.
 have osx:= Os_ordinal ox.
 split => // F fo _.
 have h:= (ord_ub_sup1 ox fo).
@@ -1173,12 +1173,12 @@ move: OS_omega omega_limit => ha hb.
 have pe: (forall x, inc x omega0 -> ordinalp x /\ ~ limit_ordinal x).
   move => x /(oltP ha) xo; have ox :=(proj31_1 xo).
   by split => //  /limit_ge_omega /(oltNge xo).
-have pc: nonempty omega0 by exists \0o; apply: NS0. 
+have pc: nonempty omega0 by exists \0o; apply: NS0.
 by move => [_ h]; case: (proj2 (h _ pe pc)); rewrite - [union _] omega_limit0.
 Qed.
 
 
-Lemma iclosed_normal_fun f x y: 
+Lemma iclosed_normal_fun f x y:
   ordinalp x -> ordinalp y -> normal_function f x y ->
   iclosed_set (Imf f).
 Proof.
@@ -1188,18 +1188,18 @@ move => F fr [w wf].
 set G := Zo (source f) (fun z => inc (Vf f z) F).
 have sgx: sub G x by rewrite - sf; apply:Zo_S.
 have neG: nonempty G.
-  move /(Imf_P ff): (fr _ wf) => [u uf uv]; exists u; apply:Zo_i => //; ue. 
+  move /(Imf_P ff): (fr _ wf) => [u uf uv]; exists u; apply:Zo_i => //; ue.
 have le1:=(ord_ub_sup1 ox sgx).
 have sG: sub G (source f) by ue.
 case: (equal_or_not (\osup G) x) => sx.
   have og:= Os_sub (Os_ordinal  ox) sgx.
   rewrite - sf in pb.
   left; apply: ord_sup_1cofinal; first split => //; last first.
-    by move =>t  /(Imf_Starget ff); rewrite tf => /(Os_ordinal oy). 
+    by move =>t  /(Imf_Starget ff); rewrite tf => /(Os_ordinal oy).
   move => b /(Imf_P ff) [u usf ->].
   have ua': u <o \osup G by rewrite sx; apply /(oltP ox); ue.
   move: (olt_sup og ua') => [v vg uv].
-  move /Zo_hi: (vg) => vf;ex_tac; exact: (proj1 (pb _ _ usf (Zo_S vg) uv)). 
+  move /Zo_hi: (vg) => vf;ex_tac; exact: (proj1 (pb _ _ usf (Zo_S vg) uv)).
 have <-: Vfs f G = F.
   set_extens t; first by move /(Vf_image_P ff sG)=> [u /Zo_hi h ->].
   move => tF; apply  /(Vf_image_P ff sG).
@@ -1227,7 +1227,7 @@ case: (equal_or_not (\osup F) a) => sna.
 case: (normal_function_equiv oa oa na subfa nef) => //.
 have ->: (Vfs f F) = F.
   have aux: sub F (source f) by ue.
-   set_extens t. 
+   set_extens t.
      by move => /(Vf_image_P ff aux) [z zf ->]; rewrite (Zo_hi (fp _ zf)).
    by move => zf; apply /(Vf_image_P ff aux); ex_tac; rewrite (Zo_hi (fp _ zf)).
 by move => fxp;right; apply: Zo_i => //; apply /(oltP oa).
@@ -1239,12 +1239,12 @@ Proof.
 move => nf; split; last first.
   apply:unbounded_non_coll => x ox.
   move: (normal_ofs_fix nf ox) => [pa pb _]; have [_ oo _]:= pa.
-  by exists (the_least_fixedpoint_ge f x). 
+  by exists (the_least_fixedpoint_ge f x).
 split; [by move => t [] | move => F fp nef ].
 move /normal_ofs_equiv1: (nf) => [pa pb].
 have pc: (forall x, inc x F -> \0o <=o x) by move =>x /fp [/ole0x ox _].
 have pd: (fun_image F f) = F.
-  set_extens t. 
+  set_extens t.
      by move => /funI_P [z zf ->]; rewrite (proj2 (fp _ zf)).
   by move => tf; apply /funI_P; ex_tac; rewrite (proj2 (fp _ tf)).
 move: (pb _ pc nef); rewrite pd => h; split => //; apply: OS_sup.
@@ -1254,7 +1254,7 @@ Qed.
 
 
 Lemma iclosed_normal_ofs1 f u:
-  ordinalp u -> normal_ofs1 f u ->  
+  ordinalp u -> normal_ofs1 f u ->
   iclosed_proper (fun z => exists2 x, u <=o x & z = f x).
 Proof.
 move => ou [na nb].
@@ -1281,7 +1281,7 @@ have Cp a: u <=o a ->  u <=o (g (f a)) /\ (f a) = f (g (f a)).
   have pp: p (f a) a by [].
   move: (pm  _ _ pp) => le1.
   have neE: nonempty E by exists a; apply:Zo_i =>//; apply/(oleP (proj32 le1)).
-  by move:(least_ordinal0 osE neE) => [_ /Zo_P [ _ qb] _]. 
+  by move:(least_ordinal0 osE neE) => [_ /Zo_P [ _ qb] _].
 have CP1 a: u <=o a -> a = g (f a).
   move => au; move: (Cp _  au) => [pa pb].
   case: (oleT_ell (proj32 au) (proj32 pa)) => // hb.
@@ -1299,13 +1299,13 @@ have Ea: (forall x, inc x E -> u <=o x) by move => x /pa [].
 have [t0 t0f] := nef.
 have fit0: inc (g t0) E by apply/funI_P; ex_tac.
 have ne: nonempty E by ex_tac.
-have: u <=o \osup E. 
+have: u <=o \osup E.
   by apply: (oleT (Ea _ fit0)); apply: ord_sup_ub => // t /Ea [].
-by move: (nb _ Ea ne); rewrite -Fv => ->; exists (union E). 
+by move: (nb _ Ea ne); rewrite -Fv => ->; exists (union E).
 Qed.
 
 
-Lemma iclosed_normal_ofs (f:fterm):  normal_ofs f  ->  
+Lemma iclosed_normal_ofs (f:fterm):  normal_ofs f  ->
   iclosed_proper (fun z => exists2 x, ordinalp x & z = f x).
 Proof.
 move => h.
@@ -1354,7 +1354,7 @@ Definition ordinalr (r:relation) x := ordinal (graph_on r (segmentr r x)).
 Lemma collectivising_srel_alt (r: relation): reflexive_rr r ->
   (collectivising_srel r <->  forall x,exists E, (forall y, inc y E <-> r y x)).
 Proof.
-move => rr; split => // H x; last by move => _; apply:H.
+move => rr; split => // H x.
 case: (p_or_not_p (r x x)) => hc; first by apply: H.
 exists emptyset => y; split; [by move /in_set0 | by  move/rr => [] ].
 Qed.
@@ -1415,8 +1415,8 @@ move: (proj1 (worder_rc_seg pa rxx)) (proj1 (worder_rc_seg pa ryy)) => ha hb.
 have pb: sub (graph_on r (segmentr r x)) (graph_on r (segmentr r y)).
   apply/(order_cp0 (proj1 ha) (proj1 hb)) => u v.
   by move/graph_on_P1 => [sa sb sc]; apply /graph_on_P1; split => //; apply: ss.
-have pc: forall z, r z z ->  
-   substrate (graph_on r (segmentr r z)) = (segmentr r z). 
+have pc: forall z, r z z ->
+   substrate (graph_on r (segmentr r z)) = (segmentr r z).
   move => z rzz; apply :graph_on_sr => a /(segmentrP csr rzz) [xx _].
   by move: (rr _ _ xx) => [].
 have xsy: inc x (segmentr r y) by apply /sy.
@@ -1430,7 +1430,7 @@ move: (rt _ _ _ h3 sa) => bx; split => // ebx.
 by rewrite ebx in h3; move: (ra _ _ sa h3).
 Qed.
 
-Lemma ordinalr_segment (r:relation) a x (b:=ordinalr r x): 
+Lemma ordinalr_segment (r:relation) a x (b:=ordinalr r x):
    worder_rc r -> r x x -> a <=o b ->
    (exists2 y, r y y & a = ordinalr r y).
 Proof.
@@ -1440,7 +1440,7 @@ have [pa pb] := (worder_rc_seg woc rxx).
 move: (the_ordinal_iso1 pa) => [].
 rewrite -/(ordinalr _ _) pb ordinal_o_sr.
 set gr := (graph_on r (segmentr r x)); set f := (the_ordinal_iso gr).
-set oor := (ordinal_o (ordinalr r x)). 
+set oor := (ordinal_o (ordinalr r x)).
 move => sa sb [[[ff injf] [_ sjf]] sf tf] sd.
 have asf: inc a (source f) by ue.
 move: (Vf_target ff asf); rewrite tf.
@@ -1449,20 +1449,20 @@ move /(segmentrP (proj2 woc) rxx) => [ryx xny].
 have or:= (proj1 (proj1 woc)).
 move: (proj33 or _ _ ryx) => [ryy _].
 have sP:=(segmentrP (proj2 woc) ryy).
-set g:= Lf (Vf f) a (segmentr r y). 
+set g:= Lf (Vf f) a (segmentr r y).
 have [oa ob sab] := ab.
 suff oih:order_isomorphism g (ordinal_o a) rs.
   have h : ordinal_o a \Is rs by exists g.
   have tt:= (worder_invariance h (ordinal_o_wor oa)).
   by exists y => //; rewrite - (ordinal_o_isu2 tt oa (orderIS h)).
-have srr: substrate rs = (segmentr r y). 
+have srr: substrate rs = (segmentr r y).
    by apply:graph_on_sr => u /sP [/(proj33 or) []].
 have saf: sub a (source f) by ue.
 have la: lf_axiom (Vf f) a (segmentr r y).
-  move => s ssa; have isf :=(saf _ ssa). 
+  move => s ssa; have isf :=(saf _ ssa).
   move/(oltP oa): ssa => [la na].
   apply /sP; split; last  by move/(injf  _ _ isf asf).
-  have:gle oor s a. 
+  have:gle oor s a.
     by apply /graph_on_P1;rewrite - sf; split => //; case:la.
   by move /(sd s a isf asf) => /graph_on_P1 [].
 hnf; rewrite (ordinal_o_sr) srr.
@@ -1483,16 +1483,16 @@ split => //; [ fprops | apply: (order_from_rel _ or) |  |].
 hnf; rewrite /g;aw => u v ua va; rewrite !LfV//.
 move: (saf _ ua) (saf _ va) =>ub vb.
 have h:= (sd u v ub vb).
-split. 
+split.
   move/sub_gleP=> [_ _ h1]; apply/graph_on_P1; split; try apply: la => //.
   suff:gle gr (Vf f u) (Vf f v) by move/graph_on_P1 =>[].
-  by apply /h; apply/sub_gleP; rewrite - sf. 
+  by apply /h; apply/sub_gleP; rewrite - sf.
 move/graph_on_P1 => [_ _ h1]; apply/sub_gleP; split => //.
 suff:gle gr (Vf f u) (Vf f v) by  move/h /sub_gleP=> [].
-apply/graph_on_P1; split => //; Wtac. 
+apply/graph_on_P1; split => //; Wtac.
 Qed.
 
-Definition ordinals (r:relation) a := 
+Definition ordinals (r:relation) a :=
   choose (fun x => r x x /\ a = ordinalr r x).
 
 Lemma ordinalsP (r:relation) a:  worder_rc r ->
@@ -1529,7 +1529,7 @@ move => x; split; first by move /Zo_hi.
 move => rxx; apply /Zo_P; split => //; apply /funI_P.
 rewrite - (ordinalsrP pa rxx).
 case: (oleT_el oa (OS_ordinalr pa rxx));first by move/(ordinalr_segment pa rxx).
-by move /oltP0 => [_ _ za]; ex_tac. 
+by move /oltP0 => [_ _ za]; ex_tac.
 Qed.
 
 Lemma ordinals_Mle r a b:  worder_rc r ->
@@ -1548,7 +1548,7 @@ Qed.
 
 Lemma ordinals_Mlt r a b:  worder_rc r ->
    (non_coll (fun x => r x x)) ->
-   a <o b -> 
+   a <o b ->
   (r (ordinals r a) (ordinals r b) /\  (ordinals r a) <>  (ordinals r b)).
 Proof.
 move => pa pb [pc pd]; move:(ordinals_Mle pa pb pc) => h.
@@ -1568,8 +1568,8 @@ exists (Zo (osucc x) (r^~ x)); move => y;split; first by move /Zo_hi.
 by move => ryx; apply:Zo_i => //; apply /(oleP ox); apply: h1.
 Qed.
 
-Lemma collectivising_srel_ord_seg (r:relation) : 
-  (forall x y, r x y -> x <=o y) -> 
+Lemma collectivising_srel_ord_seg (r:relation) :
+  (forall x y, r x y -> x <=o y) ->
   forall x, r x x -> segmentr r x = Zo x (fun z => r z x).
 Proof.
 move => ro x rxx.
@@ -1582,7 +1582,7 @@ move => /Zo_P[pa pb]; apply /(segmentrP cr rxx); split => //.
 by move=> tx; case: (ordinal_decent ox pa); rewrite {2} tx.
 Qed.
 
-Lemma worder_rc_ord (r:relation) : 
+Lemma worder_rc_ord (r:relation) :
   (forall x y, r x y -> x <=o y) ->
   (order_r r) -> (forall x y, r x x -> r y y -> (r x y \/ r y x)) ->
   worder_rc r.
@@ -1591,7 +1591,7 @@ move=> h1 h2 h3; split.
   split => // x hx [w wx].
   have ow:= (proj31 (h1 _ _ (hx _ wx))).
   move: (least_ordinal4 ow wx (p:=inc^~x)); set y := least_ordinal _ _.
-  move=> [oy yx yl]; rewrite /has_least/least (graph_on_sr hx). 
+  move=> [oy yx yl]; rewrite /has_least/least (graph_on_sr hx).
   exists y; split => //.
   move => t tx; apply /graph_on_P1; split => //.
   case: (h3 _ _ (hx _ yx) (hx _ tx)) => // /h1 ty.
@@ -1617,8 +1617,8 @@ apply: worder_rc_ord.
 Qed.
 
 Lemma ordinalrsP (p: property) (r := fun x y => [/\ p x, p y & x <=o y])
-   x (y := ordinalr r x): 
-   ordinal_prop p -> p x -> (ordinalp y) /\ ordinals r y = x. 
+   x (y := ordinalr r x):
+   ordinal_prop p -> p x -> (ordinalp y) /\ ordinals r y = x.
 Proof.
 move => op px; move:(op _ px) => ox.
 move: (worder_rc_op p) => pa.
@@ -1628,8 +1628,8 @@ Qed.
 
 Lemma ordinals_set_iso E (p := inc ^~E)
       (r:= fun x y => [/\ p x, p y & x <=o y])
-      (A:= ordinal (ole_on E)): 
-  (ordinal_set E) -> 
+      (A:= ordinal (ole_on E)):
+  (ordinal_set E) ->
   (lf_axiom  (ordinals r) A E) /\
   order_isomorphism (Lf (ordinals r) A E) (ordinal_o A) (ole_on E).
 Proof.
@@ -1651,7 +1651,7 @@ have ra: forall x, inc x E -> inc (ordinalr r x) A.
   move: (segmentrP (proj2 pc) xE); rewrite -/r => sp.
   apply: order_cp3 => //; first split.
   + apply /(order_cp0 (proj1 sa) (proj1 sc))=> u v.
-    by move/graph_on_P1 => [_ _ uv];apply/graph_on_P1. 
+    by move/graph_on_P1 => [_ _ uv];apply/graph_on_P1.
   + move => /(f_equal substrate); rewrite sb sd => ss.
     by move /rxx:(xE); rewrite - ss; move /sp => [_].
   + hnf; rewrite sb sd;split; first by move =>t /sp [] [].
@@ -1660,14 +1660,14 @@ have ra: forall x, inc x E -> inc (ordinalr r x) A.
     move => vx; case: nux; rewrite vx in vu; apply:oleA ux vu.
 have rb:forall a, inc a A -> H a.
   move => a aA.
-  move: (the_ordinal_iso1 sc); rewrite -/A; set f:= the_ordinal_iso _. 
-  rewrite /order_isomorphism sd ordinal_o_sr. 
+  move: (the_ordinal_iso1 sc); rewrite -/A; set f:= the_ordinal_iso _.
+  rewrite /order_isomorphism sd ordinal_o_sr.
   move => [sa sb [[[ff injf] [_ sjf]] sf tf] isf].
   hnf in isf; rewrite sf in injf isf.
   set x := Vf f a.
-  have xe: r x x by apply /rxx;rewrite - tf /x; Wtac. 
+  have xe: r x x by apply /rxx;rewrite - tf /x; Wtac.
   have [ta tb] :=(worder_rc_seg pc xe).
-  have oA:ordinalp A by exact: (OS_ordinal sc). 
+  have oA:ordinalp A by exact: (OS_ordinal sc).
   have oa :=(Os_ordinal oA aA).
   have saA :=(ordinal_transitive oA aA).
   exists x => //; symmetry;rewrite /ordinalr;apply: ordinal_o_isu2 => //.
@@ -1689,7 +1689,7 @@ have rb:forall a, inc a A -> H a.
       move /(isf _ _ aA bA) => /graph_on_P1 [_ _];rewrite -bb - /x => xy.
       case: xny; apply:oleA rxy xy.
     move /(oltP oa) => ba; ex_tac.
-  hnf;aw;move => u v ua va; rewrite !LfV//. 
+  hnf;aw;move => u v ua va; rewrite !LfV//.
   move: (saA _ ua) (saA _ va) => uA vA; split.
     move/sub_gleP=> [_ _ h1]; have: gle (ordinal_o A) u v by apply /sub_gleP.
     move /(isf _ _ uA vA) => /graph_on_P1 [_ _ le].
@@ -1707,7 +1707,7 @@ have bf: bijection_prop f A E.
   hnf;rewrite /f; saw; apply: lf_bijective.
   - by exact.
   - by move => u v /rc [_  e1] /rc [_ e2] e3; rewrite - e1 - e2 e3.
-  - by move => y yE; rewrite -(pe _ yE); move: (ra _ yE) => h; ex_tac. 
+  - by move => y yE; rewrite -(pe _ yE); move: (ra _ yE) => h; ex_tac.
 split => //.
 split => //; [ apply: ordinal_o_or | fprops | by rewrite ordinal_o_sr sd |].
 hnf; rewrite /f; aw; move => x y xA yA; rewrite !LfV//.
@@ -1716,16 +1716,16 @@ move: (rc _ xA) (rc _ yA) => [ta tb][tc td]; split => h.
   move /sub_gleP:h => [_ _ ce].
   suff: x = y by move => h1; move: hh; rewrite h1.
   move/graph_on_P1:hh => /(ordinalr_Mle pc).
-  by rewrite tb td; move => [_ _ cp]; apply: extensionality. 
-move/graph_on_P1:h => /(ordinalr_Mle pc). 
+  by rewrite tb td; move => [_ _ cp]; apply: extensionality.
+move/graph_on_P1:h => /(ordinalr_Mle pc).
 by rewrite tb td; move => [_ _ cp];apply/sub_gleP.
 Qed.
 
 Lemma ordinals_set_normal E (p := inc ^~E)
       (r:= fun x y => [/\ p x, p y & x <=o y])
       (A:= ordinal (ole_on E))
-      (f:= Lf (ordinals r) A E): 
-  (iclosed_set E) -> 
+      (f:= Lf (ordinals r) A E):
+  (iclosed_set E) ->
   normal_function f A E.
 Proof.
 move => [pa pb].
@@ -1741,11 +1741,11 @@ have fi: forall a b, inc a A -> inc b A -> a <o b -> Vf f a <o Vf f b.
      by move /(fincr _ _ asf bsf) => /graph_on_P1 [].
    by move => h; move: (injf _ _ asf bsf h).
 split => // a aA la.
-have oA:=(OS_ordinal sc). 
-set F :=(Vfs f a). 
+have oA:=(OS_ordinal sc).
+set F :=(Vfs f a).
 have asf: sub a (source f) by rewrite sf; apply: (ordinal_transitive oA).
 have sfe: sub F E by rewrite -tf ; apply:fun_image_Starget1.
-have nef: nonempty F. 
+have nef: nonempty F.
    exists (Vf f \0o); apply /(Vf_image_P ff asf); exists \0o => //.
    exact: (proj32 la).
 have osF:= Os_sub pa sfe.
@@ -1765,13 +1765,13 @@ case: (oleT_ell oa ob) => ab; first by ue.
   by move: (fi _ _ aA bA ab); rewrite - bv => /(oleNgt pr1).
 have sb: osucc b <o a by move /(limit_ordinal_P): la => [ _]; apply.
 have sbb: inc  (osucc b) a by apply /(oltP oa).
-have osbA:=(ordinal_transitive oA aA sbb). 
+have osbA:=(ordinal_transitive oA aA sbb).
 have h:= (fi _ _ bA osbA (oltS ob)).
 have: inc (Vf f (osucc b)) F by  apply/(Vf_image_P ff asf); ex_tac.
 by move /(ord_sup_ub osF); rewrite bv => /(oltNge h).
 Qed.
 
-Definition ordinalsE E B :=  
+Definition ordinalsE E B :=
   Lf (ordinals (fun x y => [/\ inc x B, inc y B & x <=o y])) E E.
 
 Lemma ordinals_set_normal1 C (E:= cnext C) B (f:= ordinalsE E B):
@@ -1784,15 +1784,15 @@ move: (ord_cofinal_p5 pa pc); rewrite -/E => eq1.
 move: (ordinals_set_normal pb) (ordinals_set_iso (proj1 pb)).
 rewrite eq1; set g := (Lf (ordinals _) E B); move => [p1 p2 p3] [pd pe].
 have sbe: sub B E by move: pc => [].
-have pf: lf_axiom (ordinals (fun x y=> [/\ inc x B, inc y B & x <=o y])) E E 
+have pf: lf_axiom (ordinals (fun x y=> [/\ inc x B, inc y B & x <=o y])) E E
    by move => t /pd /sbe.
 have ff: function f by apply: lf_function.
 have fg: function g by apply: lf_function.
-have oe: ordinalp E by move:(cnext_pr1 (proj1 pa)) => [[]]. 
+have oe: ordinalp E by move:(cnext_pr1 (proj1 pa)) => [[]].
 have sf: forall x, inc x E -> Vf f x = Vf g x.
   by move => x xe; rewrite /f/ordinalsE/g !LfV.
 have imf: Imf f = B.
-   set_extens t. 
+   set_extens t.
      move /(Imf_P ff); rewrite /f /ordinalsE; aw.
      by move=> [u ua ->]; rewrite LfV//; apply: pd.
    move => tb;move: pe => [_ _ [[_ [_ p4]] _ _] _].
@@ -1803,7 +1803,7 @@ have imf: Imf f = B.
 split => //; split => //.
 + by rewrite /f /ordinalsE/function_prop;aw.
 + by move => x y xe ye xy; rewrite sf // sf //; apply: p2.
-+ move => x xe lx; rewrite sf // (p3 x xe lx). 
++ move => x xe lx; rewrite sf // (p3 x xe lx).
   have sxe :=(ordinal_transitive oe xe).
   have sa: sub x (source g) by rewrite /g; aw.
   have sb: sub x (source f) by rewrite /f/ordinalsE; aw.
@@ -1817,7 +1817,7 @@ Qed.
 Lemma ordinals2_extc C1 C2 B1 B2
     (E1 := cnext C1)(E2 := cnext C2) :
   infinite_c C1 -> infinite_c C2 ->
-  iclosed_set B1 -> iclosed_set B2 -> 
+  iclosed_set B1 -> iclosed_set B2 ->
   ord_cofinal B1 E1 -> ord_cofinal B2 E2 ->
   C1 <=c C2 -> B1 = B2 \cap E1 ->
   agrees_on E1 (ordinalsE E1 B1) (ordinalsE E2 B2).
@@ -1831,8 +1831,8 @@ move => [ax2 [[ff2 sf2 tf2] ninc2 cont2] im2].
 move => [ax1 [[ff1 sf1 tf1] ninc1 cont1] im1].
 have E1E2: sub E1 E2 by exact:(proj33 (cnext_pr6  c1c2)).
 have B1B2: sub B1 B2 by rewrite iv; apply: subsetI2l.
-have oe2: ordinalp E2 by move:(cnext_pr1 (proj1 ic2)) => [[]]. 
-have oe1: ordinalp E1 by move:(cnext_pr1 (proj1 ic1)) => [[]]. 
+have oe2: ordinalp E2 by move:(cnext_pr1 (proj1 ic2)) => [[]].
+have oe1: ordinalp E1 by move:(cnext_pr1 (proj1 ic1)) => [[]].
 have ob2: ordinal_set B2 by move => t /(proj1 cf2) /(Os_ordinal oe2).
 have ob1: ordinal_set B1 by move => t /B1B2 /ob2.
 move: (ordinals_set_iso ob1) => [].
@@ -1855,7 +1855,7 @@ have sa: forall x, inc x E1 -> inc (Vf g2' (ordinals r1 x)) E2.
 set g3 := Lf (fun x => (Vf g2' (ordinals r1 x)))  E1 E2.
 have isoc: order_morphism g3 (ordinal_o E1) (ordinal_o E2).
   move: ub1 ub3 => [pa _ _ pb] [_ pc _ pd].
-  split => //. 
+  split => //.
     by rewrite !ordinal_o_sr /g3; hnf; saw; apply:lf_function.
   hnf;rewrite /g3; aw => x y xe1 ye1; rewrite !LfV//.
   move: (pb x y);aw; rewrite !LfV// => h; move: (h xe1 ye1).
@@ -1867,15 +1867,15 @@ have isoc: order_morphism g3 (ordinal_o E1) (ordinal_o E2).
     by move => /graph_on_P1  [_ _ ok]; apply /hh' /graph_on_P1.
   move/hh' /graph_on_P1 => [_ _ ok]; apply /graph_on_P1.
   by split => //; apply:ua1.
-set g4 := Lf id E1 E2. 
+set g4 := Lf id E1 E2.
 have isod : order_morphism g4 (ordinal_o E1) (ordinal_o E2).
   move: isoc => [pa pb _ _]; split => //.
     rewrite !ordinal_o_sr /g4; hnf; saw; apply: lf_function => //.
   hnf;rewrite /g4; aw => x y xe1 ye1; rewrite !LfV//;  split => //.
-      move => /graph_on_P1  [_ _ ok]; apply  /graph_on_P1. 
+      move => /graph_on_P1  [_ _ ok]; apply  /graph_on_P1.
      by split => //; apply:E1E2.
   by move /graph_on_P1 => [_ _ ok]; apply /graph_on_P1.
-have wo2: worder (ordinal_o E2) by apply: ordinal_o_wor. 
+have wo2: worder (ordinal_o E2) by apply: ordinal_o_wor.
 have wo1: worder (ordinal_o E1) by apply: ordinal_o_wor.
 have s1: segmentp (ordinal_o E2) (Imf g3).
    move: isoc=> [ _ _ [fg3 sg3 tg3] _].
@@ -1922,7 +1922,7 @@ Definition ordinalsf (p: property) :=
 
 Lemma ordinals_col_p1 (p: property) (f := ordinalsf p):
    (forall x, p x -> ordinalp x) -> (non_coll p) ->
- [/\ 
+ [/\
     forall a, ordinalp a -> p (f a),
     forall x, p x -> exists2 a, ordinalp a & x = f a,
     forall a b, a<=o b -> (f a) <=o (f b),
@@ -1939,9 +1939,9 @@ move: (worder_rc_op p) => pd.
 have le0: forall a, ordinalp a -> p (f a).
   by move => a oa; move: (ordinals_Mle pd pc (oleR oa)) => [].
 have lt1: forall a b, a <o b -> (f a) <o (f b).
-  by move => a b h; move: (ordinals_Mlt pd pc h) => [[_ _]]. 
+  by move => a b h; move: (ordinals_Mlt pd pc h) => [[_ _]].
 have le1: forall a b, a<=o b -> (f a) <=o (f b).
-  by move => a b h; move: (ordinals_Mle pd pc h) => [_ _]. 
+  by move => a b h; move: (ordinals_Mle pd pc h) => [_ _].
 have lt2:forall x, p x -> exists2 a, ordinalp a & x = f a.
   move => x px.
   have h: r x x by split => //; move: (pa _ px) => /oleR ox.
@@ -1955,7 +1955,7 @@ by case: (oleT_el ob oa) => // /le1 /(oltNge h).
 Qed.
 
 Lemma ordinals_col_p2 (p: property) (f := ordinalsf p):
-   (iclosed_proper p) -> 
+   (iclosed_proper p) ->
    normal_ofs f.
 Proof.
 move => [[pa pb] pc].
@@ -1965,14 +1965,14 @@ split=> // a la.
 have [oa zea lla] := la.
 set F :=(fun_image a f).
 have nef: nonempty F by apply: funI_setne; ex_tac.
-have Fp: (forall x, inc x F -> p x). 
+have Fp: (forall x, inc x F -> p x).
   move => t /funI_P[z za ->]; apply:s1 (Os_ordinal oa za).
-have osF: ordinal_set F  by move => t /Fp/pa. 
+have osF: ordinal_set F  by move => t /Fp/pa.
 move: (pb _ Fp nef) => puF.
 have bfa : ordinal_ub F (f a).
   by move => t /funI_P [z /(oltP oa) [za _] ->]; apply:s3.
 have ofa:= (pa _ (s1 _ oa)).
-move: (ord_ub_sup ofa bfa). 
+move: (ord_ub_sup ofa bfa).
 move: (s2 _ puF) => [b ob bv]; rewrite bv => p1.
 case: (oleT_el oa ob) => cab; first exact :(oleA (s3 _ _ cab) p1).
 move:(s4 _ _  (oltS ob)) => h.
@@ -1984,7 +1984,7 @@ Qed.
 
 
 Lemma iclosed_col_f0  (p: property) (f := ordinalsf p) (x:= f \0o):
-  (iclosed_proper p) -> 
+  (iclosed_proper p) ->
   (p x /\ (forall z, p z -> x <=o z)).
 Proof.
 move => [[pa pb] pc].
@@ -1994,7 +1994,7 @@ split; first by apply: s1; fprops.
 by move => z /s2 [a /ole0x oa ->]; apply: s3.
 Qed.
 
-Lemma iclosed_col_fs  (p: property) (f := ordinalsf p) a 
+Lemma iclosed_col_fs  (p: property) (f := ordinalsf p) a
    (x:= f a) (y := f (osucc a)) :
   (iclosed_proper p) -> ordinalp a ->
   [/\ x <o y, p x, p y &  (forall z, p z -> x <o z -> y <=o z)].
@@ -2003,12 +2003,12 @@ move => [[pa pb] pc] oa.
 set r :=  (fun x y => [/\ p x,  p y  & x <=o y]).
 move: (ordinals_col_p1 pa pc); rewrite -/r -/f; move => [s1 s2 s3 s4 [s5 s6]].
 have ob:=(OS_succ oa).
-move: (s4 _ _  (oltS oa)) => h; split => //; try apply: s1 => //. 
-move => z  /s2 [c oc -> fc]. 
+move: (s4 _ _  (oltS oa)) => h; split => //; try apply: s1 => //.
+move => z  /s2 [c oc -> fc].
 by apply/(s5 (osucc a) c ob oc) /oleSltP /(s6 _ _ oa oc).
 Qed.
 
-Definition first_derivation (f: fterm) := 
+Definition first_derivation (f: fterm) :=
   (ordinalsf (fun z => ordinalp z /\ f z = z)).
 
 
@@ -2056,14 +2056,14 @@ move: (ordinals_col_p1 pc pb) => [q1 q2 q3 q4 [q5 q6]].
 rewrite /first_derivation -/p.
 move: (normal_ofs_fix nf OS1) => [sa sb sc].
 apply: oleA.
-  by move: (q2 _ (conj (proj32 sa)  sb)) => [a /ole0x oa ->]; apply: q3. 
+  by move: (q2 _ (conj (proj32 sa)  sb)) => [a /ole0x oa ->]; apply: q3.
 move: (q1 _ OS0) => [ ha hb]; apply: sc => //;apply: oge1 => //.
 by move => ba; case: nf0; rewrite - ba.
 Qed.
 
 
 Lemma first_derivation_p3 f x: normal_ofs f ->  ordinalp x ->
-  (first_derivation f (osucc x)) = 
+  (first_derivation f (osucc x)) =
     the_least_fixedpoint_ge f (osucc (first_derivation f x)).
 Proof.
 move => nf ox; move:(iclosed_fixpoints nf) => [pa pb].
@@ -2075,7 +2075,7 @@ move: (q1 _ ox) => [ta tb].
 move: (normal_ofs_fix nf (OS_succ ta)) => [/oleSltP sa sb sc].
 apply: oleA.
   move: (q2 _ (conj (proj32_1 sa) sb)) => [a oa av].
-  case:(oleT_el oa ox); first by move/q3=> xx;case:(oltNge sa); rewrite av. 
+  case:(oleT_el oa ox); first by move/q3=> xx;case:(oltNge sa); rewrite av.
   by rewrite av; move /oleSltP /q3.
 move: (q1 _ (OS_succ ox)) => [ua ub];apply: sc => //; apply /oleSltP.
 by apply: q4; apply: oltS.
@@ -2084,8 +2084,8 @@ Qed.
 Lemma normal_ofs_from_exten f g : f =1o g -> normal_ofs f ->  normal_ofs g.
 Proof.
 move => h [sa sb].
-split => //. 
-  move => x y xy; move: (xy)=> [[ox oy _]_]. 
+split => //.
+  move => x y xy; move: (xy)=> [[ox oy _]_].
  by rewrite - h // - h //; apply: sa.
 move => x lx; move:  (proj31 lx) => ox.
 rewrite -(h x ox) (sb _ lx).
@@ -2122,7 +2122,7 @@ move: (iclosed_fixpoints nf)=> pab'.
 move: (ordinals_col_p2 pab') => nf'.
 set p  := (fun z => ordinalp z /\ f z = z).
 have pc': forall x, p x -> ordinalp x by move=> x [].
-move: (ordinals_col_p1 pc' (proj2 pab')). 
+move: (ordinals_col_p1 pc' (proj2 pab')).
 have -> : ordinalsf p = f' by [].
 move => [q1 q2 q3 q4 [q5 q6]].
 move: (proj1 pa) => oe.
@@ -2135,22 +2135,22 @@ have lfa: lf_axiom f' E F.
   apply: Zo_i => //; clear aa.
   move: x ox xE;apply:least_ordinal2 => x ox xp xE.
   have ozz:= (oes _ xE).
-  have ell: forall t, t <o x -> inc (f' t) E. 
+  have ell: forall t, t <o x -> inc (f' t) E.
     move => t ltx; apply: (xp _ ltx (sa _ _ xE ltx)).
   have H:= (next_fix_point_small iC nf fse).
   case: (ordinal_limA ox).
       move => ->; rewrite /f' (first_derivation_p1 nf); apply: H.
       apply cnextP => //; split;rewrite ? (card_card CS0); fprops.
       apply(cle0x cC).
-    move => [t ot te]; rewrite te. 
+    move => [t ot te]; rewrite te.
     rewrite /f' (first_derivation_p3 nf ot); apply: H.
     by apply:(cnext_succ iC); apply: ell; rewrite te; apply: oltS.
-  move => lz; move: (proj2 nf' _ lz). 
+  move => lz; move: (proj2 nf' _ lz).
   set w := ordinalsf _ ; have -> : w = f' by []; clear w.
   move => ->; apply: (cnext_sup iC).
     move /(cnextP cC): xE => [_]; apply: cleT.
     exact: (fun_image_smaller x f').
-  by move => t /funI_P [u /(oltP ox) uz ->]; apply:ell. 
+  by move => t /funI_P [u /(oltP ox) uz ->]; apply:ell.
 split.
 - apply: ordinal_o_or.
 - apply: order_from_rel; apply:ole_order_r.
@@ -2162,13 +2162,13 @@ split.
    - move => y /Zo_P [ye yv]; move: (q2 _ (conj (oes _ ye) yv)) => [a a1 a2].
      exists a => //; move: (osi_gex q4 a1); rewrite - a2.
      move /(oltP oe): ye => ha hb; apply/(oltP oe); apply:(ole_ltT hb ha).
-  +  by rewrite ordinal_o_sr /g; aw. 
+  +  by rewrite ordinal_o_sr /g; aw.
   +  by rewrite graph_on_sr /g ; aw; trivial => a /Zo_P [/oes /oleR oa _].
 - hnf;rewrite /g;aw; move => x y xE yE; rewrite !LfV//; split.
     move /sub_gleP => [_ _ xy]; apply /graph_on_P1; split; fprops.
     apply: q3; split; fprops.
   move /graph_on_P1 => [_ _] /(q5 _ _ (oes _ xE) (oes _ yE)) [_ _  xy].
-  by apply /sub_gleP. 
+  by apply /sub_gleP.
 Qed.
 
 Lemma ord_rev_pred x (y:= x -o \1o) : \0o <o x->
@@ -2194,16 +2194,16 @@ have pa :(iclosed_proper p).
     move: (ord_sup_ub osf tx); apply: olt_leT; exact (hx _ tx).
   apply: unbounded_non_coll => x ox; exists (osucc x); first exact:(oleS ox).
   by apply:olt0S.
-apply:(normal_ofs_uniqueness (p:= fun z => z+o \1o)). 
+apply:(normal_ofs_uniqueness (p:= fun z => z+o \1o)).
 - exact: (osum_normal OS1).
 - exact: (ordinals_col_p2 pa).
 - by move => x ox; rewrite - (osucc_pr ox) (osumA OS1 ox OS1).
 - move => x /(iclosed_col_fs pa).
   set u := ordinalsf p x; set v := ordinalsf p (osucc x).
   rewrite /p;move =>[/oleSltP uv [[_ ou _] _] _ h].
-  rewrite (osucc_pr ou); apply: oleA => //. 
+  rewrite (osucc_pr ou); apply: oleA => //.
   apply: h; [by apply:olt0S | by apply:oltS].
-- move: (iclosed_col_f0 pa); set u := ordinalsf p \0o. 
+- move: (iclosed_col_f0 pa); set u := ordinalsf p \0o.
   rewrite (osum0r OS1); move => [] /oge1P u1 h.
   exact: (oleA u1 (h _ olt_01)).
 Qed.
@@ -2219,7 +2219,7 @@ have pa:= (iclosed_fixpoints npa).
 have na:=(ordinals_col_p2 pa).
 apply:(normal_ofs_uniqueness (p:= fun z => z+o \1o)) => //.
     move => x ox.
-    move: (iclosed_col_fs pa ox). 
+    move: (iclosed_col_fs pa ox).
     set u:= ordinalsf _ x; set v := ordinalsf _ (osucc x).
     move => [sa [ou sb] _ sc].
     move: (oltS ou) => h.
@@ -2234,12 +2234,12 @@ rewrite sg in sjg.
 move: NS0 => bs0.
 have gnn: forall n, natp n -> Vf g n = a *o n.
   apply: Nat_induction; first by rewrite oprod0r.
-  move => n nb h. 
+  move => n nb h.
   rewrite (gn _ nb) h (oprod2_nsucc oa (OS_nat nb)) (osum2_2int NS1 nb).
   by rewrite (Nsucc_rw nb) csumC.
 case: (ozero_dichot oa) => ap.
   suff: (target g) = singleton \0o by  move => ->; rewrite setU_1 /b ap oprod0l.
-  apply: set1_pr; first by rewrite - g0; Wtac; rewrite sg. 
+  apply: set1_pr; first by rewrite - g0; Wtac; rewrite sg.
   by move => z /sjg [x /gnn xsg ->]; rewrite xsg ap  oprod0l.
 move: (oprod_normal ap) => /normal_ofs_equiv1 [ha hb].
 have ->: (target g) = (fun_image Nat (oprod2 a)).
@@ -2257,7 +2257,7 @@ by move => t ot; rewrite(add_fix_enumeration OS1 ot) (oprod1l OS_omega).
 Qed.
 
 
-Lemma omega_div x: ordinalp x -> 
+Lemma omega_div x: ordinalp x ->
   exists a b, [/\ ordinalp a, b<o omega0, x = omega0 *o a +o b &
      (osuccp x <-> b <> \0o)].
 Proof.
@@ -2319,7 +2319,7 @@ have p4 :(iclosed_proper p).
   apply:unbounded_non_coll => // x ox; exists(omega0 *o x); last by apply: p3.
   exact: (oprod_M1le olt_0omega ox).
 move:olt_0omega  OS_omega => oo odo.
-apply:(normal_ofs_uniqueness (p:= fun z => z +o omega0)). 
+apply:(normal_ofs_uniqueness (p:= fun z => z +o omega0)).
 - apply: (oprod_normal oo).
 - by apply: (ordinals_col_p2 p4).
 - by move => x ox; rewrite oprod2_succ.
@@ -2353,7 +2353,7 @@ move: (osum_M0le oa ob)(osum_Mle0 oa ob).
 rewrite xs => h1 h2.
 case: (equal_or_not a c)=> lt2; first by left.
 case: (equal_or_not b c)=> lt1; first by right.
-by move: (oix _ _ (conj h2 lt2) (conj h1 lt1)). 
+by move: (oix _ _ (conj h2 lt2) (conj h1 lt1)).
 Qed.
 
 Lemma indecomp_one: indecomposable \1o.
@@ -2364,7 +2364,7 @@ Qed.
 
 Lemma indecomp_omega: indecomposable omega0.
 Proof.
-split; first exact: olt_0omega. 
+split; first exact: olt_0omega.
 by move=> x y xf yf; move: (osum2_lt_omega xf yf) => [_].
 Qed.
 
@@ -2376,7 +2376,7 @@ move => u v le1 le2 /(f_equal cardinal).
 move: (proj31_1 le1) (proj31_1 le2) => ou ov.
 rewrite osum_cardinal // (card_card cx) => /esym eq2.
 move: le1 => /(ocle2P cx ou) lt1.
-move: (csum_inf2 (CS_cardinal v) xc lt1 eq2) => h. 
+move: (csum_inf2 (CS_cardinal v) xc lt1 eq2) => h.
 by move: le2 => /(ocle2P cx ov) [_ []].
 Qed.
 
@@ -2402,9 +2402,9 @@ by move: (indecomp_example (ord_ne0_pos oy ynz)); rewrite -ysx.
 Qed.
 
 
-Lemma indecomp_omega1 a: indecomposable a -> 
+Lemma indecomp_omega1 a: indecomposable a ->
   a = \1o \/ omega0 <=o a.
-Proof. 
+Proof.
 by case /indecomp_limit => h; [ left | right; apply: limit_ge_omega].
 Qed.
 
@@ -2412,14 +2412,14 @@ Lemma indecomp_prop1 c a: indecomposable c ->
   a <o c -> a +o c = c.
 Proof.
 move=> [_ oi]  ltac; move: (ltac) =>[leac _].
-move: (odiff_pr leac) => [_ se]. 
+move: (odiff_pr leac) => [_ se].
 case: (ole_eqVlt (odiff_Mle (proj31 leac) (proj32 leac))) => h.
   by rewrite {2} se h.
 by move: (oi _ _ ltac h); rewrite - se.
 Qed.
 
 
-Lemma cardinal_indecomposable1 c a : infinite_c c -> a <o c -> 
+Lemma cardinal_indecomposable1 c a : infinite_c c -> a <o c ->
   ((c -o a) = c /\ cardinal (c -s a) = c).
 Proof.
 move => icx ax; move: (icx) => [cx _].
@@ -2429,7 +2429,7 @@ have eq1:= (indecomp_prop1 oix ax).
 move: (odiff_pr (proj1 ax)); rewrite - {2} eq1; move => [ob bv].
 split; first by symmetry; exact:(osum2_simpl ox ob oa bv).
 move /(ocle2P (proj1 icx) oa): ax; move: icx.
-rewrite -{1 2 4} (card_card cx) => /infinite_setP; apply:infinite_compl.  
+rewrite -{1 2 4} (card_card cx) => /infinite_setP; apply:infinite_compl.
 Qed.
 
 Lemma indecomp_prop2 a b c: a <o c -> b <o c -> indecomposable c ->
@@ -2474,7 +2474,7 @@ move: (odivision_exists oy ox ltz)=> [[oq or zv ltrq] ltry].
 apply: oleA; last by apply: osum_M0le.
 rewrite - {2} (indecomp_prop1 xi ltry) -{2} (indecomp_prop1 xi cx1) osumA //.
 rewrite (oprodD (OS_sum2 oq OS1) ox oy) {1} zv (oprodD oq OS1 oy).
-apply:(osum_Mleeq _ (proj32_1 xynz)); apply:(osum_Meqle _ (OS_prod2 oy oq)). 
+apply:(osum_Mleeq _ (proj32_1 xynz)); apply:(osum_Meqle _ (OS_prod2 oy oq)).
 rewrite (oprod1r oy); exact: (proj1 ltrq).
 Qed.
 
@@ -2509,7 +2509,7 @@ move => oc cp. apply/(indecompP oc) => a lac.
 by rewrite -{1} (cp _ lac) -(proj2 (odiff_pr (proj1 lac))).
 Qed.
 
-  
+
 
 
 
@@ -2529,7 +2529,7 @@ move: (indecomp_div oic anz ac) => [z [oiz oz xp]].
 rewrite /b xp; apply: (oprod_Mlele (oleR oa)).
 case: (indecomp_omega1 oiz) => // z1.
 move: xp; rewrite z1 oprod1r// => ca.
-by move: ac => [_]; rewrite ca. 
+by move: ac => [_]; rewrite ca.
 Qed.
 
 Lemma indecomp_prod3 a: \0o <o a ->
@@ -2546,7 +2546,7 @@ apply: (q3 _ p1);  split; first by apply /oleSltP.
 by move=> h; move: (indecomp_example ap);rewrite h.
 Qed.
 
-Lemma indecomp_sup E: 
+Lemma indecomp_sup E:
   (forall x, inc x E -> indecomposable x) ->
   (nonempty E) ->
   indecomposable (\osup E).
@@ -2573,7 +2573,7 @@ move=> xp.
 have ox:=proj32_1 xp.
 set E := Zo (osucc x) indecomposable.
 have pa: (forall t, inc t E -> indecomposable t) by move =>t /Zo_P [_].
-have pb: nonempty E. 
+have pb: nonempty E.
   exists \1o; apply:Zo_i; last by apply:indecomp_one.
   move /oltSSP: xp => /(oltP (OS_succ ox)).
   by rewrite osucc_zero.
@@ -2610,14 +2610,14 @@ Lemma ord_induction_unique (w0: fterm)  (g:fterm2) u (f f':fterm2)
 Proof.
 move => pa pb x ux; apply:least_ordinal2 => y oy lpy.
 move: (pa _ ux)  (pb _ ux) => [h1 h2] [h3 h4].
-case: (ozero_dichot oy) => ey0; first by rewrite ey0 h1. 
+case: (ozero_dichot oy) => ey0; first by rewrite ey0 h1.
 rewrite (h2 _ ey0)(h4 _ ey0).
 by apply: ord_sup_2funI => z /(oltP oy) /lpy ->.
 Qed.
 
 Definition ord_induction_p (w0:fterm) (g:fterm2) x F :=
   (Yo (domain F = \0o) (w0 x) (ord_induction_sup g x (domain F) (Vg F))).
- 
+
 Definition ord_induction_defined (w0:fterm) (g:fterm2) x :=
    transdef_ord (ord_induction_p w0 g x).
 
@@ -2632,9 +2632,9 @@ Lemma ord_induction_yp w0 g x (f:= (ord_induction_defined w0 g)):
     (forall y, \0o <o y -> f x y = ord_induction_sup g x y (f x)).
 Proof.
 move => y [[_ oy _] ynz].
-rewrite /f /ord_induction_defined. 
+rewrite /f /ord_induction_defined.
 rewrite (transdef_ord_pr (ord_induction_p w0 g x) oy).
-rewrite /transdef_ord_prop {1} /ord_induction_p; aw; Ytac0. 
+rewrite /transdef_ord_prop {1} /ord_induction_p; aw; Ytac0.
 apply: ord_sup_2funI => t ty /=; rewrite LgV//.
 Qed.
 
@@ -2643,12 +2643,12 @@ Lemma ord_induction_y1 w0 g x:
   ord_induction_defined w0 g x \1o = g (w0 x) x.
 Proof.
 rewrite (ord_induction_yp _ _ _ olt_01).
-by rewrite /ord_induction_sup funI_set1 setU_1 ord_induction_y0. 
+by rewrite /ord_induction_sup funI_set1 setU_1 ord_induction_y0.
 Qed.
 
 
 Section OrdinalInduction.
-Variables (u: Set) (w0: fterm) (f g : fterm2). 
+Variables (u: Set) (w0: fterm) (f g : fterm2).
 Hypothesis fv: f = ord_induction_defined w0 g.
 
 Let w1 := fun x => (g (w0 x) x).
@@ -2656,7 +2656,7 @@ Definition OIax_w0 := forall x, u <=o x -> w0 x <o w1 x.
 Definition OIax_w1 := forall x, u <=o x -> x <=o w1 x.
 Definition OIax_g1 := forall x y, u <=o x -> u <=o y -> x <o (g x y).
 Definition OIax_g2:= forall a b a' b',
-    u <=o a -> u <=o b ->  a <=o a' -> b <=o b' -> 
+    u <=o a -> u <=o b ->  a <=o a' -> b <=o b' ->
    (g a b) <=o (g a' b').
 Definition OIax_w2w:= forall a a', u <=o a -> a <=o a' -> (w0 a) <=o (w0 a').
 Definition OIax_w2:= forall a a', u <=o a -> a <o a' -> w1 a <o w1 a'.
@@ -2700,7 +2700,7 @@ have ww: x <=o f x \1o by rewrite fv ord_induction_y1; apply: (aw1 _ ux0).
 exact: (oleT (oleT ww (proj1 (ag1 _ _ (oleT ux0 ww) ux0))) r1).
 Qed.
 
-Lemma ord_induction_p41 x y: OIax1 -> 
+Lemma ord_induction_p41 x y: OIax1 ->
   u <=o x -> \0o <o y -> u <=o (f x y).
 Proof.
 move=> ax1 ux y1; exact: (oleT ux (ord_induction_p4 ax1 ux y1)).
@@ -2708,7 +2708,7 @@ Qed.
 
 Lemma ord_induction_p5 x y: OIax1 ->
   u <=o x -> ordinalp y -> ordinalp (f x y).
-Proof. 
+Proof.
 move=> ax1 ux oy; case: (ozero_dichot oy) => y1.
   by move: (ord_induction_p01 ax1 ux); rewrite y1; move => [[]].
 exact: (proj32 (ord_induction_p4 ax1 ux y1)).
@@ -2720,7 +2720,7 @@ Proof.
 move => ax1 ux oy; case: (ozero_dichot oy) => y1.
   by move: (proj31 ax1 _ ux) => /proj32_1; rewrite y1 fv ord_induction_y0.
 move: (ord_induction_p41 ax1 ux y1) => h1.
-exact: (proj32_1(proj33 ax1 _ _ h1 ux)). 
+exact: (proj32_1(proj33 ax1 _ _ h1 ux)).
 Qed.
 
 Lemma ord_induction_p7 x y y': OIax1 ->
@@ -2729,10 +2729,10 @@ Proof.
 move=> ax1 ux yz.
 have [[oy oy' _] _] := yz.
 have yp:= (ole_ltT (ole0x oy) yz).
-rewrite fv (ord_induction_yp w0 g x yp) -fv. 
+rewrite fv (ord_induction_yp w0 g x yp) -fv.
 rewrite /ord_induction_sup;set T:= fun_image _ _.
 have oT: ordinal_set T.
-  by move => z /funI_P [v /(Os_ordinal oy') vz ->]; apply: ord_induction_p6. 
+  by move => z /funI_P [v /(Os_ordinal oy') vz ->]; apply: ord_induction_p6.
 have iyy:inc y y' by apply/(oltP oy').
 apply: (ord_sup_ub oT); apply /funI_P;ex_tac.
 Qed.
@@ -2748,7 +2748,7 @@ wlog: y yz / \0o <o y => yp.
   by move: (ole_ltT (proj1 cp) (yp _ y'1 olt_01)); rewrite y1.
 have le1:= (ord_induction_p7 ax1 ux yz).
 have le2:= (ord_induction_p41 ax1 ux yp).
-exact: (olt_leT (proj33 ax1 _ _ le2 ux) le1). 
+exact: (olt_leT (proj33 ax1 _ _ le2 ux) le1).
 Qed.
 
 Lemma ord_induction_p9 x y: OIax1 ->
@@ -2759,7 +2759,7 @@ case: (ozero_dichot ot).
   move => ->; exact:(ole0x (proj31_1 (ord_induction_p01 ax1 ux))).
 move => tp.
 have orf: ordinalp (f x t) by apply: ord_induction_p5.
-case: (oleT_el ot orf)=> // p3z. 
+case: (oleT_el ot orf)=> // p3z.
 case:(oleNgt (lpy _ p3z) (ord_induction_p8 ax1 ux p3z)).
 Qed.
 
@@ -2768,13 +2768,13 @@ Lemma ord_induction_p10 x: OIax1 ->
 Proof.
 move=> ax1 ux; split.
   move => y y'; apply:(ord_induction_p8 ax1 ux).
-move => a la. 
+move => a la.
 rewrite fv  (ord_induction_yp w0 g x (limit_pos la)) -fv.
 apply: ord_sup_2cofinal; split => b /funI_P [z za ->].
   move: la => [pa pb pc]; move: (pc _ za) => sza.
   exists (f x (osucc z)); first by apply/funI_P;ex_tac.
   apply: (ord_induction_p7 ax1 ux); apply: (oltS (Os_ordinal pa za)).
-move: la => [pa pb pc].  
+move: la => [pa pb pc].
 have oz:=(Os_ordinal pa za).
 exists (g (f x z) x); first by apply/funI_P; exists z.
 case: (ozero_dichot oz) => aa.
@@ -2795,10 +2795,10 @@ Qed.
 
 Lemma ord_induction_p12 x b: OIax1 ->
   u <=o x -> (w0 x) <=o b ->
-  exists y,  [/\  y <=o b, (f x y) <=o b & b <o (f x (osucc y))]. 
+  exists y,  [/\  y <=o b, (f x y) <=o b & b <o (f x (osucc y))].
 Proof.
 move=> ax1 ux w1b.
-have ob:= proj32 w1b. 
+have ob:= proj32 w1b.
 case:(normal_ofs_bounded ob (ord_induction_p10 ax1 ux)).
   by rewrite fv ord_induction_y0 => /(oleNgt w1b).
 move => [y [py pa pb]]; exists y; split => //.
@@ -2812,7 +2812,7 @@ move=> [ax1 ax2] ux oy.
 move: (OS_succ oy) => osy.
 have ysy:= oltS oy.
 apply: oleA; last by apply: ord_induction_p7.
-have syp: \0o <o osucc y by apply /oltSleP; apply: ole0x. 
+have syp: \0o <o osucc y by apply /oltSleP; apply: ole0x.
 rewrite fv (ord_induction_yp w0 g x syp) -fv.
 apply: ord_ub_sup.
   by apply:(ord_induction_p6 ax1 ux oy).
@@ -2826,10 +2826,10 @@ wlog: s sy / \0o <o s => sp.
     rewrite fv ord_induction_y0 ord_induction_y1.
     apply: (proj33 ax1 _ _  _ ux); exact: (oleT ux (proj32 ax1 _ ux)).
   case: (ozero_dichot (proj31_1 sy)); last by apply:sp.
-  move ->; case: (oone_dichot sy)=> yp; first by rewrite yp. 
+  move ->; case: (oone_dichot sy)=> yp; first by rewrite yp.
   apply: (oleT aux (sp _ yp olt_01)).
 move: (ord_induction_p41 ax1 ux sp) => pa.
-apply: ax2 => //; [exact (proj1 (ord_induction_p8 ax1 ux sy))| fprops].
+apply: ax2 => //; exact (proj1 (ord_induction_p8 ax1 ux sy)).
 Qed.
 
 Definition ord_induction_g_unit c :=
@@ -2859,18 +2859,18 @@ split.
   case: (ozero_dichot ob); first by move => ->;rewrite (pa _ ua).
   by move => bp; move: (h _  (ord_induction_p41 ax1 ua bp)) => [ _ ->  _].
 - move => a b ua ob; rewrite oprod0r (pa  _ ua).
-  case: (ozero_dichot ob). 
+  case: (ozero_dichot ob).
     by move => ->; rewrite (pa  _ ua) fv ord_induction_y0 - cwc.
   by move => bp; rewrite (pa _ (ord_induction_p41 ax1 ua bp)).
 - move => a b ua ob.
   rewrite oprod0l (pa  _ ua) fv.
   move: b ob; apply: least_ordinal2  => y oy etc.
   move:  (ord_induction_y0  w0 g c) => g0.
-  case: (ozero_dichot oy); first by move => ->; rewrite g0. 
+  case: (ozero_dichot oy); first by move => ->; rewrite g0.
   move => yp; rewrite (ord_induction_yp w0 g _ yp).
   rewrite / ord_induction_sup; set G := fun_image _ _.
   suff: G = singleton c by move => ->; rewrite setU_1.
-  apply: set1_pr. 
+  apply: set1_pr.
     by apply /funI_P;exists \0o; [ apply:olt_i |rewrite g0 - cwc  gcc].
   by move => z /funI_P [t /(oltP oy) /etc <- ->].
 Qed.
@@ -2899,9 +2899,9 @@ have aux: forall a, ordinalp a -> forall b, ordinalp b ->
    f a (osucc b) = osucc (f a b).
   move => a /ole0x oa nb ob.
   by rewrite (ord_induction_p13 ee (conj ax1 ax2) oa ob).
-have f0: forall a, ordinalp a -> f a \0o = a +o \0o 
+have f0: forall a, ordinalp a -> f a \0o = a +o \0o
    by move => a oa; rewrite /f (ord_induction_y0 w0 g a) osum0r.
-split. 
+split.
   move => a b oa ob.
   have ap:= ole0x oa.
   move: (ord_induction_p10  ee ax1 ap) => nfa.
@@ -2916,16 +2916,16 @@ move => a b c oa ob oc.
 have ap:= ole0x oa.
 have bp:= ole0x ob.
 have hh: ordinalp (f a b) by apply:(ord_induction_p5 ee ax1 ap ob).
-have qa: normal_ofs (fun c => f (f a b) c). 
+have qa: normal_ofs (fun c => f (f a b) c).
    apply: (ord_induction_p10 ee ax1 (ole0x hh)).
 have qb: normal_ofs (fun c => f a (f b c)).
-  by apply:normal_ofs_compose; apply: (ord_induction_p10 ee ax1). 
+  by apply:normal_ofs_compose; apply: (ord_induction_p10 ee ax1).
 have qc: forall x, ordinalp x -> f (f a b) (osucc x) = osucc (f (f a b) x).
   by move => x ox; rewrite aux.
 have qd:forall x, ordinalp x -> f a (f b (osucc x)) = osucc (f a (f b x)).
-  by move => x ox; rewrite aux // aux //; apply:(ord_induction_p5 ee ax1). 
+  by move => x ox; rewrite aux // aux //; apply:(ord_induction_p5 ee ax1).
 have qe: f (f a b) \0o = f a (f b \0o) by rewrite f0 // f0 // osum0r // osum0r.
-exact: (normal_ofs_uniqueness qa qb qc qd qe oc). 
+exact: (normal_ofs_uniqueness qa qb qc qd qe oc).
 Qed.
 
 
@@ -2939,7 +2939,7 @@ have ax1: OIax1 \1o w0 osum2.
   rewrite /w0;split.
   - move => x xp /=;rewrite osum0l; [ by apply/oge1P | exact: (proj32 xp)].
   - move => x [_ xp _] /=; rewrite osum0l;fprops.
-  - move => u v [_ ou _] /oge1P vp. 
+  - move => u v [_ ou _] /oge1P vp.
     by move: (osum_Meqlt vp ou); rewrite  osum0r.
 have ax2:OIax_g2 \1o osum2  by move => u v x y /= _ _; apply:osum_Mlele.
 set f := (ord_induction_defined w0 osum2).
@@ -2950,7 +2950,7 @@ have pa: (forall x, ordinalp x -> f a (osucc x) = p((f a x))).
   move => x ox; exact: (ord_induction_p13 (erefl f) (conj ax1 ax2) ap ox).
 have pb:(forall x, ordinalp x -> a *o osucc x = p (a *o x)).
   by move => x ox; rewrite (oprod2_succ (proj32 ap)).
-have pc: f a \0o = a *o \0o 
+have pc: f a \0o = a *o \0o
   by rewrite /f (ord_induction_y0 w0 osum2 a) oprod0r.
 by apply: (normal_ofs_uniqueness nfa (oprod_normal oa) pa pb pc).
 Qed.
@@ -2958,7 +2958,7 @@ Qed.
 
 
 Section OrdinalInduction2.
-Variables (u: Set) (w0: fterm) (f g : fterm2). 
+Variables (u: Set) (w0: fterm) (f g : fterm2).
 Hypothesis fv: f = ord_induction_defined w0 g.
 
 Lemma ord_induction_p16 x y x' y': OIax2 u w0 g ->
@@ -2987,12 +2987,12 @@ move=> i => /funI_P  [z /(oltP ot) zt ->]; rewrite - fv.
 have z2:= (olt_i zt).
 have oz:= proj31_1 zt.
 move: (lpy _ zt) => h1.
-set j :=g (f x' z) x'. 
+set j :=g (f x' z) x'.
 have jT2: inc j T2 by apply /funI_P ;exists z => //; rewrite - fv.
 apply:(oleT _ (ord_sup_ub oT2 jT2)).
 case: (equal_or_not x x') => exx'.
   by rewrite /j - exx'; apply:oleR; apply: (ord_induction_p6 fv ax1 ux).
-case: (ozero_dichot oz) => zz. 
+case: (ozero_dichot oz) => zz.
  rewrite /j zz fv ! ord_induction_y0; exact(proj1(aw2 _ _ ux (conj xx' exx'))).
 by apply: ag2=> //; apply: (ord_induction_p41 fv ax1).
 Qed.
@@ -3045,12 +3045,12 @@ have pa: normal_ofs1 F1 \1o.
   have bp:  \0o <=o b +o \1o by apply: ole0x; fprops.
   apply: (normal_ofs_compose1 OS0 OS1 bp n1).
   apply: (normal_ofs_equiv2 OS1); by apply: osum_normal.
-have pb: normal_ofs1 F2 \1o. 
+have pb: normal_ofs1 F2 \1o.
   move: (ag3 _ ufab) => ea.
   have uf1 : u <=o f a \1o by apply:(ord_induction_p41 fv ax1 ua olt_01).
   apply:(normal_ofs_compose1 (proj31 ua) OS1 uf1 ea).
   by apply: (normal_ofs_equiv2 OS1).
-have pe: F1 \1o = F2 \1o. 
+have pe: F1 \1o = F2 \1o.
   rewrite /F1 /F2 (osucc_pr ob) (ord_induction_p13 fv ax3 ua ob).
   by move: (aw3 _ ua); rewrite -  (ord_induction_y1 w0 g a) - fv => ->.
 exact:(normal_ofs_uniqueness1 pa pb OS1 pv pu pe c1).
@@ -3071,14 +3071,14 @@ have pu: (forall x, \1o <=o x -> F2 (osucc x) = p (F2 x)).
 have pv: (forall x, \1o <=o x -> F1 (osucc x) = p (F1 x)).
   move => x /oge1P xp; rewrite /F1 (oprod2_succ ob (proj32_1 xp)).
   by rewrite ord_induction_p18 //; apply: oprod2_pos.
-have pa: normal_ofs1 F1 \1o. 
+have pa: normal_ofs1 F1 \1o.
   have bp:= ole0x (OS_prod2 ob  OS1).
   move: (ord_induction_p10 fv ax1 ua) => /normal_ofs_equiv1 n1.
   apply: (normal_ofs_compose1 OS0 OS1 bp n1); apply: (normal_ofs_equiv2 OS1).
   by apply: oprod_normal.
-have pb: normal_ofs1 F2 \1o. 
-  apply: (normal_ofs_equiv2 OS1); apply:(ord_induction_p10 fv ax1 ufab). 
-have pe: F1 \1o = F2 \1o. 
+have pb: normal_ofs1 F2 \1o.
+  apply: (normal_ofs_equiv2 OS1); apply:(ord_induction_p10 fv ax1 ufab).
+have pe: F1 \1o = F2 \1o.
   by rewrite /F1 /F2 (oprod1r ob) {2} fv  ord_induction_y1 (aw3 _ ufab).
 exact:(normal_ofs_uniqueness1 pa pb OS1 pv pu pe c1).
 Qed.
@@ -3091,7 +3091,7 @@ have ox:=proj32 ux.
 have lt1:= (ord_induction_p4 fv ax1 ux olt_01).
 move: (ole_ltT lt1 (proj33 ax1 _ _ (oleT ux lt1) ux)).
 rewrite -(ord_induction_p13 fv ax1b ux OS1) => h1; apply: (olt_leT h1).
-move: (proj32_1 h1);rewrite osucc_one => h2. 
+move: (proj32_1 h1);rewrite osucc_one => h2.
 case: (equal_or_not \2o y) => yn2; first by rewrite -yn2; fprops.
 exact (proj1 (ord_induction_p8 fv ax1 ux (conj y2 yn2))).
 Qed.
@@ -3125,7 +3125,7 @@ have ot: ordinal_set(fun_image omega0 (f x)).
   by apply:Os_funI => w /(OS_nat) ;apply: (ord_induction_p5 fv ax1).
 apply: ord_ub_sup.
 - by apply:OS_sup.
-- move => t /funI_P [w wi ->]. 
+- move => t /funI_P [w wi ->].
   move: (proj33 ol _ wi) => so.
   move/(oltP OS_omega):wi =>h; move: (ord_induction_p21a ax ux h) => l1.
   apply:(oleT (oleT (osum_Mleeq (proj32 ax1 _ ux) (proj31_1 h)) l1)).
@@ -3142,14 +3142,14 @@ have oy1:= proj32 oy0.
 have ox:= proj32 ux. move: y oy1 oy0; apply: least_ordinal2 => z oz plz loz.
 case: (ole_eqVlt loz) => h1.
   by rewrite - h1; apply:ord_induction_p21b.
-case: (ordinal_limA oz) => H. 
+case: (ordinal_limA oz) => H.
    by move: (olt_0omega); rewrite - H => /(oleNgt loz).
   move:H=> [t ot tv]; rewrite tv.
   have lezo: omega0 <=o t by apply /oltSleP; rewrite - tv.
   have lttz : t <o z by rewrite tv; apply: oltS.
   have tp:= (olt_leT loo lezo).
   rewrite - osum2_succ //; apply /oleSltP.
-  rewrite (ord_induction_p13 fv ax ux ot). 
+  rewrite (ord_induction_p13 fv ax ux ot).
   move: (proj33 ax1 _ _ (ord_induction_p41 fv ax1 ux  tp) ux).
   exact:ole_ltT  (plz _ lttz lezo).
 rewrite (proj2 (osum_normal ox) _ H).
@@ -3202,9 +3202,9 @@ exact:(oleT (osum_M0le (proj32 ux) oy) (ord_induction_p21c ax ux p1)).
 Qed.
 
 Lemma sup_critical A y:  OIax2 u w0 g ->
-   omega0 <=o y -> ordinal_set A -> \osup A = y -> 
-   (forall x, inc x A -> u <=o x) -> 
-   (forall x, inc x A -> f x y = y) -> 
+   omega0 <=o y -> ordinal_set A -> \osup A = y ->
+   (forall x, inc x A -> u <=o x) ->
+   (forall x, inc x A -> f x y = y) ->
    critical_ordinal y.
 Proof.
 move=> ax2 ify osA sA uA hA.
@@ -3213,12 +3213,12 @@ move: (OS_sup osA); rewrite sA => oy.
 case: (emptyset_dichot A) => nea.
   case: (oleNgt ify).
   move: sA; rewrite nea setU_0 -[emptyset]/ \0o => <-; exact: olt_0omega.
-have ly2: \2o <=o y. 
+have ly2: \2o <=o y.
   move:  olt_1omega => /oleSltP; rewrite osucc_one => h; exact:(oleT h ify).
 have ly1:=(oleT (proj1 olt_12) ly2).
 have xp1: forall x, inc x A -> x <o y.
   move => x xA; by move:(ord_induction_p21d ax (uA _ xA) ly2);rewrite (hA _ xA).
-have uy: u <o y. 
+have uy: u <o y.
   move:nea => [x xA]; exact: (ole_ltT (uA _ xA)(xp1 _ xA)).
 apply: is_critical_pr => // x ux xy.
 have ox:=proj32 ux.
@@ -3227,9 +3227,9 @@ by move: (ord_induction_p16 ax2 ux zl (oleR oy)); rewrite (hA _ zA).
 Qed.
 
 Lemma sup_critical2 v: OIax2 u w0 g -> ordinalp u -> u +o \2o <=o v ->
-  let A:= target (induction_defined0 (fun _ z => f z z) v) in 
+  let A:= target (induction_defined0 (fun _ z => f z z) v) in
   critical_ordinal (\osup A) /\ v <=o (\osup A).
-Proof. 
+Proof.
 move => ax; move: (ax) => [ax1 ax0 _ _]; move: (conj ax1 ax0) => ax1b.
 move: (induction_defined_pr0 (fun _ z => f z z) v) => /=.
 set h:= induction_defined0 _ _; move=> [sh sjh h0 hrec] ou lu2v.
@@ -3251,7 +3251,7 @@ have pa: forall n, natp n ->
   split => //.
     by rewrite (hrec _ (NS_succ nN))(hrec _ nN); apply: ord_induction_p21d.
   by apply: ole_ltT pf; rewrite (succ_of_nat nN); apply /oleSltP.
-have pb: ordinal_set (target h). 
+have pb: ordinal_set (target h).
    move=> t tt; move: ((proj2 sjh) _  tt); rewrite sh; move=> [x xs ->].
    by move: (pa _ xs) => [ok _].
 move: (OS_sup pb) => os.
@@ -3266,7 +3266,7 @@ have pc: u <o y.
   by move: (osum_Meqlt olt_02 ou); rewrite (osum0r ou) => le1.
 case: (ord_sup_inVlimit pb net) => yt.
   move: ((proj2 sjh) _ yt) => [v' vsh vv].
-  rewrite sh in vsh; move: (pa _ vsh) => [_ _ _ aux _]. 
+  rewrite sh in vsh; move: (pa _ vsh) => [_ _ _ aux _].
   rewrite -vv in aux.
   have pd:inc (Vf h (csucc v')) (target h ) by Wtac; rewrite sh; apply:NS_succ.
   case: (oltNge aux (ord_sup_ub pb pd)).
@@ -3276,20 +3276,20 @@ apply: is_critical_pr => //.
   apply ord_sup_ub => //; Wtac; rewrite sh; fprops.
 move => x ux xy.
 move: (proj32_1 pc) => oy.
-move: (ord_induction_p10 fv (proj1 ax1b) ux) => [_ nf5]. 
+move: (ord_induction_p10 fv (proj1 ax1b) ux) => [_ nf5].
 rewrite (nf5 _ yt) -/y; apply: ord_ub_sup => //.
 move=> i /funI_P [j /(oltP oy) jy ->].
-have fi: forall n, natp n -> 
+have fi: forall n, natp n ->
    forall m, natp m -> Vf h m <=o Vf h (m +c n).
   apply: Nat_induction.
      move=> m mN; rewrite (Nsum0r mN); apply: oleR.
      apply: pb; Wtac; ue.
   move=> n nN hr m mN; apply: (oleT (hr _ mN)).
   by rewrite (csum_nS _ nN);move: (pa _ (NS_sum mN nN))=> [_ _ _ [hh _] _].
-move: (olt_sup pb xy) => [n nt [un _]]. 
-move: (olt_sup pb jy) => [m mt [um _]]. 
+move: (olt_sup pb xy) => [n nt [un _]].
+move: (olt_sup pb jy) => [m mt [um _]].
 move: ((proj2 sjh) _  nt)((proj2 sjh) _  mt)=> [N Nv u1] [M Mv u2].
-rewrite sh in Nv Mv; move: (fi _ Nv _ Mv); rewrite -u2. 
+rewrite sh in Nv Mv; move: (fi _ Nv _ Mv); rewrite -u2.
 move: (fi _ Mv _ Nv); rewrite -u1 csumC=> le1 le2.
 have le3:= oleT un le1.
 have le4:= oleT um le2.
@@ -3299,8 +3299,8 @@ move: (ord_induction_p16 ax ux le3 le4) => pd; apply: (oleT pd).
 rewrite - hrec;[ apply: ord_sup_ub;[| Wtac; rewrite sh] |]; fprops.
 Qed.
 
-Lemma sup_critical3 A:  OIax2 u w0 g -> nonempty A -> 
-   (forall x, inc x A -> critical_ordinal x) -> 
+Lemma sup_critical3 A:  OIax2 u w0 g -> nonempty A ->
+   (forall x, inc x A -> critical_ordinal x) ->
    critical_ordinal (\osup A).
 Proof.
 move => ax; move: (ax) => [ax1 ax0 _ _]; move: (conj ax1 ax0) => ax1b.
@@ -3346,7 +3346,7 @@ set t := x +o (u +o \2o).
 case:(sup_critical2 ax2 ou (osum_M0le ox ou2)); set y := \osup _ => qa qb.
 exists y => //; exact: (oleT (osum_Mle0 ox ou2) qb).
 Qed.
-  
+
 Lemma critical_indecomposable y: OIax2 u w0 g ->
   critical_ordinal y -> indecomposable y.
 Proof.
@@ -3357,7 +3357,7 @@ have yp:= (ole_ltT (ole0x (proj31_1 y3)) y3).
 apply/(indecompP yp) => x xy.
 move: (proj31_1 xy)  (proj31_1 y3) => ox ou.
 apply: oleA; last exact: (osum_M0le ox oy).
-have pa: forall t, u <=o t -> t +o y <=o (f t y). 
+have pa: forall t, u <=o t -> t +o y <=o (f t y).
   by move => t tp; apply: ord_induction_p21c.
 case: (oleT_ee ox ou) => lexu.
   have leuu:= (oleR ou).
@@ -3373,8 +3373,8 @@ End OrdinalInduction2.
 (** ** Ordinal power *)
 
 Definition opow' := ord_induction_defined (fun z:Set => \1o) oprod2.
-Definition opow a b := 
-  Yo (a = \0o) 
+Definition opow a b :=
+  Yo (a = \0o)
      (Yo (b = \0o) \1o \0o)
      (Yo (a = \1o) \1o (opow' a b)).
 Notation "x ^o y" := (opow x y) (at level 30).
@@ -3406,22 +3406,22 @@ Lemma opow0x' x: \0o <o x ->  \0o ^o x = \0o.
 Proof. by move => [_ /nesym h]; apply:opow0x. Qed.
 
 Lemma opow1x  x: \1o ^o x = \1o.
-Proof. 
+Proof.
 have ooz: (\1o <> \0o) by fprops.
 by rewrite /opow; Ytac0; Ytac0.
 Qed.
 
 Lemma opowx0 x: x ^o \0o = \1o.
-Proof.  
+Proof.
 rewrite /opow /opow'.
 Ytac xnz; [by Ytac0 | by Ytac xno => //; rewrite ord_induction_y0 ].
 Qed.
 
 Lemma opowx1 x: ordinalp x -> x ^o \1o = x.
-Proof.  
+Proof.
 have zno: \1o <> \0o by fprops.
 rewrite /opow; Ytac xz; [by Ytac0 |Ytac xno => // ].
-move => ox;rewrite /opow' ord_induction_y1 oprod1l //. 
+move => ox;rewrite /opow' ord_induction_y1 oprod1l //.
 Qed.
 
 Lemma opow2x x y: \2o <=o x ->  x ^o y = opow' x y.
@@ -3440,7 +3440,7 @@ case: (ord2_trichotomy ox).
   rewrite xz opow0x //; fprops.
 - by move => xo; rewrite xo opow1x; fprops.
 - move:(ord_pow_axioms) =>[ [ax1 _ _ _] _ _ _].
-  move => xo; rewrite (opow2x _ xo). 
+  move => xo; rewrite (opow2x _ xo).
   apply:(ord_induction_p5 (erefl opow') ax1 xo oy).
 Qed.
 
@@ -3464,7 +3464,7 @@ case: (equal_or_not \1o x) => o1.
 have o3: \2c <=o x  by apply /oge2P; split.
 move: ord_pow_axioms => [ [ax1 _ _ _] _ _ _].
 move: (ord_induction_p4 (erefl opow') ax1 o3 y1);rewrite opow2x //.
-Qed. 
+Qed.
 
 Lemma opow_Mspec x y: \2o <=o x ->
   ordinalp y  -> y <=o (x ^o y).
@@ -3472,7 +3472,7 @@ Proof.
 move=> x2 y1.
 move: ord_pow_axioms => [ [ax1 _ _ _] _ _ _].
 move: (ord_induction_p9 (erefl opow') ax1 x2 y1); rewrite opow2x //.
-Qed. 
+Qed.
 
 Lemma opow_Meqlt x y y': \2o <=o  x ->
   y <o y' -> (x ^o y) <o (x ^o y').
@@ -3483,12 +3483,12 @@ move: (ord_induction_p8 (erefl opow') ax1 x2 yy'); rewrite !opow2x //.
 Qed.
 
 Lemma opow_Meqltr a b c: \2o <=o a ->
-  ordinalp b -> ordinalp c -> 
+  ordinalp b -> ordinalp c ->
   ((b <o c) <-> ( (a ^o b) <o (a ^o c))).
 Proof.
 move=> h ob oc.
 split; first by apply: opow_Meqlt.
-move=> aux; case: (oleT_ell oc ob).  
+move=> aux; case: (oleT_ell oc ob).
 - by move=> cb; move: aux => [_]; rewrite cb.
 - by move=> h1;move: (opow_Meqlt h h1)  => [/(oltNge aux) ].
 - done.
@@ -3501,14 +3501,14 @@ move=> h ob oc.
 case: (oleT_ell ob oc) => //h1; move: (opow_Meqlt h h1) => [_ h2] //.
 by move=> h3; case: h2.
 Qed.
-  
+
 Lemma opow_nz0 x y:
   ordinalp x -> ordinalp y -> x ^o y = \0o ->
   (x = \0o /\ y <> \0o).
 Proof.
 move=> ox oy pz.
 case: (equal_or_not y \0o) => ynz.
-  move: pz;  rewrite ynz; rewrite opowx0 => h'. 
+  move: pz;  rewrite ynz; rewrite opowx0 => h'.
   by case: (card1_nz).
 split => //.
 case: (equal_or_not x \0o) =>// xnz.
@@ -3537,9 +3537,9 @@ have oy':=(proj32 yy').
 case: (ord2_trichotomy ox) => // x2.
    rewrite x2 opow1x; apply: oge1; fprops => h.
    move: (opow_nz0 ox' oy' h) => [p1 p2].
-   by rewrite p1 in xx'; move: (ole0 xx'). 
-move: ord_pow_axioms => [ax1 _ _ _ ]. 
-move: (ord_induction_p16 (erefl opow') ax1 x2 xx' yy'). 
+   by rewrite p1 in xx'; move: (ole0 xx').
+move: ord_pow_axioms => [ax1 _ _ _ ].
+move: (ord_induction_p16 (erefl opow') ax1 x2 xx' yy').
 by rewrite - (opow2x _ x2) -  (opow2x _ (oleT x2 xx')).
 Qed.
 
@@ -3550,7 +3550,7 @@ Proof. by move => xne le1 /oleR oy; apply:opow_Mlele. Qed.
 
 Lemma opow_Meqle x y y':
   \0o <o x -> y <=o y' ->  (x ^o y) <=o (x ^o y').
-Proof. 
+Proof.
 move => [[_ ox _] xn] le1 ; apply: opow_Mlele;fprops.
 Qed.
 
@@ -3586,7 +3586,7 @@ Qed.
 Lemma opow_succ x y: ordinalp x -> ordinalp y ->
   x ^o (osucc y) = (x ^o y) *o x.
 Proof.
-by move=> ox oy;rewrite -(osucc_pr oy) (opow_sum ox oy OS1) opowx1.  
+by move=> ox oy;rewrite -(osucc_pr oy) (opow_sum ox oy OS1) opowx1.
 Qed.
 
 
@@ -3606,7 +3606,7 @@ case: (ord2_trichotomy oa) => az.
     by apply: oprod2_nz.
   rewrite az (opow1x b) (opow1x c)(opow1x (b *o c)) //.
 move: (ord_induction_p19 (erefl opow') ord_pow_axioms az b1 c1).
-rewrite (opow2x b az)(opow2x (b *o c) az). 
+rewrite (opow2x b az)(opow2x (b *o c) az).
 suff: (\2o <=o (opow' a b)) by  move => f2; rewrite (opow2x c f2) //.
 apply: (ord_induction_p41 (erefl opow') _ az b1).
 by move: ord_pow_axioms  => [[]].
@@ -3619,7 +3619,7 @@ move=> aN bN;move: b bN.
 move: (OS_nat aN) => oa.
 apply: Nat_induction; first by rewrite cpowx0 opowx0.
 move=> n nN hrec.
-rewrite (cpow_succ _ nN)  (succ_of_nat nN) (opow_succ oa (OS_nat nN)) hrec.  
+rewrite (cpow_succ _ nN)  (succ_of_nat nN) (opow_succ oa (OS_nat nN)) hrec.
 apply: (oprod2_2int); fprops.
 Qed.
 
@@ -3629,13 +3629,13 @@ move /olt_omegaP => aN /olt_omegaP bN; apply /olt_omegaP.
 rewrite (opow_2int aN bN); fprops.
 Qed.
 
-Lemma cnext_pow C x y: 
+Lemma cnext_pow C x y:
   infinite_c C -> inc x (cnext C) -> inc y (cnext C) ->
   inc (x ^o y) (cnext C).
 Proof.
 move => ha hx; move: (ha) => [cc _].
 move /(cnextP cc): (hx) => [ox cx] /(cnextP cc) [oy cy].
-have s1: inc \1o (cnext C). 
+have s1: inc \1o (cnext C).
   by apply:cnext_leomega => //; move: olt_1omega => [].
 case: (ord2_trichotomy ox).
     case: (equal_or_not y \0o); first by move => ->; rewrite opowx0.
@@ -3644,7 +3644,7 @@ case: (ord2_trichotomy ox).
   by move => ->; rewrite opow1x.
 move => x2;move: y oy cy; apply:least_ordinal2 => z oz hz coz.
 have aux: forall t, t<o z -> inc (x ^o t) (cnext C).
-  move => t sa; apply: (hz _ sa). 
+  move => t sa; apply: (hz _ sa).
   exact: (cleT  (ocle1 (proj1 sa)) coz).
 case: (ordinal_limA oz); first by move => ->; rewrite opowx0.
   move=> [t ot zt].
@@ -3668,11 +3668,11 @@ Lemma opow_Mspec2 a b: ordinalp b ->
   \2o <=o a -> (a *o b) <=o (a ^o b).
 Proof.
 move=> ob oa2.
-have oa:= proj32 oa2. 
+have oa:= proj32 oa2.
 have a1:=(olt_leT olt_02 oa2).
 move: (ord2_trichotomy1 oa2) => [pa1 pa2].
 move: b ob;apply: least_ordinal2 => t ot lpy.
-case: (ordinal_limA ot).  
+case: (ordinal_limA ot).
     move => ->;rewrite opowx0 oprod0r; exact: ole_01.
   move=> [y oy ty].
   rewrite ty (opow_succ oa oy) (oprod2_succ oa oy).
@@ -3715,7 +3715,7 @@ Lemma opow_Mo_leP a b: ordinalp a -> ordinalp b ->
 Proof.
 move=> oa ob; split; first apply:opow_Mo_le.
 move => loo.
-by case: (oleT_el oa ob) => //; move/(opow_Mo_lt) => /oltNge. 
+by case: (oleT_el oa ob) => //; move/(opow_Mo_lt) => /oltNge.
 Qed.
 
 Lemma opow_Mo_ltP a b: ordinalp a -> ordinalp b ->
@@ -3734,8 +3734,8 @@ Proof. apply:opowx0. Qed.
 Lemma oopow1: oopow \1o = omega0.
 Proof. apply:(opowx1 OS_omega). Qed.
 
-Lemma omega_log_p1 x: \0o <o x -> 
-   exists y, [/\ ordinalp y, oopow y <=o x & x <o oopow (osucc y)]. 
+Lemma omega_log_p1 x: \0o <o x ->
+   exists y, [/\ ordinalp y, oopow y <=o x & x <o oopow (osucc y)].
 Proof.
 move => ox.
 have x1: \1o <=o x by apply/oge1P.
@@ -3743,7 +3743,7 @@ have o2:= ole_2omega.
 move: ord_pow_axioms => [[ax1 _ _ _ ] _ _ _].
 move: (ord_induction_p12 (erefl opow') ax1 o2 x1) => [y []].
 rewrite - (opow2x _ o2) -(opow2x _ o2) => sa sb sc.
-by have oy:=(proj31 sa); exists y. 
+by have oy:=(proj31 sa); exists y.
 Qed.
 
 Definition ord_ext_div_pr a b x y z :=
@@ -3752,25 +3752,25 @@ Definition ord_ext_div_pr a b x y z :=
    z <o (a ^o x), y <o a & \0o <o y]].
 
 Lemma ord_ext_div_unique a b x y z x' y' z':
-  \2o <=o a -> ordinalp b -> 
+  \2o <=o a -> ordinalp b ->
   ord_ext_div_pr a b x y z ->  ord_ext_div_pr a b x' y' z' ->
   [/\ x=x', y=y' & z=z'].
 Proof.
 move=> pa ob.
 have oa:= proj32 pa.
-have aux: forall x y z, ord_ext_div_pr a b x y z -> 
+have aux: forall x y z, ord_ext_div_pr a b x y z ->
   (a ^o x <=o b /\ b <o a ^o (osucc x)).
   move => u v w [ou ov ow [-> r1 r2 r3]]; move: (OS_pow oa ou) => op; split.
     apply:(oleT (oprod_Mle1 op r3)); apply:(osum_Mle0 (OS_prod2 op ov) ow).
   apply:(olt_leT (osum_Meqlt r1 (OS_prod2 op ov))).
-  rewrite - (oprod2_succ op ov) (opow_succ oa ou); apply:oprod_Meqle => //. 
+  rewrite - (oprod2_succ op ov) (opow_succ oa ou); apply:oprod_Meqle => //.
   by apply /oleSltP.
 move => p1 p2.
 move: (aux _ _ _ p1) (aux _ _ _ p2) => [p3 p4][p5 p6].
 move: p1 p2 => [ox oy oz [bv r1 r2 r3]][ox' oy' oz' [bv' r1' r2' r3']].
 have sx: x = x'.
    move: (proj1 (opow_normal pa)) => h.
-   apply: (sincr_bounded_unique h ox ox' p3 p4 p5 p6). 
+   apply: (sincr_bounded_unique h ox ox' p3 p4 p5 p6).
 rewrite - sx in  bv' r1'.
 have p7 : (odiv_pr0 b (a^o x) y z) by split.
 have p8 : (odiv_pr0 b (a^o x) y' z') by split.
@@ -3779,13 +3779,13 @@ Qed.
 
 
 Lemma ord_ext_div_exists a b:
-  \2o <=o a -> \0o <o b -> 
+  \2o <=o a -> \0o <o b ->
   exists x y z,  ord_ext_div_pr a b x y z.
 Proof.
 move=> a2 b1.
 move: (proj32 a2) (proj32_1 b1) => oa ob.
 case: (oleT_el oa ob); last first.
-  move=> ba; exists \0o; exists b; exists \0o; hnf. 
+  move=> ba; exists \0o; exists b; exists \0o; hnf.
   rewrite (opowx0 a) (oprod1l ob)(osum0r ob).
   move: OS0 => o0; split => //; split => //;by apply olt_01.
 move=> ab.
@@ -3795,8 +3795,8 @@ move: (ord_induction_p12 (erefl opow') ax1 a2 b11) => [y].
 rewrite -(opow2x y a2) -(opow2x (osucc y) a2).
 move=> [yb fyb fysb].
 have oy:=proj31 yb.
-move: fysb; rewrite (opow_succ oa oy). 
-move:(OS_pow oa oy)=> oay ltb. 
+move: fysb; rewrite (opow_succ oa oy).
+move:(OS_pow oa oy)=> oay ltb.
 move: (odivision_exists oay oa ltb)=> [[oq or abq lt1] lt2].
 exists y, (oquo b (a ^o y)), (orem b (a ^o y)); split => //; split => //.
 apply/ord_ne0_pos => // qz; move: abq; rewrite qz (oprod0r) (osum0l or) => h.
@@ -3804,12 +3804,12 @@ by apply/(oltNge lt1); rewrite -h.
 Qed.
 
 Lemma opow_rec_def a b: \2o <=o a -> ordinalp b ->
-  a ^o b = unionb (Lg b (fun x => 
+  a ^o b = unionb (Lg b (fun x =>
     fun_image( (a-s1 \0o)\times a ^o x) (fun p => (a^o x) *o (P p) +o (Q p))))
     +s1 \0o.
 Proof.
 move => a2 ob.
-have oa:= proj32 a2. 
+have oa:= proj32 a2.
 have ap:= (olt_leT olt_02 a2).
 have oab:= OS_pow oa ob.
 set_extens t => h; last first.
@@ -3842,7 +3842,7 @@ exact: (olt_i r1).
 Qed.
 
 
-Lemma indecomp_prop3 x: 
+Lemma indecomp_prop3 x:
   indecomposable x -> exists2 y, ordinalp y & x = oopow y.
 Proof.
 move=> oidx.
@@ -3856,7 +3856,7 @@ case: (indecomp_pr op1 oc oidx pa) => eq1; last first.
   by move: (proj2 (olt_leT lt1 (osum_Mle0 op1 oc))); rewrite pa eq1.
   have bN: natp b by exact (olt_i pc).
 have bz:= nesym (proj2 pd).
-move: (cpred_pr bN bz)=> []; set b1:= cpred b. 
+move: (cpred_pr bN bz)=> []; set b1:= cpred b.
 move => ra;rewrite (succ_of_nat ra) => rb.
 move:(OS_nat ra) => ob1;move: (OS_prod2 op ob1) => h2.
 move: eq1; rewrite rb (oprod2_succ op ob1) => h1.
@@ -3871,14 +3871,14 @@ Proof.
 move: y;apply: least_ordinal2 => z oz zle.
 case:(ordinal_limA oz)=> zl.
     rewrite zl oopow0; exact indecomp_one.
-  move: zl => [x ox zv]. 
-  rewrite zv (oopow_succ ox). 
+  move: zl => [x ox zv].
+  rewrite zv (oopow_succ ox).
   apply/(indecomp_prodP olt_1omega (oopow_pos ox));apply: indecomp_omega.
 rewrite /oopow (proj2 (opow_normal (ole_2omega)) _ zl).
 set E := (fun_image z oopow).
-have pa: (forall x, inc x E -> indecomposable x). 
+have pa: (forall x, inc x E -> indecomposable x).
   by move => x /funI_P [t /(oltP oz) tz ->]; apply: zle.
-apply:(indecomp_sup pa); exists \1o; apply/funI_P. 
+apply:(indecomp_sup pa); exists \1o; apply/funI_P.
 by exists \0o; [exact (proj32 zl) | rewrite oopow0 ].
 Qed.
 
@@ -3897,11 +3897,11 @@ set p := indecomposable.
 have opp: ordinal_prop p by move => x [/proj32_1 h _].
 have p4 :(iclosed_collection p) by split => // F fl nef; apply: indecomp_sup.
 move:ole_2omega  OS_omega => oo odo.
-have p5: (non_coll p). 
-   apply:unbounded_non_coll => // x ox; exists(omega0 ^o x). 
+have p5: (non_coll p).
+   apply:unbounded_non_coll => // x ox; exists(omega0 ^o x).
      apply: (opow_Mspec oo ox).
    by apply: indecomp_prop4.
-apply:(normal_ofs_uniqueness (p:= fun z => z *o omega0)). 
+apply:(normal_ofs_uniqueness (p:= fun z => z *o omega0)).
 - apply: (opow_normal oo).
 - by apply: (ordinals_col_p2 (conj p4 p5)).
 - by move => x ox; rewrite oopow_succ.
@@ -3919,10 +3919,10 @@ apply:(normal_ofs_uniqueness (p:= fun z => z *o omega0)).
   apply:oleA => //; exact: (h _ indecomp_one).
 Qed.
 
-Lemma oprod_fix1 a y (x := a ^o omega0 *o y):  
+Lemma oprod_fix1 a y (x := a ^o omega0 *o y):
   \0o <o a  -> ordinalp y -> a *o x = x.
 Proof.
-move => ap oy. 
+move => ap oy.
 have oa:= proj32_1 ap.
 rewrite (oprodA oa (OS_pow oa OS_omega) oy)  -{1} (opowx1 oa).
 by rewrite - (opow_sum oa OS1 OS_omega) (osum_int_omega olt_1omega).
@@ -3938,7 +3938,7 @@ have oa:= proj32_1 ap.
 have ofp:=(OS_prod2 (proj32_1 rs) oq).
 move: (oprodD ofp or oa); rewrite -xv xp xv (oprod_fix1 ap oq) => eq1.
 move:( osum2_simpl or (OS_prod2 oa or) ofp eq1) => rar.
-have ran: forall n, inc n Nat -> r = a ^o n *o r. 
+have ran: forall n, inc n Nat -> r = a ^o n *o r.
   apply: Nat_induction; first by rewrite opowx0 oprod1l.
   move => n nN h; move:(OS_nat nN) => os.
   have ->: csucc n = \1o +o n.
@@ -3951,7 +3951,7 @@ case:(oltNge  rs).
 move/oge2P : a2 => a2; rewrite(proj2 (opow_normal a2) _ omega_limit).
 apply: ord_ub_sup => //.
 move => w /funI_P [n nN ->].
-rewrite (ran _ nN); move:(OS_nat nN) => os. 
+rewrite (ran _ nN); move:(OS_nat nN) => os.
 by apply:oprod_Mle1; [ fprops | apply/ord_ne0_pos ].
 Qed.
 
@@ -3992,7 +3992,7 @@ Qed.
 (** repeated derivations *)
 
 Lemma closed_cofinal_inter C S (E := cnext C) (T:= intersectionb S):
-  infinite_c C -> fgraph S -> ordinalp (domain S) -> 
+  infinite_c C -> fgraph S -> ordinalp (domain S) ->
   cardinal (domain S) <=c C ->
   nonempty (domain S) ->
   (forall i, inc i (domain S) -> iclosed_set (Vg S i)) ->
@@ -4003,7 +4003,7 @@ Lemma closed_cofinal_inter C S (E := cnext C) (T:= intersectionb S):
 Proof.
 move => ic fgs ods cds /nonemptyP neds h1 h2 h4.
 move: (cnext_pr1 (proj1 ic)) => [sa sb sc].
-have pa:=(olt_i (ord_ne0_pos ods neds)). 
+have pa:=(olt_i (ord_ne0_pos ods neds)).
 have h3:  (forall i, inc i (domain S) -> sub (Vg S i) E) by move => i /h2 [].
 have pb: sub T E by move => x h; move:(setIb_hi h pa); apply: h3.
 move: (infinite_card_limit2 (cle_inf_inf ic (proj1 sb))) => hy.
@@ -4019,18 +4019,18 @@ have pd: ord_cofinal T E.
   pose yipp i y := [/\ inc y (Vg S i), x <=o y & forall z,
          inc z (Vg S i) -> x <=o z -> y <=o z].
   pose yis i := Zo (Vg S i) (yipp i).
-  pose yi i := intersection (yis i). 
-  have yip:forall i, inc i (domain S) -> yipp i (yi i). 
+  pose yi i := intersection (yis i).
+  have yip:forall i, inc i (domain S) -> yipp i (yi i).
     move => i ids; suff: inc (yi i) (yis i) by move/Zo_hi.
     move: (pc _ ids) => h.
     have xe1 : x <o \osup (Vg S i) by rewrite h; move/(oltP oe): xe.
-    have osi: ordinal_set (Vg S i) by move => t /(h3 _ ids) /ose. 
+    have osi: ordinal_set (Vg S i) by move => t /(h3 _ ids) /ose.
     apply:ordinal_setI; last by move => t /Zo_P [/osi].
-    move: (olt_sup osi xe1) => [z za [zb _]]. 
+    move: (olt_sup osi xe1) => [z za [zb _]].
     pose p z := inc z (Vg S i) /\ x <=o z.
     have pz: p z by split.
     have oz:= proj32 zb.
-    move: (least_ordinal4 oz pz) => [ta [tb tc] td].  
+    move: (least_ordinal4 oz pz) => [ta [tb tc] td].
     have ok: (yipp i (least_ordinal p z)).
       by split => // t te tf; move:(proj32 tf)=> ot; apply: td.
     by exists (least_ordinal p z); apply:Zo_i.
@@ -4042,10 +4042,10 @@ have pd: ord_cofinal T E.
      (yi i) <=o (yi j).
     move => i j ids jds ij; move: (yi1 _ _ ids jds ij) => h.
     move: (yip _ ids) (yip _ jds) => [_ _ uc] [ _ ub _]; apply: uc => //.
-  set F := fun_image (domain S) yi. 
-  have cf: cardinal F <=c C. 
+  set F := fun_image (domain S) yi.
+  have cf: cardinal F <=c C.
     exact:cleT (fun_image_smaller (domain S) yi) cds.
-  have fe: sub F E. 
+  have fe: sub F E.
     move => t /funI_P [z zdf ->]; move /yip:(zdf) => [ua ub _].
     by apply: (h3 _ zdf).
   have osf: ordinal_set F by move => t /fe /ose.
@@ -4053,22 +4053,22 @@ have pd: ord_cofinal T E.
   have pe: x <=o (union F).
     move:(yip _ pa) => [_ ua _]; apply: (oleT ua); apply: ord_sup_ub => //.
     apply /funI_P; ex_tac.
-  exists (\osup F) => //; apply/setIb_P => //. 
+  exists (\osup F) => //; apply/setIb_P => //.
   move => i ids.
   set G := fun_image (Zo (domain S) (fun z => i <=o z)) yi.
   have oi:= (Os_ordinal ods ids).
-  have pf:inc i (Zo (domain S) [eta ordinal_le i]). 
+  have pf:inc i (Zo (domain S) [eta ordinal_le i]).
       apply/Zo_P; split => //; exact: (oleR oi).
   have eq1: \osup G = \osup F.
     apply:ord_sup_1cofinal => //; split.
        move => t /funI_P [z /Zo_P [ha _] ->]; apply/funI_P; ex_tac.
     move => a /funI_P [z za ->].
     have oz:= (Os_ordinal ods za).
-    case (oleT_el oi oz) => h5. 
+    case (oleT_el oi oz) => h5.
        exists (yi z); first by apply/funI_P; exists z => //; apply/Zo_P => //.
        by move: (yip _ za) => [_ /proj32 /oleR h6 _].
     by exists (yi i); [ apply/funI_P; exists i | apply:yi2 ].
-  have g1: sub G (Vg S i). 
+  have g1: sub G (Vg S i).
     move => t /funI_P [j /Zo_P [ja jb] ->]; case (equal_or_not i j) => ij.
        by rewrite ij; move: (yip _ ja) => [h6 _ _].
     apply:yi1 => //.
@@ -4077,7 +4077,7 @@ have pd: ord_cofinal T E.
   case => //;move: (pc _ ids) => -> h6.
   by case: (ordinal_irreflexive oe); move: pd; rewrite h6.
 split => //.
-have pe: \osup T = E by move /(ord_cofinal_p2 hy pb): pd ->. 
+have pe: \osup T = E by move /(ord_cofinal_p2 hy pb): pd ->.
 split; first by move => x /pb /(cnextP (proj1 ic)) [].
 move => F FT neF; rewrite pe;set x := (\osup F).
 case (equal_or_not x E) => xe; [by left | right ].
@@ -4095,25 +4095,25 @@ Definition many_der f E :=
 
 Lemma many_der_ex C (E := cnext C) f (g:= many_der f E)
   (ii:= fun i => (intersectionf i (fun z => fixpoints (Vf g z)))):
-  infinite_c C -> normal_function f E E -> 
-  [/\ function g, source g = E, Vf g \0o = f, 
+  infinite_c C -> normal_function f E E ->
+  [/\ function g, source g = E, Vf g \0o = f,
       (forall i, inc i E ->  i <> \0o -> Vf g i = ordinalsE E (ii i)) &
        [/\ forall i, inc i E -> i <> \0o ->
-          lf_axiom (ordinals (fun x y => [/\ inc x  (ii i), inc y  (ii i) 
+          lf_axiom (ordinals (fun x y => [/\ inc x  (ii i), inc y  (ii i)
         & x <=o y])) E E,
        (forall i, inc i E ->  i <> \0o ->
           iclosed_set (ii i) /\ ord_cofinal (ii i) E),
        (forall i, inc i E -> normal_function (Vf g i) E E) &
        (forall i, inc i E -> i <> \0o ->
-         Imf (Vf g i) =  (ii i))]]. 
+         Imf (Vf g i) =  (ii i))]].
 Proof.
 move => pa pb.
-have oe: ordinalp E by move:(cnext_pr1 (proj1 pa)) => [[]]. 
+have oe: ordinalp E by move:(cnext_pr1 (proj1 pa)) => [[]].
 case:(transfinite_defined_pr (many_der_aux f E) (ordinal_o_wor oe)).
-rewrite -/(many_der _ _) -/g ordinal_o_sr => sa sb sc. 
-have ze:= (cnext_leomega pa (proj1 olt_0omega)).  
+rewrite -/(many_der _ _) -/g ordinal_o_sr => sa sb sc.
+have ze:= (cnext_leomega pa (proj1 olt_0omega)).
 have fg: function g by fct_tac.
-move: (sc _ ze). 
+move: (sc _ ze).
 rewrite /many_der_aux /restriction1; aw.
 have -> :(segment (ordinal_o E) \0o = \0o) by rewrite ordinal_segment.
 Ytac0 => pc.
@@ -4123,10 +4123,10 @@ have pd: forall i, inc i E -> i <> \0o -> Vf g i =  ordinalsE E (ii i).
   rewrite /many_der_aux {1 2} /restriction1; aw.
   have -> :(segment (ordinal_o E) i = i) by rewrite ordinal_segment.
   Ytac0 ; move => ->; congr (fun z => ordinalsE E z); apply: setIf_exten.
-  move => k ki /=; rewrite restriction1_V // sb. 
+  move => k ki /=; rewrite restriction1_V // sb.
   apply: (ordinal_transitive oe ie).
 split => //.
-pose pp k := iclosed_set (fpi k)/\ ord_cofinal (fpi k) E /\ 
+pose pp k := iclosed_set (fpi k)/\ ord_cofinal (fpi k) E /\
    forall l, l <o k -> sub (fpi k) (fpi l).
 have pe: forall i, inc i E -> i<> \0o -> (forall k, k <o i -> pp k) ->
   iclosed_set (ii i) /\ ord_cofinal (ii i) E.
@@ -4137,7 +4137,7 @@ have pe: forall i, inc i E -> i<> \0o -> (forall k, k <o i -> pp k) ->
   move /(cnextP (proj1 pa)): ie => [u1 u2].
   have qc: ordinalp (domain S) by rewrite qb.
   have qd: cardinal (domain S) <=c C by rewrite qb.
-  have qe: nonempty (domain S). 
+  have qe: nonempty (domain S).
     by exists \0c;move:(olt_i (ord_ne0_pos u1 inz)); rewrite - qb.
   have qf:(intersectionb S) = ii i.
     rewrite /ii /S /fpi /intersectionb Lgd;apply:setIf_exten => k kd.
@@ -4164,13 +4164,13 @@ have pg: forall k, inc k E -> pp k.
      have sfe: source f = E by move: pb => [ [] ].
      rewrite l0 /pp/fpi pc; split.
     apply:(iclosed_fixpoints_fun  oe) => //; rewrite sfe.
-     split; last by move => m /olt0. 
+     split; last by move => m /olt0.
      by apply: normal_fix_cofinal.
   have ww: forall k, k <o l -> pp k.
     move /(oltP oe): le => lte.
     move => t tl; apply: etc => //;apply/(oltP oe); exact:(olt_ltT tl lte).
   move: (pe _ le l0 ww) => r0; move: (pf l le l0 r0) => [ta tb].
-  have tc:  iclosed_set (fpi l). 
+  have tc:  iclosed_set (fpi l).
      by move: (iclosed_fixpoints_fun oe ta); rewrite /fpi/fixpoints ss.
   have td:  ord_cofinal (fpi l) E by rewrite /fpi; apply: normal_fix_cofinal.
   split => //; split => //.
@@ -4180,13 +4180,13 @@ have pg: forall k, inc k E -> pp k.
     rewrite /fpi /fixpoints ss // ss //.
     move => /Zo_P [ua ub]; apply /Zo_P; split => //.
     have fv: function (Vf g l) by move: ta => [[]].
-    have ti: inc t (ii l). 
+    have ti: inc t (ii l).
        rewrite - tb; apply /(Imf_P fv); rewrite ss//; exists t => //.
     by move:(setIf_hi ti (olt_i lm)) => /Zo_P [].
-have ph: forall i, inc i E -> i <> \0o -> 
+have ph: forall i, inc i E -> i <> \0o ->
   normal_function (Vf g i) E E /\ Imf (Vf g i) = ii i.
   move => i ie inz; apply: pf => //; apply: pe => // k ke; apply: pg.
-  have iE: i <o E by apply/oltP. 
+  have iE: i <o E by apply/oltP.
   exact:(olt_i(olt_ltT ke iE)).
 split.
 +  move => i ie inz.
@@ -4199,7 +4199,7 @@ split.
 + move => i ide inz; apply: pe => // k ki; apply: pg.
    have iE: i <o E by apply/oltP.
    apply /oltP => //; exact:(olt_ltT ki iE).
-+ move => i ide; case (equal_or_not i \0o);first by move => ->; ue. 
++ move => i ide; case (equal_or_not i \0o);first by move => ->; ue.
   move => inz; exact: (proj1 (ph i ide inz)).
 + move => i ide inz;exact: (proj2 (ph i ide inz)).
 Qed.
@@ -4215,7 +4215,7 @@ move => lcc ic1 ic2 agg n1 n2.
 have pa: sub E1 E2.
    move => x /(cnextP (proj1 ic1)) [sa sb]; apply/(cnextP (proj1 ic2)).
    split => //;exact: (cleT sb lcc).
-move: (many_der_ex ic1 n1). 
+move: (many_der_ex ic1 n1).
 move: (many_der_ex ic2 n2).
 rewrite -/E1 -/E2 -/g1 -/g2.
 set ii1:= fun i => (intersectionf i (fun z => fixpoints (Vf g1 z))).
@@ -4266,7 +4266,7 @@ Qed.
 
 Definition all_der_bound (f: fterm) (b: fterm2):=
   forall x i, ordinalp x -> ordinalp i ->
-    [/\ inc x (b x i), inc i (b x i), 
+    [/\ inc x (b x i), inc i (b x i),
       (exists2 C, infinite_c C & b x i = cnext  C) &
       forall t, inc t (b x i) -> inc (f t) (b x i)].
 
@@ -4281,7 +4281,7 @@ move: (h _ _ ox oi) => [sa sb sc sd].
 by move: (cnext_pred_more sc) => [sz sf].
 Qed.
 
-Definition all_der_aux (f:fterm) E x i := 
+Definition all_der_aux (f:fterm) E x i :=
    Vf (Vf (many_der (Lf f E E) E) i) x.
 
 Definition all_der (f:fterm) (b:fterm2) x i := all_der_aux f (b x i) x i.
@@ -4296,7 +4296,7 @@ Let g := all_der f b.
 
 Lemma all_der_bound_prop2 x i:
    ordinalp x -> ordinalp i ->
-   normal_function (Lf f (b x i) (b x i)) (b x i) (b x i). 
+   normal_function (Lf f (b x i) (b x i)) (b x i) (b x i).
 Proof.
 move => sa sb; move: (all_der_bound_prop sa sb bf).
 move => [ta tb tc td te].
@@ -4318,9 +4318,9 @@ have aux: forall C C', C <=c C' -> sub (cnext C) (cnext C').
    move => C1 C2 cc; move: (cc) => [c1 c2 _].
    move => t /(cnextP c1) [sa sb]; apply/(cnextP c2).
    by move:(cleT sb cc).
-move:(all_der_bound_prop ox oi bf). 
+move:(all_der_bound_prop ox oi bf).
 set C1 := union _; move => [sa sb sc sd se].
-rewrite {3 4} sd in n1. 
+rewrite {3 4} sd in n1.
 case: (cleT_ee (proj1 pc) (proj1 sa)) => cc.
   have see: sub E (b x i) by rewrite sd;apply: aux.
   have ag: agrees_on E (Lf f E E) (Lf f (b x i) (b x i)).
@@ -4342,7 +4342,7 @@ move => ox.
 have [sb sc sd se sf]:= (all_der_bound_prop ox OS0 bf).
 have sa:= (all_der_bound_prop2 ox OS0).
 rewrite se in sa.
-move:(many_der_ex sb sa) => [pa pb pc _ _]. 
+move:(many_der_ex sb sa) => [pa pb pc _ _].
 move: (f_equal (Vf^~ x) pc); rewrite - se LfV//.
 Qed.
 
@@ -4355,18 +4355,18 @@ rewrite se in sa.
 move:(many_der_ex sb sa) => [_ _ _ _ [_ _ pg _]].
 rewrite se in sd.
 move: (pg _ sd); rewrite - se; move => [[p1 p2 p3] _ _].
-rewrite -p3 /g/all_der/all_der_aux; Wtac. 
+rewrite -p3 /g/all_der/all_der_aux; Wtac.
 Qed.
 
 Lemma OS_all_der x i: ordinalp x -> ordinalp i -> ordinalp (g x i).
 Proof.
 move=> ox oi; move: (all_der_p3 ox oi) => h.
-have [sb _ _ se _]:= (all_der_bound_prop ox oi bf). 
+have [sb _ _ se _]:= (all_der_bound_prop ox oi bf).
 rewrite se in h.
 exact: (Os_ordinal (proj1 (CS_cnext (proj1 sb))) h).
 Qed.
 
-Lemma all_der_p4 x y i: ordinalp i -> x <o y  -> 
+Lemma all_der_p4 x y i: ordinalp i -> x <o y  ->
   [/\  inc x (cnext (union (Zo (b y i) cardinalp))),
        g x i = all_der_aux f (b y i) x i &
        g y i = all_der_aux f (b y i) y i].
@@ -4407,7 +4407,7 @@ Lemma all_der_p5'' x y i: ordinalp i -> ordinalp x -> ordinalp y  ->
   g x i <o g y i ->  x<o y.
 Proof.
 move => oi ox oy h.
-case: (oleT_ell oy ox) => //. 
+case: (oleT_ell oy ox) => //.
   by move => eq; move: (proj2 h); rewrite eq.
 by move/(all_der_p5 oi) => [/(oltNge h)].
 Qed.
@@ -4434,7 +4434,7 @@ rewrite - sd in ug.
 move: (ug _ sc); set g2 := (Vf _ _).
 have <-: Vf g2 x = g1 x by [].
 move => [[ fg2 sg2 _] hb hc]; rewrite (hc _ sb lx); congr union.
-have sgx: sub x (source g2). 
+have sgx: sub x (source g2).
    rewrite sg2;apply:ordinal_transitive => //; rewrite sd.
    exact: (proj1 (CS_cnext (proj1 sa))).
 set_extens t.
@@ -4458,8 +4458,8 @@ set ge:= all_der_aux f E.
 set y := (g x j).
 have ye: inc y E by rewrite - sd; apply:all_der_p3.
 have v1:= (all_der_p1 sa ye ie se).
-have v2:= (all_der_p1 sa sb sc se). 
-have jnz: j <> \0o by move => h; move: ij; rewrite h; exact:olt0.  
+have v2:= (all_der_p1 sa sb sc se).
+have jnz: j <> \0o by move => h; move: ij; rewrite h; exact:olt0.
 move: (all_der_bound_prop2 ox oj); rewrite sd => sf.
 move:(many_der_ex sa sf); rewrite -/E.
 set ff:=(many_der (Lf f E E) E).
@@ -4490,22 +4490,22 @@ move:(many_der_ex sa sf); rewrite -/E.
 set ff:=(many_der (Lf f E E) E).
 move => [ua ub uc ud [_ _ ug uh]].
 move: (proj1 (CS_cnext (proj1 sa))) => oe.
-suff:inc y (Imf (Vf ff j)).  
+suff:inc y (Imf (Vf ff j)).
   move: (ug _ sc) => [[pa pb pc] _ _ ].
   move /(Imf_P pa); rewrite pb; move => [u ue uv]; exists u.
      exact: (Os_ordinal oe ue).
-  by rewrite uv (all_der_p1 sa ue sc). 
+  by rewrite uv (all_der_p1 sa ue sc).
 rewrite (uh j sc jnz).
 have nej: nonempty j by exists \0o;move: (olt_i jp).
 apply /setIf_P => // i ij.
 have ij1: i <o j by apply/(oltP oj).
-have iE: inc i E. by move/(oltP oe): sc => /(olt_ltT ij1) /olt_i.  
+have iE: inc i E. by move/(oltP oe): sc => /(olt_ltT ij1) /olt_i.
 move: (ug _ iE) => [[pa pb pc] _ _ ].
 apply /Zo_P; rewrite pb; split => //.
-by move:(h _ ij1);rewrite (all_der_p1 sa sb iE se). 
+by move:(h _ ij1);rewrite (all_der_p1 sa sb iE se).
 Qed.
 
-Lemma all_der_p9 x y i j: 
+Lemma all_der_p9 x y i j:
   ordinalp x -> ordinalp y -> ordinalp i -> ordinalp j ->
   (g x i = g y j  <->
    [/\ i <o j -> x = g y j, i = j -> x = y & j <o i -> y = g x i]).
@@ -4527,7 +4527,7 @@ case (oleT_ell oi oj).
 + move => lji.
   move: (all_der_p7 ox lji) => eq1.
   split.
-    rewrite - {1} eq1 => eq; symmetry in eq. 
+    rewrite - {1} eq1 => eq; symmetry in eq.
     rewrite - (all_der_p5' oj oy (OS_all_der ox oi) eq).
     split => //.
     - by move => [/(oltNge lji) ].
@@ -4536,7 +4536,7 @@ case (oleT_ell oi oj).
 Qed.
 
 
-Lemma all_der_p10 x y i j: 
+Lemma all_der_p10 x y i j:
   ordinalp x -> ordinalp y -> ordinalp i -> ordinalp j ->
   (g x i <o g y j  <->
    [/\ i <o j -> x <o g y j, i = j -> x <o y & j <o i -> g x i <o y]).
@@ -4565,7 +4565,7 @@ case (oleT_ell oi oj).
 Qed.
 
 
-Lemma all_der_p10' x y i j: 
+Lemma all_der_p10' x y i j:
   ordinalp x -> ordinalp y -> ordinalp i -> ordinalp j ->
   (g x i <=o g y j  <->
    [/\ i <o j -> x <=o g y j, i = j -> x <=o y & j <o i -> g x i <=o y]).
@@ -4574,7 +4574,7 @@ move => ox oy oi oj.
 move: (all_der_p9 ox oy oi oj) (all_der_p10 ox oy oi oj) => ha hb.
 case: (equal_or_not (g x i) (g y j)) => h2.
   move/ha:(h2) => [sa sb sc].
-  split => // _. 
+  split => // _.
     split => // h3.
     + rewrite - (sa h3); fprops.
     + rewrite - (sb h3); fprops.
@@ -4589,7 +4589,7 @@ split => h.
 have[//]: g x i <o g y j.
 move:h => [sa sb sc].
 apply/ hb; split => // h3; split; fprops => ne; case h2; apply /ha.
-+ split => //. 
++ split => //.
     by move => ii; move: (proj2 h3); rewrite ii.
   by move => [/(oltNge h3)].
 +  by rewrite h3; split => // [] [].
@@ -4605,7 +4605,6 @@ move: (ij) => [oi oj _].
 apply/(all_der_p10' ox ox oi oj); split => //.
 + move => lij.
   exact: (osi_gex (proj1 (all_der_p6 oj))  ox).
-+ move => _; fprops.
 + by move => /(oleNgt ij).
 Qed.
 
@@ -4616,7 +4615,7 @@ move => oi f0. move: i oi; apply least_ordinal2 => y oy etc.
 case: (ozero_dichot oy) => yz; first by rewrite yz all_der_p2 //; fprops.
 move: (all_der_p8 OS0 yz etc)=> [x ox h].
 case (ozero_dichot ox) => xz; first by rewrite - {1} xz.
-by move: (all_der_p5 oy xz); rewrite - h; move /olt0. 
+by move: (all_der_p5 oy xz); rewrite - h; move /olt0.
 Qed.
 
 Lemma all_der_p13 : f \0o <> \0o -> normal_ofs (g \0o).
@@ -4633,7 +4632,7 @@ have pa: forall i j, i <o j -> g \0o i <o g \0o j.
 split => // j lj.
 move: lj => [oj z0j lj1].
 have osi: ordinal_set (fun_image j (g \0o)).
-  move => t /funI_P [i ij ->]; apply:OS_all_der; fprops. 
+  move => t /funI_P [i ij ->]; apply:OS_all_der; fprops.
   exact: (Os_ordinal oj ij).
 have oy: (ordinalp (g \0o j)) by apply:OS_all_der; fprops.
 have ubb: ordinal_ub (fun_image j (g \0o)) (g \0o j).
@@ -4675,7 +4674,7 @@ have wwe: inc ww E.
      move => t /funI_P [z za ->].
      have ze:=(ordinal_transitive oe sc za).
      move: (ug _ ze) => [[fg sg tg] _ _].
-     rewrite (all_der_p1 sa sb ze se). 
+     rewrite (all_der_p1 sa sb ze se).
      rewrite -tg -/E /all_der_aux -/ff; Wtac.
    apply: cnext_sup => //.
    move/(cnextP (proj1 sa)):sc => [_ rd].
@@ -4687,7 +4686,7 @@ have pd: forall k, k<o j ->  ww = g ww k.
     by move: (all_der_p7 OS0 vb); rewrite - eq.
   set Z:= fun_image  (Tk k) (g^~k).
   have h1: Tk k = Z.
-       set_extens t. 
+       set_extens t.
           move => tk; move:(pr1 t tk) => eq1; apply/funI_P; ex_tac.
        by move => /funI_P [z za zb]; move: (pr1 _ za); rewrite - zb => <-.
   have nez: nonempty Z by rewrite - h1; move: (wa _ kj) => h; ex_tac.
@@ -4740,7 +4739,7 @@ Qed.
 
 End All_derivatives.
 
-Lemma all_der_p12_bis f b (g:= all_der f b) z: 
+Lemma all_der_p12_bis f b (g:= all_der f b) z:
   normal_ofs f ->all_der_bound f b ->
   ordinalp z -> (forall x, x <o z -> f x = x) ->
   (forall x i, x <o z -> ordinalp i -> g x i = x).
@@ -4749,7 +4748,7 @@ move => ha hb oz fp x i xi oi0;move:x xi.
 move: i oi0; apply: least_ordinal2 => i oi etc x xz.
 have ox:= proj31_1 xz.
 case (ozero_dichot oi) => iz.
-  by rewrite iz /g (all_der_p2 ha hb ox) (fp _ xz). 
+  by rewrite iz /g (all_der_p2 ha hb ox) (fp _ xz).
 have hc: forall x, x <o z -> exists2 t, t <=o x & x = g t i.
   move => u uz.
   have ou:= proj31_1 uz.
@@ -4764,10 +4763,10 @@ case (equal_or_not t x0) => eq2; first by rewrite - eq2 - eq1.
 by move: (etc2 _ (conj ta eq2) (ole_ltT ta le2)) => eq3;rewrite  eq1 eq3.
 Qed.
 
-Lemma all_der_p13_bis f b (g:= all_der f b) z: 
+Lemma all_der_p13_bis f b (g:= all_der f b) z:
   normal_ofs f ->all_der_bound f b ->
   ordinalp z -> (forall x, x <o z -> f x = x) ->
-  f z <> z -> normal_ofs (g z).  
+  f z <> z -> normal_ofs (g z).
 Proof.
 move => ha hb oz hc fzz.
 move: (all_der_p12_bis ha hb oz hc) => hd.
@@ -4783,11 +4782,11 @@ have hb': all_der_bound fs bs.
     by move: (ole_ltT(osum_Mle0 oz ox) pa')=> pa''; rewrite eq; apply/(oltP oE).
   have pe: inc x (b (z +o x) i).
     by move: (ole_ltT(osum_M0le oz ox) pa')=> pa''; rewrite eq; apply/(oltP oE).
-  split => // t tE. 
+  split => // t tE.
   have: inc (z +o t) (b (z+o x) i).
     move: zE tE; move: (cnext_sum ic); rewrite -eq; apply.
   move/pd; rewrite eq; move/(oltP oE) => za; apply /(oltP oE).
-  exact: (ole_ltT (odiff_Mle oz (proj31_1 za)) za). 
+  exact: (ole_ltT (odiff_Mle oz (proj31_1 za)) za).
 have zfz: z <o f z.
   split; fprops; exact: (osi_gex (proj1 ha) oz).
 have fsz: fs \0o <> \0o.
@@ -4795,7 +4794,7 @@ have fsz: fs \0o <> \0o.
 move: (all_der_p13 ha' hb' fsz) => he.
 set gs:= (all_der fs bs).
 have ns:= (osum_normal oz).
-suff: forall i, ordinalp i -> forall x, ordinalp x -> 
+suff: forall i, ordinalp i -> forall x, ordinalp x ->
   z +o (gs x i) = g (z +o x) i.
   move => h.
   have n1: forall i, ordinalp i -> g z i = z +o (gs \0o i).
@@ -4823,7 +4822,7 @@ apply:(sincr_ofs_exten (proj1 na) (proj1 nb)) => x ox.
   move: (ofs_sincr (proj1 na) ox) => o1.
   have ot: (ordinalp (gs x i)) by apply: (OS_all_der ha' hb' ox oi).
   have h: forall j, j <o i -> g (z +o gs x i) j = z +o gs x i.
-    move => j ji.     
+    move => j ji.
     by rewrite - (ee _ _ ji ot) /gs (all_der_p7 ha' hb' ox ji).
   move: (all_der_p8 ha hb o1 iz h) => [y y1 y2]; rewrite y2 -/g.
   case: (oleT_el oz y1) => eq1.
@@ -4832,25 +4831,25 @@ apply:(sincr_ofs_exten (proj1 na) (proj1 nb)) => x ox.
 set u :=(g (z +o x) i -o z).
 move: (pa _ x (all_der_p6 ha hb oi) ox) => []; rewrite -/g -/u => [ou uv].
 have h: forall j, j <o i -> all_der fs bs u j = u.
-  move => j ji. 
+  move => j ji.
   have ogu:= (OS_all_der ha' hb' ou (proj31_1 ji)).
   apply: (osum2_simpl ogu ou oz); rewrite ee // uv.
-  exact:(all_der_p7 ha hb (OS_sum2 oz ox) ji). 
+  exact:(all_der_p7 ha hb (OS_sum2 oz ox) ji).
 rewrite - uv.
 by move: (all_der_p8 ha' hb' ou iz h) => [y oy ->]; exists y.
 Qed.
 
 
-Lemma all_der_p13_ter f b (g:= all_der f b): 
+Lemma all_der_p13_ter f b (g:= all_der f b):
   normal_ofs f -> all_der_bound f b ->
-  f \0o = \0o -> f \1o <> \1o -> normal_ofs (g \1o).  
+  f \0o = \0o -> f \1o <> \1o -> normal_ofs (g \1o).
 Proof.
 move => ha hb hc hd; apply:(all_der_p13_bis) => //; fprops.
 by move => x /olt1 ->.
 Qed.
 
 
-Lemma all_der_unique f1 f2 b1 b2 
+Lemma all_der_unique f1 f2 b1 b2
    (g1:=  all_der f1 b1) (g2:=  all_der f2 b2):
    normal_ofs f1 -> all_der_bound f1 b1 -> all_der_bound f2 b2 ->
    (f1 =1o f2) ->
@@ -4860,19 +4859,19 @@ move => nf1 h1 h2 sv.
 have nf2 := (normal_ofs_from_exten sv nf1).
 move => x i ox oi; move: i oi x ox; apply:least_ordinal2 => y oy etc.
 case: (ozero_dichot oy) => yp.
-  rewrite  yp => x ox. 
+  rewrite  yp => x ox.
   by rewrite /g1 /g2 (all_der_p2 nf1 h1 ox)(all_der_p2 nf2 h2 ox) sv.
 move: (all_der_p6 nf1 h1 oy); rewrite -/g1; move=> [pa _].
 move: (all_der_p6 nf2 h2 oy); rewrite -/g2; move=> [pb _].
 apply:(sincr_ofs_exten pa pb) => x ox.
   move:(ofs_sincr pa ox) => sa.
   apply:(all_der_p8 nf2 h2 sa yp).
-  move => j jy; rewrite -/g2 - (etc j jy _ sa). 
-  exact :(all_der_p7 nf1 h1 ox jy). 
+  move => j jy; rewrite -/g2 - (etc j jy _ sa).
+  exact :(all_der_p7 nf1 h1 ox jy).
 move:(ofs_sincr pb ox) => sa.
 apply:(all_der_p8 nf1 h1 sa yp).
 move => j jy;rewrite -/g1 (etc j jy _ sa).
-exact :(all_der_p7 nf2 h2 ox jy). 
+exact :(all_der_p7 nf2 h2 ox jy).
 Qed.
 
 

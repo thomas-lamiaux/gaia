@@ -1,9 +1,9 @@
-(** * Theory of Sets : Exercises sections 4 
-  Copyright INRIA (2009-2013 2018) Apics/Marelle Team (Jose Grimm). 
+(** * Theory of Sets : Exercises sections 4
+  Copyright INRIA (2009-2013 2018) Apics/Marelle Team (Jose Grimm).
 *)
 (* $Id: ssete4.v,v 1.5 2018/09/04 07:58:00 grimm Exp $ *)
 
-From mathcomp Require Import ssreflect ssrfun ssrbool eqtype ssrnat.  
+From mathcomp Require Import ssreflect ssrfun ssrbool eqtype ssrnat.
 From gaia Require Export ssete3.
 
 Set Implicit Arguments.
@@ -22,7 +22,7 @@ Definition meet A B := nonempty (A \cap B).
 
 Lemma finite_is_maximal_inclusion x:
   finite_set x <->
-  (forall y, sub y (\Po x) -> nonempty y -> exists2 z, 
+  (forall y, sub y (\Po x) -> nonempty y -> exists2 z,
      inc z y & forall t, inc t y -> sub z t -> z = t).
 Proof.
 split.
@@ -43,20 +43,20 @@ split.
     have neT:nonempty T.
       move: ze => [z zZ]; exists (a \cap z); apply /funI_P; ex_tac.
   move: (hrec _ Tp neT)=> [z zT zm].
-  move: zT =>  /funI_P[u uZ iau]. 
+  move: zT =>  /funI_P[u uZ iau].
   move: uZ => /Zo_P [uy bu].
-  ex_tac; move=> t ty ut. 
+  ex_tac; move=> t ty ut.
   have bt: inc b t by apply: ut.
   have tz: inc t Z by apply: Zo_i => //.
   have it: inc (a \cap t) T by apply /funI_P; ex_tac.
   have it1: sub z (a \cap t).
     rewrite iau => w /setI2_P [p1 p2]; apply /setI2_P;split;fprops.
   move: (zm _ it it1) => zi.
-  apply: extensionality => // v vt; move: (yp _ ty). 
+  apply: extensionality => // v vt; move: (yp _ ty).
     move /setP_P => tt;move:(tt _ vt); case /setU1_P; last by move => ->.
   by move => va;apply:  (@setI2_2 a);rewrite-  iau zi; apply:setI2_i.
 move=> h.
-set F := (finite_subsets x). 
+set F := (finite_subsets x).
 have p1:sub F (\Po x) by apply: Zo_S.
 have p2: nonempty F.
   exists emptyset; apply:Zo_i; [ apply: setP_0i| apply:emptyset_finite].
@@ -65,7 +65,7 @@ case: (emptyset_dichot (x -s z)) => ce.
   have -> //: x = z by  apply:extensionality => //; apply:empty_setC.
 move: ce => [y] /setC_P [yx nyz].
 set (t:= z +s1 y).
-have tF: inc t F. 
+have tF: inc t F.
   by  apply:Zo_i; [apply /setP_P; apply: setU1_sub | apply:setU1_finite].
 have zt: sub z t by move=> u uz; rewrite /t; fprops.
 move: (zp _ tF zt) => tz; case: nyz; rewrite tz /t; fprops.
@@ -74,25 +74,25 @@ Qed.
 (** ---- Exercise 4.3 is in file ssete3 *)
 
 (** Exercise 4.4. Assume that [C] is a subset of [E x E] that contains a
-pair [(x , y) ] if and only if it does not contain [(y, x)]. 
+pair [(x , y) ] if and only if it does not contain [(y, x)].
 We can re-order the elements of [E] as [(x(1), x(2), ..., x(n))] so that
 [(x(i),x(i+1))] is in [C].
  *)
 
 
 Lemma Exercise4_4 n E C:
-  natp n -> cardinal E = n -> sub C (coarse E) -> 
-  (forall x y, inc x E -> inc y E -> x <> y -> 
+  natp n -> cardinal E = n -> sub C (coarse E) ->
+  (forall x y, inc x E -> inc y E -> x <> y ->
     (exactly_one (inc (J x y) C) (inc (J y x) C))) ->
     exists2 f,  bijection_prop f (Nint1c n) E &
-      (forall i, \1c <=c i -> i <c n -> 
-        inc (J (Vf f i) (Vf f (csucc i))) C). 
+      (forall i, \1c <=c i -> i <c n ->
+        inc (J (Vf f i) (Vf f (csucc i))) C).
 Proof.
 move=> nN cn _; move: n nN E cn C.
 apply: Nat_induction1.
 move=> n nN hrec E nE C cp.
 case: (emptyset_dichot E) => Ee.
-  rewrite  -nE Ee cardinal_set0. 
+  rewrite  -nE Ee cardinal_set0.
   have  ->: (Nint1c \0c) = emptyset.
     apply /set0_P => t /(Nint1cP NS0)  [pa pb].
     case: (clt0 (conj pb pa)).
@@ -107,13 +107,13 @@ have sE1E: sub E1 E by apply: sub_setC.
 have Z1E: sub Z1 E by apply: sub_trans  sE1E.
 have Z2E: sub Z2 E by apply: sub_trans sE1E=>//; apply: Zo_S.
 have Z2c: Z2 = E1 -s Z1.
-  set_extens t. 
+  set_extens t.
     move /Zo_P => [ta tb]; apply /setC_P; split => //; move /Zo_P => [_ tc].
     move /setC_P: ta => [te ] /set1_P tna.
-    by case: (proj2 (cp _ _ te aE tna)). 
+    by case: (proj2 (cp _ _ te aE tna)).
   move => /setC_P [te h]; apply /Zo_P;split => //.
   move /setC_P: (te) => [te1 ] /set1_P tna.
-  case: (proj1 (cp _ _ te1 aE tna)) => // pa. 
+  case: (proj1 (cp _ _ te1 aE tna)) => // pa.
   case: h; apply :Zo_i => //.
 move: (cardinal_setC s1); rewrite /cdiff cardinal_set1 -/E1 csumC.
 move: (cardinal_setC Z1E1); rewrite  /cdiff  -Z2c nE; move => <-.
@@ -125,7 +125,7 @@ move: (cltS n1n2N); rewrite rel1 => aux2.
 have aux3: n1 <=c (n1 +c n2) by apply: csum_M0le; rewrite /n1; fprops.
 have aux4: n2 <=c (n1 +c n2) by apply: csum_Mle0; rewrite /n2;fprops.
 have ltn1n:= cle_ltT aux3 aux2.
-have ltn2n:= cle_ltT aux4 aux2.  
+have ltn2n:= cle_ltT aux4 aux2.
 move:(NS_lt_nat ltn1n nN) (NS_lt_nat ltn2n nN)=> n1N n2N.
 have c1p: (forall x y, inc x Z1 -> inc y Z1 -> x <> y ->
   exactly_one (inc (J x y) C) (inc (J y x) C)).
@@ -142,11 +142,11 @@ pose f i := Yo (i = (csucc n1)) a
 have lt1:= (cltS n1N).
 have p1: f (csucc n1) = a by rewrite /f; Ytac0.
 have p2: forall i, i <=c n1 -> f i = Vf f1 i.
-  move=> i lei. 
+  move=> i lei.
   by rewrite /f (Y_false (proj2(cle_ltT lei lt1))) (Y_true lei).
 have p3 i: (csucc n1) <c i -> f i = Vf f2 (i -c (csucc n1)).
   move=> [lesi nsi]; rewrite /f; Ytac0; Ytac in1 => //.
-  case:(cltNge lt1 (cleT lesi in1)). 
+  case:(cltNge lt1 (cleT lesi in1)).
 have p4 i: i <> \0c -> i <=c n1 -> inc (f i) Z1.
   move=> inz in1; rewrite (p2 _  in1);rewrite -tf1; Wtac; try fct_tac.
   by rewrite sf1; apply /(Nint1cP n1N).
@@ -156,7 +156,7 @@ have p5 i: csucc n1 <c i -> i <=c n ->
    inc  (i -c  (csucc n1)) (source f2).
   move=>  [n1i ni3] n2i; rewrite sf2 ; apply /(Nint1cP n2N).
   move:(NS_diff (csucc n1)(NS_le_nat n2i nN))  (cdiff_pr n1i).
-  set d := _ -c _ ; move=> sN sv; split. 
+  set d := _ -c _ ; move=> sN sv; split.
     dneg dz; rewrite - sv dz; rewrite csum0r //; exact: (proj31 n1i).
   apply: (csum_le2l snN) => //; rewrite sv -nn12//.
 have p6 i: (csucc n1) <c i -> i <=c n -> inc (f i) Z2.
@@ -192,13 +192,13 @@ have injF: injection F.
         by rewrite vn1 p1=> h4; move/Zo_S: h3 => /setC1_P[_]; case.
       case: (cleT_el (proj31 vb) (proj32_1 lt1)).
         move => h1'; move/ (cltSleP n1N): (conj h1' vn1) => h2'.
-        rewrite (p2 _ h2)(p2 _ h2'). 
+        rewrite (p2 _ h2)(p2 _ h2').
         by apply: (proj2 (proj1 bf1)); rewrite  sf1; apply/(Nint1cP n1N).
       move => h4 h5; move: (p6 v h4 vb); rewrite Z2c => /setC_P [_]; case;ue.
     move => h1; move:(clt_ltT h1 luv)=> h2; rewrite  (p3 u h1) (p3 v h2)=> h3.
     move: (proj2 (proj1 bf2) _ _ (p5 u h1 ub) (p5 v h2 vb) h3) => h4.
     by rewrite - (cdiff_pr (proj1 h1)) - (cdiff_pr (proj1 h2)) h4.
-exists F. 
+exists F.
   split => //.
   apply: bijective_if_same_finite_c_inj => //.
     by rewrite /F lf_source lf_target /sf3 nE card_Nint1c.
@@ -206,14 +206,14 @@ exists F.
 move=> i i1 lin.
 have inz: i <> \0c by move /cge1P: i1 => [_ /nesym].
 move: (proj1 lin) => lein ;move: (NS_le_nat lein nN) =>  iN.
-have i3: inc i sf3 by apply /(Nint1cP nN). 
-have si3: inc (csucc i) sf3. 
+have i3: inc i sf3 by apply /(Nint1cP nN).
+have si3: inc (csucc i) sf3.
   by apply /(Nint1cP nN); split; [ apply: succ_nz |  apply /cleSltP].
 rewrite /F LfV // LfV //.
 case: (cleT_el (proj31 lein) (CS_succ n1)) => aux1.
   case: (equal_or_not i (csucc n1)) => in1.
     have: inc (f (csucc i)) Z2.
-       apply:p6; first by rewrite in1; apply: cltS. 
+       apply:p6; first by rewrite in1; apply: cltS.
         by apply/(cleSltP (NS_lt_nat lin nN)).
     by move/Zo_hi; rewrite in1 p1.
   have lein1: i <=c n1 by apply /(cltSleP n1N); split.
@@ -222,7 +222,7 @@ case: (cleT_el (proj31 lein) (CS_succ n1)) => aux1.
   have sin1: (csucc i) <=c n1  by apply /cleSltP.
   by rewrite p2 // p2 //; apply: f1p.
 have p7:= (clt_leT aux1 (cleS iN)).
-rewrite p3 // p3 //. 
+rewrite p3 // p3 //.
 have aux1':= (proj1 aux1).
 move:(NS_diff (csucc n1) iN) (cdiff_pr  aux1').
 set  k:= i -c  (csucc n1); move => kN kp.
@@ -230,7 +230,7 @@ have ->: (csucc i) -c  (csucc n1) = csucc k.
   rewrite - csucc_diff // cdiff_pr6//.
 apply: f2p.
   apply: cge1; fprops.
-  by move=> kz; case: (proj2 aux1); rewrite - kp kz (csum0r (CS_succ _)). 
+  by move=> kz; case: (proj2 aux1); rewrite - kp kz (csum0r (CS_succ _)).
 by apply: (csum_lt2l snN) => //;rewrite kp -nn12.
 Qed.
 
@@ -245,16 +245,16 @@ have surjF: surjection F.
     by apply /cleSltP.
   move=> ya; move: (cp _ _ yE aE ya) => [p7 _]; case: p7 => pc.
     have yz1: inc y Z1 by apply: Zo_i => //; apply /setC1_P;split => //.
-    move: yz1; rewrite -tf1 => yt1. 
+    move: yz1; rewrite -tf1 => yt1.
     move: bf1 => [_ srf1]; move: ((proj2 srf1) _ yt1) => [x xf1 ->].
     move: xf1; rewrite sf1; move /(Nint1cP n1N)=> [xnz xn1].
     exists x; last by rewrite p2.
      by apply /(Nint1cP nN);split => //; move: ltn1n => [/(cleT xn1) len1n _].
   have yz2: inc y Z2 by  apply: Zo_i => //; apply/ setC1_P.
-  move: yz2; rewrite -tf2 => yt2. 
+  move: yz2; rewrite -tf2 => yt2.
   move: bf2 => [_ srf2]; move: ((proj2 srf2) _ yt2) => [x xf2 ->].
   move: xf2; rewrite sf2; move /(Nint1cP n2N) => [xnz xn2].
-  have xN:= (NS_le_nat xn2 n2N). 
+  have xN:= (NS_le_nat xn2 n2N).
   move: (cdiff_pr1 xN snN).
   set x1:= x +c (csucc n1) => x1n1.
   have x1p: (csucc n1) <c x1.
@@ -265,19 +265,19 @@ have surjF: surjection F.
   apply /(Nint1cP nN); split.
     move=> h; rewrite h in x1p; apply: (clt0 x1p).
     rewrite /x1 nn12 csumC;apply: csum_Mlele => //; fprops.
-*)   
+*)
 
 
 (** ---- Exercise 4.5. Let [E] be an ordered set, [k] the maximal number of
 elements in a free subset. Then [E] can be partitioned into [k] totally ordered
-subsets. 
+subsets.
 
-Definitions: [Hw(k)] says that any free subset has at most [k] elements, 
-[H(k)] says moreover that there is a free subset with [k] elements. 
+Definitions: [Hw(k)] says that any free subset has at most [k] elements,
+[H(k)] says moreover that there is a free subset with [k] elements.
 [Cw(k)] says that there exists at most [k] totally ordered, mutually disjoint
-sets  whose union is [E], [C(k)] says that this number is exactly [k], and 
+sets  whose union is [E], [C(k)] says that this number is exactly [k], and
 the sets are non-empty. The claim is [H(k)] implies [C(k)]. We can restate it
-as [Hw(k)] implies [Cw(k)]. Note that if we have a free subset with [k] 
+as [Hw(k)] implies [Cw(k)]. Note that if we have a free subset with [k]
 elements, each element of the partition contains at most one element of the
 free subset, so that if [Cw(k)] holds, there are [k] sets, none of them is empty.
  *)
@@ -286,7 +286,7 @@ free subset, so that if [Cw(k)] holds, there are [k] sets, none of them is empty
 
 Assume [T] is a subset of a set partitioned by [Y], both sets have the same
 finite number of elements; assume that the intersection of [T] and each [Yi] is
-empty or a singleton. Then it is never empty. 
+empty or a singleton. Then it is never empty.
 *)
 
 
@@ -298,7 +298,7 @@ Lemma max_card_on_set_unique X k1 k2:
   max_card_on_set X k1 -> max_card_on_set X k2 ->
   k1 = k2.
 Proof.
-move => [[x1 x1X x1v] h1] [[x2 x2X x2v] h2]. 
+move => [[x1 x1X x1v] h1] [[x2 x2X x2v] h2].
 by move: (h1 x2 x2X)  (h2 x1 x1X); rewrite x1v x2v => l1 l2; apply: cleA.
 Qed.
 
@@ -309,7 +309,7 @@ Lemma max_card_on_set_exists X n:
   exists2 k, natp k & max_card_on_set X k.
 Proof.
 move=> nN neX hyp.
-set T := fun_image X cardinal.  
+set T := fun_image X cardinal.
 have pa: (forall m, inc m T -> m <=c n) by move => m/funI_P [z /hyp zX ->].
 have neT: nonempty T by  apply: funI_setne.
 have TN: sub T Nat by move => m /pa /NS_le_nat; apply.
@@ -341,7 +341,7 @@ Lemma the_max_card_on_set_prop2 X n: natp n -> max_card_on_set X  n ->
 Proof.
 move => ha hb.
 have H: singl_val2 (inc^~ Nat) (max_card_on_set X).
-  by move => a b /= _ ax _ bx; apply: (max_card_on_set_unique  ax bx). 
+  by move => a b /= _ ax _ bx; apply: (max_card_on_set_unique  ax bx).
 have exx:(exists2 x, inc x Nat & max_card_on_set X x) by exists n.
 move: (select_pr  exx H); rewrite /the_max_card_on_set; set y := select _ _.
 by move => [h1 _]; move: (max_card_on_set_unique h1 hb).
@@ -360,7 +360,7 @@ Qed.
 
 
 Lemma total_subordersP r x:
-  inc x (total_suborders r) <-> 
+  inc x (total_suborders r) <->
    (sub x (substrate r) /\ total_order (induced_order r x)).
 Proof.
 split; first by move=> /Zo_P[/setP_P ha hb].
@@ -442,7 +442,7 @@ have sf x: inc x (free_subsets r) -> cardinal x <=c (cardinal (substrate r)).
 move: (the_max_card_on_set_prop nN nef sf)=>[ra rb]; split => //.
 by move: (proj1 ra) => [x/sf ccx eq]; rewrite eq in ccx.
 Qed.
-  
+
 Lemma order_length_exists r (k := the_order_length r):
   finite_set (substrate r) ->
   [/\ natp k, k <=c (cardinal (substrate r))  & order_length r k].
@@ -468,10 +468,10 @@ Proof.
 move => or xsr.
 have h: sub (singleton x) (substrate r) by move => t /set1_P ->.
 apply: (total_suborder_prop or h) => a b /set1_P-> /set1_P ->; left.
-by order_tac.  
+by order_tac.
 Qed.
 
-Lemma set0_width: 
+Lemma set0_width:
   the_order_width emptyset = \0c /\  the_order_length emptyset = \0c.
 Proof.
 have aux x: inc x (\Po substrate emptyset) -> cardinal x <=c \0c.
@@ -512,12 +512,12 @@ apply:(the_max_card_on_set_prop2 NS1);split.
 by move =>  x / (Exercise1_5e tor) /cardinal_small_set.
 Qed.
 
-Lemma total_order_width_contra r: order r -> 
+Lemma total_order_width_contra r: order r ->
   order_width r \1c -> total_order r.
 Proof.
 move => or [ha hb].
 split => // u v usr vsr; ex_middle bad.
-have hc: inc (doubleton u v) (free_subsets r).  
+have hc: inc (doubleton u v) (free_subsets r).
   apply/free_subsetsP; split; first by apply:sub_set2.
   move => a  b /set2_P; case => ->; case/ set2_P => -> // h; case: bad.
     by left.
@@ -567,7 +567,7 @@ Lemma diagonal_width r: order r -> finite_set (substrate r) ->
 Proof.
 move => or fse.
 split => hyp; last first.
-  split. 
+  split.
     exists (substrate r) => //; apply /free_subsetsP; split => //.
     by rewrite hyp => a b asr bsr /diagonal_pi_P [].
   by move => x /free_subsetsP [] /sub_smaller.
@@ -577,7 +577,7 @@ move: (proj41 or _ tr) (pr1_sr tr) (pr2_sr tr) => pt Ps Qs.
 split => //.
 have cp: (gle r (P t) (Q t)) by move:tr; rewrite - {1} pt.
 move: (proj1 hyp) => [X /free_subsetsP [Xsr Xfree] cX].
-have XX := (cardinal_setC5 fse Xsr cX). 
+have XX := (cardinal_setC5 fse Xsr cX).
 rewrite - XX in Ps Qs.
 exact: (Xfree (P t) (Q t) Ps Qs cp).
 Qed.
@@ -587,7 +587,7 @@ Lemma total_order_length r: order r -> finite_set (substrate r) ->
 Proof.
 move => or fse.
 split => hyp; last first.
-  split. 
+  split.
     exists (substrate r) => //; apply /total_subordersP; split => //.
      by apply:total_order_sub.
   by move => x /total_subordersP [] /sub_smaller.
@@ -596,19 +596,19 @@ by move: Xt; rewrite (cardinal_setC5 fse Xsr cX) iorder_substrate.
 Qed.
 
 Lemma Dilworth_dual r (k := the_order_length r): order r ->
-  (exists2 n, natp n & 
+  (exists2 n, natp n &
      forall x, inc x (total_suborders r) -> cardinal x <=c n) ->
   exists A,
   [/\ natp k, order_length r k
     & [/\ partition_s A (substrate r),
     cardinal A = k & sub A (free_subsets r)]].
-Proof.   
+Proof.
 move => or ha.
 have [res1 kN]: order_length r k /\ natp k.
   move: ha =>[n nN np].
   apply: (the_max_card_on_set_prop nN (nonempty_total_suborders r) np).
-clear ha. 
-move: (res1) => [[C Cto ca] cb]. 
+clear ha.
+move: (res1) => [[C Cto ca] cb].
 set Cs := (total_suborders r).
 pose p x X:= [/\ inc X Cs, inc x X & forall y, inc y X -> gle r y x].
 pose P x := Zo Cs (p x).
@@ -628,13 +628,13 @@ have fbd x: inc x (substrate r) -> \1c <=c (f x) /\ f x <=c k.
   move => xsr; move: (Hx x xsr) => [[qa qb] qc]; split.
     by move: (qb _ (Ha x xsr)); rewrite cardinal_set1.
   by move: qa => [X] /Zo_S /cb le <-.
-case: (emptyset_dichot (substrate r)) => Enz. 
+case: (emptyset_dichot (substrate r)) => Enz.
   exists emptyset; split => //.
   move:Cto =>/Zo_P [/setP_P /sub_smaller]; rewrite Enz cardinal_set0 ca.
   move => /cle0 -> _; split => //;last by move => t/in_set0.
   by split;[hnf; rewrite setU_0; split => // u v /in_set0| move => t /in_set0].
 case: (equal_or_not k \0c) => knz.
-  case: Enz => x /fbd [ua ub]; move: (cleT ua ub) => /cleNgt; case; ue. 
+  case: Enz => x /fbd [ua ub]; move: (cleT ua ub) => /cleNgt; case; ue.
 have finc x y: glt r x y -> f x <c f y.
   move => [lxy nxy]; move: (arg1_sr lxy) (arg2_sr lxy) => xsr ysr.
   move: (Hx _ xsr) => [[[c /Zo_P[/Zo_P[/setP_P ra rb] [_ qb qc]] lc] _] fN].
@@ -651,7 +651,7 @@ have finc x y: glt r x y -> f x <c f y.
     move => bX;  case/setU1_P: (aY); last first.
       by move ->; right; apply/(iorder_gle0P r bY yY); apply: bmax.
     move => aX; move: (proj2 rb a b); rewrite (iorder_sr or ra) => h.
-    by case: (h aX bX) => /iorder_gle1 cp; [left | right]; apply/(iorder_gleP). 
+    by case: (h aX bX) => /iorder_gle1 cp; [left | right]; apply/(iorder_gleP).
   have Ys: inc Y Cs by apply: Zo_i => //; apply/setP_P.
   have Yb: inc Y (P y) by apply:(Zo_i Ys); split => //.
   have bx:  ~ inc y c by  move => /qc h; case:  nxy; order_tac.
@@ -660,7 +660,7 @@ have finc x y: glt r x y -> f x <c f y.
 pose A i := Zo (substrate r) (fun z => f z = i).
 pose AA := fun_image (Nint1c k) A.
 have ra : partition_w AA (substrate r).
-  split. 
+  split.
    set_extens t.
      by move/setU_P=> [u tu /funI_P [i _ uv]]; move: tu; rewrite uv => /Zo_S.
    move => tsr; move /(Nint1cPb kN): (fbd _ tsr)=> fi. apply/setU_P.
@@ -672,7 +672,7 @@ have Hb x: inc x AA -> inc x (free_subsets r).
   move => a b /Zo_P [_ fa] /Zo_P[_ fb] leab.
   by ex_middle bad; case: (proj2(finc _ _  (conj leab bad))); rewrite fa fb.
 have Akne: nonempty (A k).
-  suff:  exists2 x, inc x (substrate r) & f x = k. 
+  suff:  exists2 x, inc x (substrate r) & f x = k.
     by move=> [x xde fx]; exists x; apply: Zo_i.
   move: (Cto) =>/Zo_P [/setP_P qa qb].
   have fsC: finite_set C by apply /NatP; ue.
@@ -682,14 +682,14 @@ have Akne: nonempty (A k).
   move: (h fsC neC) => [x []]; rewrite sr => xc xm.
   have cp: inc C (P x). apply:(Zo_i Cto); split => // y yC.
     exact: (iorder_gle1 (xm y yC)).
-  move: (qa x xc) => xsr; exists x => //; apply: cleA. 
+  move: (qa x xc) => xsr; exists x => //; apply: cleA.
       exact: (proj2 (fbd _ xsr)).
   by move: (Hx x xsr) => [ [_] xp] _; move: (xp _ cp); rewrite ca.
 have neA i: inc i (Nint1c k) -> nonempty (A i).
   case/(Nint1cPb kN);move: i; apply:(Nat_induction4 NS1 kN Akne).
   move => i le1 le2 [u /Zo_P [usr fu]].
   move: (Hx u usr)=> [[[c /Zo_hi [qa qb qc] cs] _] nv].
-  move:(NS_lt_nat le2 kN) => iN. 
+  move:(NS_lt_nat le2 kN) => iN.
   set D := c -s1 u.
   have cD: cardinal D = i by rewrite /D - (cpred_pr5 qb) cs fu (cpred_pr2 iN).
   have neD: nonempty D by  apply/cle1P; ue.
@@ -728,8 +728,8 @@ move => [A [_ _ [pa pb pc]]].
 rewrite - (proj1 (proj1 pa)) - pb cprodC.
 by apply: cardinal_uniona => x /pc /qd.
 Qed.
-  
-  
+
+
 Lemma Dilworth_lemma_v2 r n m:
   order r -> natp n -> natp m -> cardinal (substrate r) = csucc (n *c m) ->
   (exists2 B, inc B (free_subsets r) & cardinal B = csucc m) \/
@@ -752,7 +752,7 @@ case: (NleT_el aN nN) => le2.
   by move => u v /yf ua /yf ub; apply: rb.
 right; move/(cleSltP nN): le2; rewrite -(card_card (CS_succ n)) - cA.
 move/ (sub_smaller_contra) => [Y yf ->]; exists Y => //.
-exact:(sub_total_suborders2 or Af yf). 
+exact:(sub_total_suborders2 or Af yf).
 Qed.
 
 
@@ -767,7 +767,7 @@ Lemma Erdos_Szerkeres r n m f (D := csucc (n *c m)) :
 Proof.
 move => [or tor] nN mN fgf df rgf injf.
 move: (NS_succ (NS_prod nN mN)); rewrite -/D => DN.
-pose comp i j := i <=c j /\ gle r (Vg f i) (Vg f j). 
+pose comp i j := i <=c j /\ gle r (Vg f i) (Vg f j).
 pose cp := graph_on comp D.
 have: order_r  comp.
   split.
@@ -783,7 +783,7 @@ have sr1: substrate cp = D.
 have csr1: cardinal (substrate cp) = csucc (n *c m) by  rewrite sr1 card_nat.
 case: (Dilworth_lemma_v2 or1 nN mN csr1).
    move => [B /Zo_P [/setP_P sb pb] cb]; left; exists B; split => //; first ue.
-   move => i j iB jB [cij nij]; split; last first.   
+   move => i j iB jB [cij nij]; split; last first.
      rewrite sr1 in sb;move => bad; case:nij.
      by rewrite (injf j i (sb _ jB) (sb _ iB) bad).
   rewrite sr1 in sb.
@@ -795,7 +795,7 @@ case: (Dilworth_lemma_v2 or1 nN mN csr1).
   have h: gle cp i j by apply/graph_on_P1; split => //; apply: sb.
   case: nij; exact: (pb i j iB jB h).
 move => [A /total_subordersP [Asr tor1] xA]; right;exists A.
-have AD: sub A D by move: Asr; ue. 
+have AD: sub A D by move: Asr; ue.
 split => // i j iA jA [lik nij]; split.
   move: (proj2 tor1 i j); rewrite iorder_sr // => h.
   move: (h iA jA); case; move/iorder_gle1 /graph_on_P1.
@@ -803,7 +803,7 @@ split => // i j iA jA [lik nij]; split.
   by move => [_ _ [pa pb]]; case: nij; apply: cleA.
 move => bad; case:nij.
 exact:(injf i j (AD _ iA) (AD _ jA) bad).
-Qed. 
+Qed.
 
 Lemma Sperner_1 A B k: natp k -> cardinal A = k -> cardinal B = k ->
   sub A B -> A = B.
@@ -819,31 +819,31 @@ by move/ (csum_eq2l kN NS0 nD); move /esym /card_nonempty.
 Qed.
 
 Lemma Sperner_2 E k (F := subsets_with_p_elements k E): natp k ->
-  free_subset (subp_order E) F. 
+  free_subset (subp_order E) F.
 Proof.
 move => kN i j /Zo_P [/setP_P iE ci] /Zo_P[ /setP_P jE cj].
 move/ sub_gleP => [_ _ sij]; apply: (Sperner_1 kN ci cj sij).
 Qed.
 
 Lemma Sperner_b1 n k: natp n -> k <=c n ->
-   (factorial n) <=c 
+   (factorial n) <=c
    (binom n (chalf n)) *c ((factorial k) *c (factorial (n -c k))).
 Proof.
 move => nN lkn.
-move:(NS_le_nat lkn nN) => kN. 
+move:(NS_le_nat lkn nN) => kN.
 rewrite - (binom_good nN kN lkn).
 by apply: cprod_Mleeq; apply: binom_max.
 Qed.
 
 Definition is_half_n n k := (k = (chalf n) \/ n -c k = (chalf n)).
-  
+
 Lemma Sperner_b2 n k: natp n -> k <=c n ->
    (factorial n) =
      (binom n (chalf n)) *c ((factorial k) *c (factorial (n -c k))) ->
    is_half_n n k.
 Proof.
 move => nN lkn.
-move:(NS_le_nat lkn nN)(NS_diff k nN) => kN dN h. 
+move:(NS_le_nat lkn nN)(NS_diff k nN) => kN dN h.
 apply/(binom_monotone_max_arg nN lkn).
 move: h; rewrite - (binom_good nN kN lkn) ; apply: cprod_eq2r.
 - by apply:NS_prod; apply: NS_factorial.
@@ -861,7 +861,7 @@ Let cn := binom n (chalf n).
 
 Lemma  Sperner_p0: natp n.
 Proof. by apply/NatP. Qed.
-  
+
 Lemma Sperner_p1 k: k <=c n ->
   free_subset r (subsets_with_p_elements k E).
 Proof.
@@ -891,7 +891,7 @@ Lemma Sperner_p5 k: k <=c n ->
 Proof.
 by move =>h; apply/Sperner_p4; split;[ apply: Zo_S | apply:Sperner_p1].
 Qed.
-  
+
 Lemma Sperner_3 C: inc C (total_suborders r) -> {inc C &, injective cardinal}.
 Proof.
 move => /total_subordersP [qa qb] A B AC BC /= sc.
@@ -919,12 +919,12 @@ Definition Sperner_mx_chain :=
 Definition chain_of_fun  g := fun_image (csucc n) (Vfs g).
 
 Lemma Sperner_5 g: bijection_prop g n E  ->
-  inc (chain_of_fun g) Sperner_mx_chain. 
+  inc (chain_of_fun g) Sperner_mx_chain.
 Proof.
 move => [ [[fg ing] sjg] sg tg].
 move:(subp_osr  E) Sperner_p0 => [or sr] nN.
 have H i: i <=c n -> sub i (source g) by  move/proj33; rewrite sg.
-have pa : {inc (csucc n) &, injective (Vfs g)}. 
+have pa : {inc (csucc n) &, injective (Vfs g)}.
   move => i j /(NleP nN) lin  /(NleP nN) ljn ss.
   move: (NS_le_nat lin nN)(NS_le_nat ljn nN) => iN jN.
   move: (H _ lin) (H _ ljn) => isg jsg.
@@ -954,7 +954,7 @@ case: (cleT_ee (proj31 lin) (proj31 ljn)) => cij; [left | right].
   by apply/(Vf_image_P fg jsg); exists u => //; apply: (proj33 cij).
 apply/subp_gleP; split => // t /(Vf_image_P fg jsg)  [u ui ->].
 by apply/(Vf_image_P fg isg); exists u => //; apply: (proj33 cij).
-Qed.  
+Qed.
 
 Lemma Sperner_6: order_length r (csucc n).
 Proof.
@@ -978,8 +978,8 @@ split => //;apply: bijective_if_same_finite_c_inj; aw.
 - apply /NatP; rewrite hb; fprops.
 - by apply: lf_injective.
 Qed.
-  
-  
+
+
 Lemma Sperner_8 C (F := Vf (inverse_fun (Lf cardinal C (csucc n)))):
    inc C Sperner_mx_chain ->
    forall i, i <=c n -> inc (F i) C /\ cardinal (F i) = i.
@@ -1003,7 +1003,7 @@ move:(subp_osr E) Sperner_p0 => [or sr] nN.
 have Xig i j:  i <=c n -> j <=c n -> i <=c j -> sub (F i) (F j).
   move => lin ljn lij.
   move: (Ha _ lin)  (Ha _ ljn)=> [ra rb] [rc rd].
-  move: (proj2 qb (F i) (F j)); rewrite iorder_sr // => h.  
+  move: (proj2 qb (F i) (F j)); rewrite iorder_sr // => h.
   case:(h ra rc) => /iorder_gle1/sub_gleP/proj33 //.
   by move/sub_smaller; rewrite rb rd => ji; rewrite (cleA ji lij).
 have rec A B: sub A B /\ singletonp (B -s A) -> B = A +s1 (union (B -s A) ).
@@ -1041,10 +1041,10 @@ have Xif i j: i <c j -> j <=c n -> inc (xi i) (F j).
   move: (Xie _ (clt_leT lij ljn)) => h.
   move/(cleSltP iN): lij => lij.
   move: (Ha _ (cleT lij ljn)) (Ha _ ljn) => [ra rb] [rc rd].
-  move: (proj2 qb (F (csucc i)) (F j)); rewrite iorder_sr // => hyp.  
+  move: (proj2 qb (F (csucc i)) (F j)); rewrite iorder_sr // => hyp.
   case:(hyp ra rc) => /iorder_gle1/sub_gleP/proj33; first by apply.
   by move/sub_smaller; rewrite rb rd => ji; rewrite (cleA ji lij).
-have Xih i: i <c n -> ~inc (xi i) (F i). 
+have Xih i: i <c n -> ~inc (xi i) (F i).
    move => lin xx; move: (f_equal cardinal (Hb i lin)); rewrite (setU1_eq xx).
    move: (NS_lt_nat lin nN) => iN.
    rewrite (proj2(Ha i (proj1 lin))).
@@ -1069,7 +1069,7 @@ have Xik i: i <=c n -> Vfs g i = F i.
     move => t /(Vf_image_P fg sig)  [u /(NltP iN) ui ->]; rewrite/g LfV//.
       by apply: Xif.
     by apply/(NltP nN); apply: (clt_leT ui lin).
-  apply: (cardinal_setC5 fs1 sa). 
+  apply: (cardinal_setC5 fs1 sa).
   by rewrite c1 (cardinal_image sig injg) card_nat.
 split => //;set_extens t.
   move => tC.
@@ -1082,7 +1082,7 @@ exact: (proj1 (Ha _ lin)).
 Qed.
 
 
-Lemma Sperner_11 w i (C :=  chain_of_fun w) 
+Lemma Sperner_11 w i (C :=  chain_of_fun w)
      (F := Vf (inverse_fun (Lf cardinal C (csucc n)))):
   bijection_prop w n E -> i <=c n -> Vfs w i = F i.
 Proof.
@@ -1103,7 +1103,7 @@ Proof.
 move => [[iw [fw _]] sw tw] lin.
 move:Sperner_p0  => nN.
 move: (NS_lt_nat lin nN) => iN.
-set A := Vfs w (csucc i); set B := Vfs w i. 
+set A := Vfs w (csucc i); set B := Vfs w i.
 suff: A -s B = singleton (Vf w i) by move ->; rewrite setU_1.
 have lsin: csucc i <=c n by apply/(cleSltP iN).
 have sisw: sub (csucc i) (source w) by rewrite sw; exact: (proj33 lsin).
@@ -1127,7 +1127,7 @@ move => p1 p2 sv.
 move:Sperner_p0  => nN.
 move:(p1)(p2) => [qa qb qc][qd qe qf].
 apply: function_exten; try fct_tac; try ue; rewrite qb => i iin.
-move/(NltP nN): (iin) => lin. 
+move/(NltP nN): (iin) => lin.
 have lein: csucc i <=c n by apply/(cleSlt0P (proj31_1 lin) nN).
 rewrite (Sperner_12 p1 lin) (Sperner_12 p2 lin).
 rewrite (Sperner_11 p1 lein)  (Sperner_11 p2 lein) (Sperner_11 p2 (proj1 lin)).
@@ -1150,7 +1150,7 @@ move: (inverse_bij_bp fp)=> fip.
 apply: (lf_bijective ax); last first.
   move => C hc; move: (Sperner_10 hc)=> []; set g := Lf _ _ _ => gp ->.
   move: (compose_bp gp fip) => cb.
-  exists ((inverse_fun f) \co g); first by apply/permutationsP.   
+  exists ((inverse_fun f) \co g); first by apply/permutationsP.
   move: fp gp => [Ha _ Hb] [[[Hc _] _] _ Hd ].
   rewrite /phi compf_lK' //; ue.
 move => u v /permutationsP up /permutationsP vp.
@@ -1174,7 +1174,7 @@ pose g x := Yo (x <c a) (Vf ga x) (Vf gb (x -c a)).
 pose G := Lf g (a+c b) (U \cup V).
 have abN := (NS_sum aN bN).
 have sG: source G = a +c b by rewrite/G; aw.
-have saab: sub a (a +c b).  
+have saab: sub a (a +c b).
   move => t /(NltP aN) lta; apply/(NltP abN).
   apply:(clt_leT lta (csum_M0le b (CS_nat aN))).
 have saG: sub a (source G) by ue.
@@ -1186,7 +1186,7 @@ have ax: lf_axiom g (a +c b) (U \cup V).
   move/(NltP abN): tab => tab.
   move: (NS_lt_nat tab abN) => tN.
   case: (NleT_el aN tN) => // leat.
-  rewrite csumC in tab. 
+  rewrite csumC in tab.
   apply: setU2_2; Wtac; rewrite qb; apply/(NltP bN); apply:cdiff_Mlt => //.
 have: bijection G.
   apply: bijective_if_same_finite_c_surj.
@@ -1210,7 +1210,7 @@ have fG: function G by fct_tac.
 set_extens t.
   move /(Vf_image_P fG saG) => [u ua ->];rewrite (GU _ ua); Wtac.
 rewrite - qf; move/(proj2 (proj2 qd)) => [i]; rewrite qe => ia ->.
-rewrite -(GU _ ia); apply  /(Vf_image_P fG saG); ex_tac. 
+rewrite -(GU _ ia); apply  /(Vf_image_P fG saG); ex_tac.
 Qed.
 
 
@@ -1228,7 +1228,7 @@ by rewrite (setU2_Cr suE) /n (cardinal_setC2 suE) csum2cl csum2cr.
 Qed.
 
 Lemma Sperner_17 U V: sub U V -> sub V E ->
-  exists2 C, inc C Sperner_mx_chain & (inc U C /\ inc V C). 
+  exists2 C, inc C Sperner_mx_chain & (inc U C /\ inc V C).
 Proof.
 move => sUV sVE.
 move:(sub_smaller sUV) (sub_smaller sVE).
@@ -1237,8 +1237,8 @@ have lean := cleT leab lebn.
 have nN:=  Sperner_p0.
 have sUE := (sub_trans sUV sVE).
 suff: exists g, [/\ bijection_prop g n E, Vfs g a = U & Vfs g b = V].
-  move => [g [gA gB gC]]; move: (Sperner_5 gA). 
-  move/(NleP nN): lebn => p1; move/(NleP nN): lean => p2. 
+  move => [g [gA gB gC]]; move: (Sperner_5 gA).
+  move/(NleP nN): lebn => p1; move/(NleP nN): lean => p2.
   move => Fp; ex_tac; split; apply/funI_P; [  ex_tac | by exists b].
 move: (Sperner_16 sUE) => [ga [bga sga tga] ga2].
 pose U1 := V -s U; pose V1 := E -s V.
@@ -1249,8 +1249,8 @@ have fsU: natp(cardinal U1).
 have fsV: natp(cardinal V1).
   apply/card_finite_setP;exact: (sub_finite_set svE fsE).
 have duv1: disjoint U1 V1 by apply: disjoint_pr => x /setC_P [xv _]/setC_P[_ ].
-move: (Sperner_15 fsU fsV duv1) => [gb]. 
-have eqa: (U1 \cup V1) = E -s U. 
+move: (Sperner_15 fsU fsV duv1) => [gb].
+have eqa: (U1 \cup V1) = E -s U.
   set_extens t.
     case/setU2_P => /setC_P [ta tb]; apply/setC_P; split; fprops.
   move => /setC_P [tE tU]; case: (inc_or_not t V) => tv.
@@ -1263,8 +1263,8 @@ pose h x := Yo (x <c a) (Vf ga x) (Vf gb (x -c a)).
 have fga: function ga by fct_tac.
 have fgb: function gb by fct_tac.
 have aN := NS_le_nat lean nN.
-have san :=  (proj33 lean). 
-have sbn :=  (proj33 lebn). 
+have san :=  (proj33 lean).
+have sbn :=  (proj33 lebn).
 have bN := NS_le_nat lebn nN.
 have ax: lf_axiom  h n E.
   rewrite /h => i iin; move:(NS_inc_nat nN iin) => iN.
@@ -1285,7 +1285,7 @@ have bgp: bijection_prop (Lf h n E) n E.
   apply: (lf_surjective ax) => y yE; case: (inc_or_not y U) => yU.
     move/he:yU =>[i ia ->]; exists i => //; apply: (san _ ia).
   have: inc y (target gb) by rewrite tgb; apply/setC_P.
-  move/(proj2 (proj2 bgb)) =>[i]; rewrite sgb => id ->.    
+  move/(proj2 (proj2 bgb)) =>[i]; rewrite sgb => id ->.
   move: (NS_inc_nat (NS_diff a nN) id) => iN.
   move/(NltP (NS_diff a nN)): id => lin.
   exists (i +c a).
@@ -1355,7 +1355,7 @@ have: bijection (Lf (compose g) B C).
   + move => f/Zo_P [/bijectionsP bf fp].
     apply/Zo_P; split; last by rewrite compf_image fp.
     apply/bijectionsP; apply: (compose_bp bf ga1).
-  + move => u v /Zo_P [/bijectionsP [bf sf tf] fp].  
+  + move => u v /Zo_P [/bijectionsP [bf sf tf] fp].
     move => /Zo_P [/bijectionsP [bv sv tv] p].
     apply/  (compf_regr bg); split => //; try fct_tac; ue.
   + move => f /Zo_P [/bijectionsP bf fp].
@@ -1376,23 +1376,23 @@ have fsd := (sub_finite_set s1 fsn).
 pose phi1 f := restriction2 f k k.
 pose phi2 f := restriction2 f (n-s k) (n -s k).
 have rax1 f: inc f B -> restriction2_axioms f k k.
-  rewrite /restriction2_axioms. 
+  rewrite /restriction2_axioms.
   by move => /Zo_P [/bijectionsP[/proj1/proj1 fs -> ->] ->]; split.
 have rax2 f: inc f B -> restriction2_axioms f (n -s k) (n -s k).
-  rewrite /restriction2_axioms. 
+  rewrite /restriction2_axioms.
   move => /Zo_P [/bijectionsP[/proj1 [ ff injf] sf tf] Vfk].
   have ha: sub (n -s k) (source f) by ue.
   have hb: sub k (source f) by ue.
   rewrite sf tf; split => // t /(Vf_image_P ff ha) [i lein ->]; apply/setC_P.
   have hc: inc (Vf f i) n by Wtac.
-  split => //; rewrite - Vfk =>  /(Vf_image_P ff hb)  [u uk ]. 
+  split => //; rewrite - Vfk =>  /(Vf_image_P ff hb)  [u uk ].
   move /(injf i u (ha _ lein) (hb _ uk)) => iu.
   move/setC_P: lein => /proj2; case; ue.
 have perm_phi1 f: inc f B -> inc (phi1 f) (permutations k).
   move => fB; move:(rax1 f fB) => ax.
   move: (restriction2_prop ax) => rp2; move: (rp2) =>[fg sg tg].
   move: fB =>/Zo_P [/bijectionsP[ [qa qb] _ _ ] _].
-  apply:(permutation_if_inj (finite_set_nat kN) rp2). 
+  apply:(permutation_if_inj (finite_set_nat kN) rp2).
   apply: (restriction2_fi qa ax).
 have perm_phi2 f: inc f B -> inc (phi2 f) (permutations (n -s k)).
   move => fB; move:(rax2 f fB) => ax.
@@ -1410,13 +1410,13 @@ apply: lf_bijective.
   move/Zo_P: (uB) => [ /bijectionsP [[[fu _] _] su tu] uk ].
   move/Zo_P: (vB) => [ /bijectionsP [[[fv _] _] sv tv] vk ].
   apply: function_exten => //; try ue; rewrite su => t itn.
-  case: (inc_or_not t k) => tk. 
+  case: (inc_or_not t k) => tk.
     move: (rax1 _ uB) (rax1 _ vB) => a1 a2.
-    move: (f_equal (Vf ^~ t) eq1). 
+    move: (f_equal (Vf ^~ t) eq1).
     by rewrite (restriction2_V a1 tk)(restriction2_V a2 tk).
   move: (rax2 _ uB) (rax2 _ vB) => a1 a2.
   have tnk: inc t (n -s k) by apply/setC_P.
-  move: (f_equal (Vf ^~ t) eq2). 
+  move: (f_equal (Vf ^~ t) eq2).
   by rewrite (restriction2_V a1 tnk)(restriction2_V a2 tnk).
 + move => y /setX_P [py /permutationsP [ba sa ta] /permutationsP [bb sb tb]].
   pose c i := Yo (inc i k) (Vf (P y) i) (Vf (Q y) i).
@@ -1430,10 +1430,10 @@ apply: lf_bijective.
     apply: (lf_injective axc) => i j iin jin.
     rewrite /c; Ytac lik; Ytac ljk.
     + by move: (proj2 (proj1 ba) i j); rewrite sa; apply.
-    + move => eq. 
+    + move => eq.
       have: inc j (n -s k) by apply/setC_P.
       move/ hsb => /setC_P[_]; case; rewrite - eq; exact: (hsa i lik).
-    + move => eq. 
+    + move => eq.
       have: inc i (n -s k) by apply/setC_P.
       move/ hsb => /setC_P[_]; case; rewrite  eq; exact: (hsa j ljk).
     + by move: (proj2 (proj1 bb) i j); rewrite sb; apply; apply/setC_P.
@@ -1463,7 +1463,7 @@ apply: lf_bijective.
     by rewrite LfV///c; Ytac0.
   exists (Lf c n n); first by apply/Zo_P; split.
   rewrite/phi3;apply: pair_exten; aww.
-Qed. 
+Qed.
 
 Lemma nb_permutations_nat m: natp m -> cardinal (permutations m) = factorial m.
 Proof.
@@ -1473,7 +1473,7 @@ by apply: finite_set_nat.
 Qed.
 
 Lemma Sperner_19 A (k := cardinal A):
-  sub A E -> 
+  sub A E ->
   cardinal (Zo Sperner_mx_chain (inc A))
   = factorial k *c (factorial (n -c k)).
 Proof.
@@ -1488,7 +1488,7 @@ set W := Zo _ _; set V := Zo _ _; suff: bijection (Lf chain_of_fun  V W).
 apply: lf_bijective.
 -  move => g /Zo_P [/bijectionsP bgp gc].
   move:(Sperner_5 bgp) => h.
-  by apply/Zo_P; split => //; apply/funI_P; exists k => //; apply/NleP.  
+  by apply/Zo_P; split => //; apply/funI_P; exists k => //; apply/NleP.
 - by move => u v /Zo_S/bijectionsP uu /Zo_S/bijectionsP vv; apply:Sperner_13.
 - move => t /Zo_P [/Sperner_10] [ bgp ->] /funI_P [i lin Ai].
   set g:= Lf _ _ _.
@@ -1496,12 +1496,12 @@ apply: lf_bijective.
     move/(NleP nN): lin bgp=> [ci _ ssin]  [[qa _] sg tg].
     by rewrite /k Ai cardinal_image ? sg // (card_card ci).
   by exists g => //; apply/Zo_P; split; [ apply/bijectionsP | ue ].
-Qed. 
+Qed.
 
 Definition free_rep f :=
   [/\ bijection f, natp (source f) & inc (target f) (free_subsets r)].
-Definition chain_free_meet f C := 
-  union(Zo (csucc (source f)) (fun i => \0c <c i /\ inc (Vf f (cpred i)) C)). 
+Definition chain_free_meet f C :=
+  union(Zo (csucc (source f)) (fun i => \0c <c i /\ inc (Vf f (cpred i)) C)).
 Definition chain_free_meet_i f i :=
   Zo Sperner_mx_chain (fun C => chain_free_meet f C  = i).
 
@@ -1525,7 +1525,7 @@ Lemma Sperner_cf0 f i: free_rep f -> inc i (source f) ->
 Proof.
 move: Sperner_p0 => nN fp isf.
 have sE: sub (Vf f i) E.
-  move:fp =>[ qa qb /Sperner_p4/proj1  qc]. 
+  move:fp =>[ qa qb /Sperner_p4/proj1  qc].
   by move /setP_P: (qc _ (Vf_target (proj1(proj1 qa)) isf)).
 move: (sub_smaller sE) => le1.
 split => //; apply/(NS_le_nat le1 nN).
@@ -1554,12 +1554,12 @@ move: (subp_osr E) => [or sr].
 move: (C3 (Vf f i) (Vf f (cpred j))); rewrite iorder_sr // => h1.
 move/Zo_P: rrf => [ _ h2].
 case: (h1 h jp) => /iorder_gle1 cp.
-  by move: (fi _ _ lin ksf (h2 _ _  pa vtt cp)).  
+  by move: (fi _ _ lin ksf (h2 _ _  pa vtt cp)).
 by move: (fi _ _ ksf lin (h2 _ _  vtt pa cp)).
 Qed.
 
 Lemma Sperner_cf2 f C: free_rep f -> inc C Sperner_mx_chain ->
-  (forall  i, inc i (source f) -> ~inc (Vf f i) C) -> 
+  (forall  i, inc i (source f) -> ~inc (Vf f i) C) ->
   chain_free_meet f C = \0c.
 Proof.
 move =>  [[[ff fi] _] sfN rrf]  hb hc.
@@ -1593,7 +1593,7 @@ Proof.
 move => fp.
 rewrite - csum_pr4_bis; last first.
   move => i j ip jp; mdi_tac nij => x /Zo_hi iv /Zo_hi jv; case: nij; ue.
-rewrite - Sperner_14; congr cardinal. 
+rewrite - Sperner_14; congr cardinal.
 set_extens t; last by move =>/setUf_P [y yp] /Zo_S.
 move => tC; apply/setUf_P.
 have pN: natp p by case: fp.
@@ -1608,7 +1608,7 @@ Qed.
 Lemma Sperner_cf5 f (p := source f)
       (m := fun i => cardinal (chain_free_meet_i f i)):
   free_rep f ->
-   cn *c factorial n = cn *c (m \0c) +c 
+   cn *c factorial n = cn *c (m \0c) +c
      csumb p (fun i => cn *c (m (csucc i))).
 Proof.
 move => h; rewrite(f_equal (cprod2 cn) (Sperner_cf4 h)).
@@ -1618,7 +1618,7 @@ rewrite cprod2Dn (fct_sum_rec1 _ pN); aw; rewrite csumC.
 by apply: f_equal; apply: csumb_exten => i isf; aw.
 Qed.
 
-Lemma Sperner_cf6 f i: free_rep f -> inc i (source f) ->  
+Lemma Sperner_cf6 f i: free_rep f -> inc i (source f) ->
    chain_free_meet_i f (csucc i) = (Zo Sperner_mx_chain (inc (Vf f i))).
 Proof.
 move => fp mip.
@@ -1629,10 +1629,10 @@ set_extens t => /Zo_P [qa qb]; apply/Zo_P; split => //.
   by move =>[j [/aux jsf fj]] /(csucc_inj (aux _ mip) jsf) => ->.
 by  move: (Sperner_cf1 fp qa mip qb).
 Qed.
-  
+
 Lemma Sperner_cf7 f i (a := cardinal (Vf f i))
       (m := cardinal (chain_free_meet_i f (csucc i))):
-  free_rep f -> inc i (source f) -> 
+  free_rep f -> inc i (source f) ->
   natp m /\ m = factorial a *c factorial (n -c a).
 Proof.
 move => fp isf; move: (Sperner_cf0 fp isf) =>[sE _ aN].
@@ -1653,7 +1653,7 @@ Lemma Sperner_cf8 f (p := source f)
       (s := csumb p (fun i => cn *c (m (csucc i)))):
   free_rep f ->
    [/\ natp s, p *c factorial n <=c s &
-   (p *c factorial n = s -> 
+   (p *c factorial n = s ->
          forall i, inc i p -> cn *c m (csucc i) = factorial n)].
 Proof.
 move => fp.
@@ -1711,7 +1711,7 @@ ex_tac.
 Qed.
 
 Lemma Sperner_cf11 f : free_rep f -> (source f) = cn ->
-  (forall C, inc C Sperner_mx_chain -> 
+  (forall C, inc C Sperner_mx_chain ->
      exists2 i, inc i (source f) & inc (Vf f i) C) /\
   (forall i, inc i (source f) -> is_half_n n  (cardinal (Vf f i))).
 Proof.
@@ -1733,11 +1733,11 @@ split.
   move => C Cp.
   case: (cprod2_eq0 c1z) => // /card_nonempty xfmz.
   case: (Sperner_cf3 fp Cp) => cp; first by empty_tac1 C; apply/Zo_P.
-  move:cp => [i [isf iv _]]; ex_tac. 
+  move:cp => [i [isf iv _]]; ex_tac.
 have /hp T: source f *c factorial n = c by rewrite cs eq1 c1z (csum0r cc).
 move=> i ip; move: (T i ip). rewrite (proj2 (Sperner_cf7 fp ip)) => /esym  av.
 have /sub_smaller lan: sub (Vf f i) E.
-  move:fp =>[ qe _ /Sperner_p4/proj1  qc]. 
+  move:fp =>[ qe _ /Sperner_p4/proj1  qc].
   by move /setP_P: (qc _ (Vf_target (proj1(proj1 qe)) ip)).
 exact: (Sperner_b2 nN lan av).
 Qed.
@@ -1753,7 +1753,7 @@ move: (fp) => [bf qa qb].
 have cf: (cardinal F) = cn.
   by rewrite /F(Sperner_p2 lekn);move/ (binom_monotone_max_arg nN lekn): hn.
 have cc:  target f =c F.
-  by rewrite - (card_bijection bf) csf cf (card_card (CS_nat ncN)). 
+  by rewrite - (card_bijection bf) csf cf (card_card (CS_nat ncN)).
   have ha: finite_set F by apply/NatP; rewrite cf.
 exact: (cardinal_setC5 ha stf cc).
 Qed.
@@ -1774,34 +1774,34 @@ apply:(csum_eq2r (NS_half nN) q2  (NS_half nN)).
 Qed.
 
 Lemma Sperner_cf14 f (F := fun k => (subsets_with_p_elements k E)):
- free_rep f -> source f = cn -> oddp n -> 
+ free_rep f -> source f = cn -> oddp n ->
  target f =  F (chalf n) \/ target f =  F (csucc (chalf n)).
 Proof.
 move => fp sg on.
 have hN := NS_half (proj1 on).
 move: (Sperner_cf11 fp sg) => [Ha Hb].
-move: (half_odd on); 
+move: (half_odd on);
   rewrite /cdouble - csum_nn - (csum_Sn _ hN); set q := chalf n => nv.
 pose a i :=  cardinal (Vf f i).
 have ap i: inc i (source f) ->  a i = q \/ a i = csucc q.
   move => isf; move: (Sperner_cf0 fp isf) => [_ lean aN].
   case: (Hb _ isf); [by left | move => eq ; right].
   apply:(csum_eq2r hN aN  (NS_succ hN)).
-  by move: (cdiff_pr lean); rewrite eq {2} nv. 
+  by move: (cdiff_pr lean); rewrite eq {2} nv.
 move: (fp) => [[[ffp injp] [_ sj]] cf /Sperner_p4[ste tff]].
 case: (p_or_not_p (exists2 i, inc i (source f) & a i = q)); last first.
   have le1: csucc q <=c n by rewrite nv; apply: csum_M0le; fprops.
-  have le2:  is_half_n n (csucc q). 
+  have le2:  is_half_n n (csucc q).
     right; rewrite {1} nv csumC; apply: cdiff_pr1; fprops.
-  move => bad ; right; apply: (Sperner_cf12 fp sg le1 le2). 
+  move => bad ; right; apply: (Sperner_cf12 fp sg le1 le2).
   move => t tf; apply/ Zo_P;split; first by move: (ste _ tf).
   move: (sj _ tf) =>[k kf ->].  case: (ap _ kf) => // dv.
   ex_middle bad1; case: bad; ex_tac.
 have nN := proj1 on.
 move => [i0 i0sg ai0v]; left.
-have le1: q <=c n by apply cle_halfn_n. 
+have le1: q <=c n by apply cle_halfn_n.
 have le2: is_half_n n q by left.
-apply: (Sperner_cf12 fp sg le1 le2). 
+apply: (Sperner_cf12 fp sg le1 le2).
 move => t tf; apply/ Zo_P;split; first by move: (ste _ tf).
 move: (sj _ tf) =>[k kf kv]; rewrite kv;case: (ap _ kf) => //.
 rewrite /a - kv => ct.
@@ -1809,8 +1809,8 @@ set U := (Vf f i0).
 have Utf: inc U (target f) by rewrite /U;  Wtac.
 have cU: cardinal U = q by [].
 have H A p: cardinalp p -> cardinal A = csucc p -> exists B x,
-   [/\ A = B +s1 x, cardinal B = p, sub B A & B <> A]. 
-   move => qN cA. 
+   [/\ A = B +s1 x, cardinal B = p, sub B A & B <> A].
+   move => qN cA.
    case: (emptyset_dichot A) => Ae.
      by case: (@succ_nz p); rewrite - cA Ae cardinal_set0.
    move: (rep_i Ae) => rt; exists (A -s1 (rep A)), (rep A).
@@ -1826,16 +1826,16 @@ have pN: natp (cardinal (V -s U)).
   by apply/NatP; apply: sub_finite_set fsE => x /setC_P [/sVE].
 suff: forall p, natp p -> forall V, sub V E -> cardinal (V -s U) = p ->
      cardinal V = q -> inc V (target f).
-   by move => hyp; apply: (hyp _ pN V sVE). 
+   by move => hyp; apply: (hyp _ pN V sVE).
 clear V  cV t tf k kf kv ct ra rv sVE stE x0 pN.
 apply: Nat_induction.
-  have fsU: finite_set U by apply/NatP; rewrite cU. 
+  have fsU: finite_set U by apply/NatP; rewrite cU.
   move => V sVE /card_nonempty/empty_setC cdz cvq.
   by rewrite - cU in cvq; rewrite (cardinal_setC5 fsU cdz cvq).
 move => p pN  Hrec V Ve cvd cvq.
 move: (H (V -s U) p (CS_nat pN) cvd) => [W [x1 [pa pb pc pd]]].
 case: (emptyset_dichot (U -s V)) => nes.
-   have fsV: finite_set V by apply/NatP; rewrite cvq. 
+   have fsV: finite_set V by apply/NatP; rewrite cvq.
    by rewrite - cvq in cU; rewrite -(cardinal_setC5 fsV (empty_setC nes) cU).
 move /setC_P: (rep_i nes); set y := rep (U -s V);move =>[yU yV].
 have yE: inc y E by move /setP_P: (ste _ Utf); apply.
@@ -1879,7 +1879,7 @@ move/Zo_S: (Cp) => /Sperner_3 cij.
 have Wt: inc (Vf f j) (target f) by Wtac.
 case : (ap _ jsf) => cfj.
    have xx:V =c Vf f j by ue.
-   by rewrite (cij V (Vf f j) i1 fjC xx). 
+   by rewrite (cij V (Vf f j) i1 fjC xx).
 have xx:  (V +s1 y) =c Vf f j by rewrite (csucc_pr yV) cvq - cfj.
 move: Wt; rewrite - (cij _ (Vf f j) i2 fjC xx) eq3 => vtf.
 have bad: gle r V' (V' +s1 x1) by apply/subp_gleP; split; fprops; ue.
@@ -1982,7 +1982,7 @@ have sg: source g = T  by rewrite /g ;aw.
 have stgc:source g =c target g by rewrite sg tg cY cT.
 have fsg: finite_set (source g) by rewrite sg; apply /NatP; rewrite cT.
 have ig : injection g by apply: lf_injective => // a /Ha [].
-move: (bijective_if_same_finite_c_inj stgc fsg ig) => bg. 
+move: (bijective_if_same_finite_c_inj stgc fsg ig) => bg.
 move => Z ZY; apply/singletonP; split; last exact: (als _ ZY).
 rewrite - tg in ZY.
 move: (proj2 (proj2 bg) _ ZY) => [x];rewrite  sg /g => xs; rewrite LfV// => ->.
@@ -2004,7 +2004,7 @@ move=> n nN hrec r k csr or kN [[X Xf cX] h2].
 have fsr: finite_set(substrate r) by apply/NatP; ue.
 move: (order_length_exists fsr); set ol:= the_order_length _.
 move => [olN oln [[C /total_subordersP [Csr Ctot]cC] olb]].
-have dots u v: gle r u v ->  inc (doubleton u v) (total_suborders r).    
+have dots u v: gle r u v ->  inc (doubleton u v) (total_suborders r).
   move=> luv; move: (arg1_sr luv) (arg2_sr luv) => usr vsr.
   set Y := doubleton u v.
   have sY: sub Y (substrate r) by apply: sub_set2.
@@ -2014,9 +2014,9 @@ have dots u v: gle r u v ->  inc (doubleton u v) (total_suborders r).
   - by right.
   - by right; order_tac.
 case: (NleT_el NS2 olN) => ol2; last first.
-  move: (greatest_is_partition (substrate r)). 
+  move: (greatest_is_partition (substrate r)).
   set A := greatest_partition _ => h.
-  have cA: cardinal A = cardinal (substrate r). 
+  have cA: cardinal A = cardinal (substrate r).
     by apply: (cardinal_fun_image) => i j _ _; apply:set1_inj.
   have At: sub A (total_suborders r).
     move => t /funI_P[z zsr ->]; apply:(total_suborder_prop or (set1_sub zsr)).
@@ -2028,9 +2028,9 @@ case: (NleT_el NS2 olN) => ol2; last first.
   exists A; split => //; rewrite cA; apply: cleA => //.
   by move/free_subsetsP: Xf => [/sub_smaller]; rewrite cX.
 move: (iorder_osr or Csr) => [orC sioC].
-have fsC: finite_set (substrate (induced_order r C)). 
+have fsC: finite_set (substrate (induced_order r C)).
   by rewrite sioC; apply /NatP; ue.
-have neC: nonempty (substrate (induced_order r C)). 
+have neC: nonempty (substrate (induced_order r C)).
   rewrite sioC; apply /cle1P; rewrite cC; exact: (cleT cle_12 ol2).
 move: (finite_set_torder_least Ctot fsC neC) =>[alpha []].
 move: (finite_set_torder_greatest Ctot fsC neC) => [omga []].
@@ -2054,7 +2054,7 @@ have fs1: finite_set (substrate r1).
   by rewrite sr1; apply: (sub_finite_set sub1 fsr).
 move: (order_width_exists fs1); set k1 := the_order_width _.
 move => [k1N kbd owrk1]; move: (owrk1)  => [[X1 cX1 x1p] k1max].
-move/free_subsetsP: cX1 => [X1sr X1free]. 
+move/free_subsetsP: cX1 => [X1sr X1free].
 have Xfree a b: inc a X1 -> inc b X1 -> gle r a b -> a = b.
   move => ax bx le; apply:(X1free a b ax bx);apply/iorder_gleP.
   by split => //; rewrite - sr1; apply: X1sr.
@@ -2062,7 +2062,7 @@ have le1: k1 <=c k.
   suff: inc X1 (free_subsets r) by move/ h2; rewrite x1p.
   apply/free_subsetsP.
   split; first by apply: (sub_trans X1sr); rewrite sr1.
-  by move => u v ux1 vx1 le1; apply:(Xfree u v ux1 vx1). 
+  by move => u v ux1 vx1 le1; apply:(Xfree u v ux1 vx1).
 have: k = k1 \/ k = csucc k1.
   set X2 := X \cap E'.
   have sr2: sub X2 (substrate r1) by rewrite sr1 => t /setI2_P [].
@@ -2070,7 +2070,7 @@ have: k = k1 \/ k = csucc k1.
   have: inc X2 (free_subsets r1).
     apply/free_subsetsP; split => // u v /setI2_P [uX _] /setI2_P[vX _].
     by move/iorder_gle1; apply:qb.
-  move/k1max => le2. 
+  move/k1max => le2.
   have aux: cardinal X = csucc (cardinal X2) ->  k = k1 \/ k = csucc k1.
      move => h.
      case: (equal_or_not k1 k) =>kk1; [ by left | right].
@@ -2098,7 +2098,7 @@ have: k = k1 \/ k = csucc k1.
     rewrite csucc_pr //; case/setI2_P => _ /setC_P [_]; case; fprops.
   - left; apply: cleA => //; move: le2; rewrite - cX.
     have -> //: X2 = X.
-    set_extens t; [ by move/setI2_P => [] | move => tx; apply/setI2_P]. 
+    set_extens t; [ by move/setI2_P => [] | move => tx; apply/setI2_P].
     split => //; apply/setC_P; split; try apply: qa  => //.
     case/set2_P => tv; [ case: hb; ue | case: ha; ue ].
 case => kk1; last first.
@@ -2127,7 +2127,7 @@ case => kk1; last first.
         have /setC_P [_] //: inc x E' by  rewrite - sr1 - pa; union_tac.
       * by rewrite au bu; left.
     + move => t /setU1_P; case; [ by apply: pc | move ->; apply:set2_ne].
-  - rewrite csucc_pr ? x2b // => dx2. 
+  - rewrite csucc_pr ? x2b // => dx2.
     have /setC_P [_ /set2_P]: inc alpha E' by rewrite - sr1 - pa; union_tac.
     by case; left.
   - move => t/setU1_P []; first by move/x2c; apply:sub_total_suborders1.
@@ -2167,7 +2167,7 @@ case: (inc_or_not alpha Ep).
   case: (equal_or_not a alpha) => eaa.
     move:(X1sr _ ax1); rewrite eaa sr1 => /setC_P [_];case; fprops.
   have naC: ~ inc a C by move/alC => le2; case: eaa; order_tac.
-  set C2 := C +s1 a.   
+  set C2 := C +s1 a.
   suff : inc C2 (total_suborders r).
     by move/ olb; rewrite (csucc_pr naC) cC => /cleNgt; case; apply/cltS.
   have C2sr: sub C2 (substrate r).
@@ -2184,7 +2184,7 @@ case: (inc_or_not omga Em).
   case: (equal_or_not a omga) => eaa.
     move:(X1sr _ ax1); rewrite eaa sr1 => /setC_P [_];case; fprops.
    have naC: ~ inc a C by move/olC => le2; case: eaa; order_tac.
-   set C2 := C +s1 a.   
+   set C2 := C +s1 a.
   suff : inc C2 (total_suborders r).
     by move/ olb; rewrite (csucc_pr naC) cC => /cleNgt; case; apply/cltS.
   have C2sr: sub C2 (substrate r).
@@ -2210,8 +2210,8 @@ have ltm: cardinal Em <c n.
   apply/(cleSlt0P (CS_cardinal _) nN);rewrite - (csucc_pr Ems) csr.
   by apply: sub_smaller; apply: setU1_sub.
 clear Ems Eps.
-have wrpk: (order_width rp k). 
-  have ha: sub X1 (substrate rp) by  rewrite  srp. 
+have wrpk: (order_width rp k).
+  have ha: sub X1 (substrate rp) by  rewrite  srp.
   have fr1: inc X1(free_subsets rp).
     apply/free_subsetsP; split => //.
     by move => a b aX1 bX1 /iorder_gle1 le;apply: Xfree.
@@ -2220,8 +2220,8 @@ have wrpk: (order_width rp k).
   have Tsr: sub T (substrate r) by apply: (sub_trans qc); rewrite srp.
   rewrite srp in qc.
   split => //a b aT bT leab; apply: qd => //; apply/iorder_gleP; split; fprops.
-have wrmk: (order_width rm k). 
-  have ha: sub X1 (substrate rm) by  rewrite  srm. 
+have wrmk: (order_width rm k).
+  have ha: sub X1 (substrate rm) by  rewrite  srm.
   have fr1: inc X1(free_subsets rm).
     apply/free_subsetsP; split => //.
     by move => a b aX1 bX1 /iorder_gle1 le;apply: Xfree.
@@ -2234,7 +2234,7 @@ case: (hrec _ ltp _ _  eqp orp kN wrpk).
 case: (hrec _ ltm _ _  eqm orm kN wrmk).
 rewrite srm srp => Pm [Pma Pmb Pmc] Pp [Ppa Ppb Ppc].
 pose FP x := select (fun z => inc x z).
-have HFP E P: partition_s P E -> 
+have HFP E P: partition_s P E ->
   forall x, inc x E -> inc x (FP x P) /\ inc (FP x P) P.
   move => [[qa qb] qc] x xE; apply: select_pr.
      rewrite - qa in xE; move /setU_P: xE=> [y ya yb]; ex_tac.
@@ -2247,18 +2247,18 @@ have injfp: {inc X1 &, injective fp}.
   move => x y xX1 yX1 /=; move: (Hap _ (sX1Ep _ xX1)) (Hap _ (sX1Ep _ yX1)).
   move => [pa pb] [pc pd] pe; rewrite - pe in pc.
   move:(Ppc _ pb) => /total_subordersP [qa qb].
-  move: (proj2 qb x y); rewrite iorder_sr // => h; move: (h pa pc). 
+  move: (proj2 qb x y); rewrite iorder_sr // => h; move: (h pa pc).
   case=>/iorder_gle1 /iorder_gle1 => le.
     by apply:(Xfree _ _ xX1 yX1).
-  by symmetry;apply:(Xfree _ _ yX1 xX1). 
+  by symmetry;apply:(Xfree _ _ yX1 xX1).
 have injfm: {inc X1 &, injective fm}.
   move => x y xX1 yX1 /=; move: (Ham _ (sX1Em _ xX1)) (Ham _ (sX1Em _ yX1)).
   move => [pa pb] [pc pd] pe; rewrite - pe in pc.
   move:(Pmc _ pb) => /total_subordersP [qa qb].
-  move: (proj2 qb x y);rewrite iorder_sr // => h; move: (h pa pc). 
+  move: (proj2 qb x y);rewrite iorder_sr // => h; move: (h pa pc).
   case=>/iorder_gle1 /iorder_gle1 => le.
-    by apply:(Xfree _ _ xX1 yX1). 
-  by symmetry;apply:(Xfree _ _ yX1 xX1). 
+    by apply:(Xfree _ _ xX1 yX1).
+  by symmetry;apply:(Xfree _ _ yX1 xX1).
 have cX1: cardinal X1 = k by ue.
 have fsX1: finite_set X1 by apply /NatP; ue.
 have axp: lf_axiom fp X1 Pp by move => x /sX1Ep /Hap[].
@@ -2307,14 +2307,14 @@ have aux2 x i j: inc i X1 -> inc j X1 ->inc x (fpm i) -> inc x (fpm j) -> i = j.
   case/setU2_P => xx; case/setU2_P => yy.
     + move: (Hap _ (sX1Ep _ ix)) (Hap _ (sX1Ep _ jx)) => [qa qb][qc qd].
       move: (sb _ _ qb qd); case => sf; last by empty_tac1 x.
-      by move:(injfp _ _ ix jx sf) => ->. 
+      by move:(injfp _ _ ix jx sf) => ->.
     + by rewrite (aux _ _ _ ix jx xx yy).
     + by rewrite (aux _ _ _ jx ix yy xx).
     + move: (Ham _ (sX1Em _ ix)) (Ham _ (sX1Em _ jx)) => [qa qb][qc qd].
       move: (sd _ _ qb qd); case => sf; last by empty_tac1 x.
       by rewrite(injfm _ _ ix jx sf).
 have rb: partition_s (fun_image X1 fpm) (substrate r).
-  split; first split => //. 
+  split; first split => //.
     move => a b /funI_P[i ix ->] /funI_P[j jx ->]; mdi_tac hh => x x1 x2.
     by case: hh; rewrite (aux2 x i j ix jx x1 x2).
   move => t /funI_P [z zX1 ->]; move:  (proj1(Hap _ (sX1Ep _ zX1))) => zi.
@@ -2322,7 +2322,7 @@ have rb: partition_s (fun_image X1 fpm) (substrate r).
 have rc: cardinal (fun_image X1 fpm) = k.
   rewrite cardinal_fun_image // => i j ix jx hh.
   move: (proj1 (Hap _ (sX1Ep _ ix))) => qa.
-  have qb: inc i (fpm i) by apply/setU2_P; left.  
+  have qb: inc i (fpm i) by apply/setU2_P; left.
   have qc: inc i (fpm j) by ue.
   exact:(aux2 i i j ix jx qb qc).
 exists (fun_image X1 fpm); split => // t /funI_P [x x1 ->].
@@ -2357,7 +2357,7 @@ apply:(total_suborder_prop or s1) => a b;case/setU2_P => xx; case/setU2_P => yy.
 Qed.
 
 
-(* old 
+(* old
 Lemma Exercise4_5a Y T k:
   cardinal Y = k -> cardinal T = k -> natp k ->
   sub T (union Y) -> disjoint_ser T ->
@@ -2366,7 +2366,7 @@ Lemma Exercise4_5a Y T k:
 Proof.
 move => cY cT kN Tu ald als.
 set V1 := Zo Y (fun z => (T \cap z) <> emptyset).
-set V2 := Lg V1 (fun z => (T \cap z)). 
+set V2 := Lg V1 (fun z => (T \cap z)).
 move=> Z ZY; case: (small_set_pr (als _ ZY)) => // itz.
 have s1: sub V1 Y by apply: Zo_S.
 have fsy: finite_set Y by apply /NatP; rewrite cY.
@@ -2389,13 +2389,13 @@ have pd: (forall i, inc i (domain duf) -> (Vg duf i) =c (Vg V2 i)).
   rewrite  /duf/disjointU_fam/V2/cst_graph; bw.
   move=> i iV1; bw.
   rewrite (card_card CS1) -(v1p _ iV1) /V2; bw.
-have pe:  mutually_disjoint duf. 
+have pe:  mutually_disjoint duf.
   apply: disjointU_disjoint; rewrite /cst_graph; fprops.
 have pf: mutually_disjoint V2.
-  rewrite /V2; apply: mutually_disjoint_prop2. 
+  rewrite /V2; apply: mutually_disjoint_prop2.
   move=> i j y => /Zo_S iY /Zo_S jY /setI2_P [_ yi] /setI2_P [_ yj].
   case: (ald _ _ iY jY) => // di; empty_tac1 y.
-move: (Eq_disjointU (conj pc pd) pe pf). 
+move: (Eq_disjointU (conj pc pd) pe pf).
 have -> //: unionb V2 = T.
 rewrite /V2;set_extens t.
   by move /setUb_P; bw; move =>  [y yv1]; bw; move /setI2_P => [].
@@ -2420,13 +2420,13 @@ move=> n nN hrec r k csr or kN [[X Xf cX] h2].
 (** The case where [E] is empty is trivial *)
 case: (emptyset_dichot (substrate r)) => sre.
   move: Xf =>  /Zo_P []; rewrite /Exercise4_5_conc sre; move /setP_P => Xse _.
-  exists emptyset => //;split. 
+  exists emptyset => //;split.
   + split;last by move=> a /in_set0.
     by split => //; try split => //; [rewrite setU_0 |move=> a b /in_set0].
   + by move/sub_set0: Xse => <-.
   + by move=> x /in_set0.
 (** Assumption: we have a free set [X] with [k] elements, all other free
-subsets have at most [k] elements. We have chosen an element [a], the 
+subsets have at most [k] elements. We have chosen an element [a], the
 complementary is [E'].  The results holds, for any [k], on sets with less
 than [n] elements. In particular, if no free subset of [E'] has [k] elements,
 we can partition [E'] in [k-1] subsets, and add [(singleton a)] as last set.  *)
@@ -2444,18 +2444,18 @@ move: (cltS p1N); rewrite - eq1 => p1n.
 have fsE T:  inc T (free_subsets r') -> inc T (free_subsets r).
   move=> /free_subsetsP [p3 p2]; apply/free_subsetsP; split.
     by apply: (sub_trans _ sE'); ue.
-  move => x y xt yt lexy;apply: p2=> //. 
+  move => x y xt yt lexy;apply: p2=> //.
   by apply /iorder_gle0P => //;rewrite - sr'; apply: p3.
 have h21 x: inc x (free_subsets r') -> (cardinal x) <=c k.
   by move/fsE; apply: h2.
 rewrite - sr' in sE'.
-case: (p_or_not_p (exists2 X', 
+case: (p_or_not_p (exists2 X',
    inc X' (free_subsets r') & cardinal X' = k)); last first.
   move=> ne.
   set X1 := X -s1 a.
-  have X1f: inc X1 (free_subsets r'). 
+  have X1f: inc X1 (free_subsets r').
     move/free_subsetsP: Xf => [p3 p2]; apply/free_subsetsP; split.
-      by rewrite sr' => t /setC1_P [/p3 tX ta]; apply /setC1_P. 
+      by rewrite sr' => t /setC1_P [/p3 tX ta]; apply /setC1_P.
     move=> u v  => /setC1_P [uX _] /setC1_P [vX _] uv.
     by move: (iorder_gle1 uv);apply: p2.
   case: (inc_or_not a X) => aX; last first.
@@ -2470,7 +2470,7 @@ case: (p_or_not_p (exists2 X',
     by rewrite ks; move /(cltSleP kN').
   move: (hrec p1 p1n _ _ p1c or' kN' krec)  => [Y [[[uY adi] ane] cY altY]].
   have nauy: ~(inc a (union Y)).
-     by rewrite uY sr' /E'; move /setC1_P => [_]. 
+     by rewrite uY sr' /E'; move /setC1_P => [_].
   have nsY: ~ inc (singleton a) Y.
     move=> say; case: nauy; apply: (@setU_i _ (singleton a)); fprops.
   move: (csucc_pr nsY); rewrite cY -ks => p3.
@@ -2491,7 +2491,7 @@ case: (p_or_not_p (exists2 X',
       case: nauy; rewrite -ta; union_tac.
     + right; rewrite us; apply: disjoint_pr => t /set1_P ta tu.
       case: nauy; rewrite -ta; union_tac.
-    + by left;rewrite us vs.  
+    + by left;rewrite us vs.
   have pr3: alls Y' nonempty.
    move=> u; case /setU1_P; [ by apply: ane| move=> ->; apply: set1_ne].
   exists (Y +s1 (singleton a)); split => //.
@@ -2506,13 +2506,13 @@ case: (p_or_not_p (exists2 X',
     - by right; apply /iorder_gleP => //;move: (iorder_gle1(iorder_gle1 le1)).
    have xsr: sub x (substrate r) by rewrite xy; apply: set1_sub.
    move: (iorder_osr or xsr) => [pa pb].
-   apply/total_subordersP; split =>//;split => //; rewrite pb xy;move=> y z. 
+   apply/total_subordersP; split =>//;split => //; rewrite pb xy;move=> y z.
    by move =>/set1_P -> /set1_P ->; left; apply /iorder_gle0P; fprops; order_tac.
 (** We assume now that there is a free subset with [k] elements in [E']
-   and partition [E'] into [k] parts. Let [f T] be the set of elements of [T] 
-   that are [>= a]. Assume that there is [Z] in the partition 
+   and partition [E'] into [k] parts. Let [f T] be the set of elements of [T]
+   that are [>= a]. Assume that there is [Z] in the partition
    such that any free subset that contains no element of [f Z] has less
-   than [k] elements. By induction we partition the complement of [f Z] 
+   than [k] elements. By induction we partition the complement of [f Z]
    into [k-1] sets, and add [f Z] as last set.
  *)
 move=> h22.
@@ -2525,12 +2525,12 @@ case: (p_or_not_p (exists2 Z, inc Z Y &
   move => [Z ZY hZ].
   set E'':= (E' -s (f Z)).
   set r'':= induced_order r E''.
-  have sEs: sub E'' (substrate r). 
+  have sEs: sub E'' (substrate r).
     apply: (@sub_trans E') => //; apply: sub_setC.
   move: (iorder_osr or sEs) => [or'' sr''].
   set X1:= X \cap (E' -s  (f Z)).
   have X1f: inc X1 (free_subsets r'').
-    apply/free_subsetsP;split; first by  rewrite sr'';apply: subsetI2r. 
+    apply/free_subsetsP;split; first by  rewrite sr'';apply: subsetI2r.
     move=> x y /setI2_P [xX _] /setI2_P [yX _] le1.
     move: Xf => /Zo_P [p3 p2].
     exact: (p2 x y xX yX (iorder_gle1 le1)).
@@ -2547,7 +2547,7 @@ case: (p_or_not_p (exists2 Z, inc Z Y &
       right; ex_middle aux; case: x1; split => //;  apply /setC_P;split => //.
         by apply /setC1_P;split => //; apply: aa.
       by apply /Zo_P.
-    have sc: small_set (X -s X1). 
+    have sc: small_set (X -s X1).
       move=> x y xc yc; move: (cXp _ xc) (cXp _ yc) => [xX ex] [yX ey].
       case: ex => xp; case: ey => yp.
       + by rewrite xp yp.
@@ -2561,7 +2561,7 @@ case: (p_or_not_p (exists2 Z, inc Z Y &
     move: (cardinal_setC X1c); rewrite cX k1s.
     have cX1: cardinalp (cardinal X1) by fprops.
     case: (small_set_pr sc) => cp1.
-      rewrite /cdiff cp1 cardinal_set0 csum0r //. 
+      rewrite /cdiff cp1 cardinal_set0 csum0r //.
       move=> le2; case: (proj2 le1); ue.
     rewrite /cdiff; move: cp1; move=> [x] ->.
     rewrite cardinal_set1 - csucc_pr4 // => ssc.
@@ -2609,20 +2609,20 @@ case: (p_or_not_p (exists2 Z, inc Z Y &
     + by right; apply /disjoint_S;rewrite us; apply: aux.
     + by left;rewrite us vs.
   have pr3: alls Y'' nonempty.
-    move=> u; case /setU1_P; [ by apply: ane'| move=> ->; exists a]. 
+    move=> u; case /setU1_P; [ by apply: ane'| move=> ->; exists a].
     rewrite /U1;fprops.
   exists Y''; split => //.
   move => x;case /setU1_P => xy.
     move /total_subordersP: (altY' _ xy) => [sx []]; rewrite iorder_sr// => orx torx.
     have sx1: sub x (substrate r).
-      by apply: (@sub_trans  (substrate r'')) => //; rewrite sr'';apply: sEs. 
+      by apply: (@sub_trans  (substrate r'')) => //; rewrite sr'';apply: sEs.
     move: (iorder_osr or sx1) => [pa pb].
     apply/total_subordersP; split => //.
     split => //; rewrite pb=> y z yx zx; case: (torx _ _ yx zx) => le2.
       by left; apply /iorder_gleP => //; move: (iorder_gle1 (iorder_gle1 le2)).
     by right;apply /iorder_gleP => //; move: (iorder_gle1(iorder_gle1 le2)).
   rewrite xy; apply:(total_suborder_prop or U1r) => x1 y1 x1u y1u.
-  move/total_subordersP: (altY _ ZY)=> [_ [_]]; rewrite iorder_sr//; move=> torz.  
+  move/total_subordersP: (altY _ ZY)=> [_ [_]]; rewrite iorder_sr//; move=> torz.
   move: x1u y1u; case /setU1_P=> x1p; case /setU1_P => y1p.
   + move: x1p y1p => /Zo_S a1 /Zo_S a2.
     by case:(torz _ _ a1 a2) => /iorder_gle1 /iorder_gle1 h; [left | right].
@@ -2643,13 +2643,13 @@ have sfr:  forall Z T, inc Z Y ->
   move: (Zp1 Z)(Zp2 Z) => pc pd; rewrite pd in pa.
   split; first by apply /setP_P;apply: (@sub_trans (E' -s (f Z))).
   by move=> x y xT yT xy; apply: pb => //; apply /iorder_gle0P => //; apply: pa.
-have good: forall Z, inc Z Y -> exists2 T, 
+have good: forall Z, inc Z Y -> exists2 T,
      inc T (free_subsets (io Z)) & cardinal T = k.
   move => Z ZY; ex_middle bad2.
   case: bad; exists Z => // T Tf.
   move: (sfr _ _ ZY Tf) => f1.
   split; first by apply: (h2 _ f1).
-  case: (equal_or_not (cardinal T) k) => // Tk; case: bad2; ex_tac.  
+  case: (equal_or_not (cardinal T) k) => // Tk; case: bad2; ex_tac.
 pose g Z := choose(fun T => inc T (free_subsets(io Z)) /\ cardinal T = k).
 have gp1: forall Z, inc Z Y ->
   (inc (g Z) (free_subsets (io Z)) /\ cardinal (g Z) = k).
@@ -2671,16 +2671,16 @@ have gp2: forall Z, inc Z Y -> krec1 (g Z).
 have gp3: forall T Z,  krec1 T -> inc Z Y -> small_set (T \cap Z).
   move=> T Z [pa pb pc] ZY x y /setI2_P [xT xZ] /setI2_P [yT yZ].
   move: pa => /Zo_P [_ aux2].
-  move /total_subordersP: (altY _ ZY) => [Zr'[_]]; rewrite iorder_sr//;move=> tor. 
+  move /total_subordersP: (altY _ ZY) => [Zr'[_]]; rewrite iorder_sr//;move=> tor.
   have Zr: sub Z (substrate r) by apply: (@sub_trans  (substrate r')).
   case: (tor _ _ xZ yZ)=> aux.
     by move: (iorder_gle1 (iorder_gle1 aux)); apply: aux2.
     by symmetry; move: (iorder_gle1 (iorder_gle1 aux)); apply: aux2.
 have gp4: forall T Z,  krec1 T -> inc Z Y ->
     singletonp (T \cap Z).
-  move => T Z kr; move: (kr) => [kt1 kt2 kt3]. 
+  move => T Z kr; move: (kr) => [kt1 kt2 kt3].
   have stu: sub T (union Y) by rewrite uY  sr'.
-  apply: (Exercise4_5a cY kt3 kN stu adi). 
+  apply: (Exercise4_5a cY kt3 kN stu adi).
   move=> z zy;apply: (gp3 _ _ kr zy).
 pose sij z1 z2 := union ((g z1) \cap z2).
 have sijp: forall z1 z2, inc z1 Y -> inc z2 Y ->
@@ -2688,7 +2688,7 @@ have sijp: forall z1 z2, inc z1 Y -> inc z2 Y ->
   move=> z1 z2 z1Y z2Y; rewrite /sij; move: (gp4 _ _ (gp2 _ z1Y) z2Y) => [s] ->.
   by rewrite setU_1.
 have sij1: forall i j, inc i Y -> inc j Y -> inc (sij i j) (g i).
-   move => i j iY jY; apply: (@setI2_1 _ j). 
+   move => i j iY jY; apply: (@setI2_1 _ j).
    rewrite (sijp _ _ iY jY); fprops.
 have sij2: forall i j, inc i Y -> inc j Y -> inc (sij i j) j.
    move => i j iY jY; apply: (@setI2_2 (g i)).
@@ -2701,10 +2701,10 @@ have sija1: forall i j, inc i Y -> inc j Y -> gle r  (sij i j) a-> False.
 have sija2: forall i, inc i Y-> gle r a (sij i i) -> False.
   move=> i iY; move: (sij1 _ _ iY iY) => pa pc.
   move: (gp1 _ iY) => [] /Zo_P [] /setP_P; rewrite /io iorder_sr // => s1 _.
-  move: (s1 _ pa) => /setC_P [] /Zo_P [pb] /set1_P pe pd _. 
+  move: (s1 _ pa) => /setC_P [] /Zo_P [pb] /set1_P pe pd _.
   by case: pd; apply: Zo_i=> //; apply: sij2.
 
-(** Fix [T]; consider the least of the [sij Z T]. This exists, since we 
+(** Fix [T]; consider the least of the [sij Z T]. This exists, since we
 consider a non-empty finite subset of a totally ordered set.
 This gives some [sj T]. These elements are all distinct.
 Together with [a], we get a free subset with [k+1] elements, absurd.  *)
@@ -2714,7 +2714,7 @@ have v1p: forall j, inc j Y ->
    let r1 := (induced_order r (V1 j)) in
      [/\ order r1, substrate r1 = V1 j & least r1 (sj j)].
   move=> j jY r1.
-  have s1: sub (V1 j) j. 
+  have s1: sub (V1 j) j.
     move => t /funI_P [z zY ->]; apply: (sij2 _ _ zY jY).
   have s0: sub j (substrate r') by move=> t tj;rewrite -uY; union_tac.
   have s2:= (sub_trans s1 s0).
@@ -2730,8 +2730,8 @@ have v1p: forall j, inc j Y ->
   apply: finite_subset_torder_least => //.
   rewrite - (iorder_trans r s0)  sr'//.
 have v2p: forall i j, inc i Y -> inc j Y ->
-   gle r (sj i) (sj j) -> i = j. 
-  move=> i j iY jY leij. 
+   gle r (sj i) (sj j) -> i = j.
+  move=> i j iY jY leij.
   move: (v1p _ iY) (v1p _ jY) => [o1 sr1 le1][o2 sr2 le2].
   move: le1 => []; rewrite sr1; move /funI_P => [z zY sa] _.
   have sb: inc (sij z j) (substrate (induced_order r (V1 j))).
@@ -2765,11 +2765,11 @@ have an2: ~ (inc a V2).
   by case: (sija1 _ _ jY zY); rewrite - ta; order_tac.
 move: (csucc_pr an2); rewrite c2;set (V3:= V2 +s1 a) => bad1.
 have V3t: inc V3 (free_subsets r).
-  apply: Zo_i. 
-    apply /setP_P => t; case /setU1_P; last by move => ->. 
+  apply: Zo_i.
+    apply /setP_P => t; case /setU1_P; last by move => ->.
     by move=> /funI_P [z zY ->];apply: v3p.
   move=> x y ; case /setU1_P => pa; case /setU1_P => pb.
-  + move: pa pb => /funI_P [z zY ->] /funI_P [z' zY' ->]. 
+  + move: pa pb => /funI_P [z zY ->] /funI_P [z' zY' ->].
     by move=> aux; rewrite (v2p  _ _ zY zY' aux).
   + rewrite pb; move: pa => /funI_P [z zY ->].
     move: (sii _ zY) => [j jY ->] le1.
@@ -2793,9 +2793,9 @@ move=> or kN; move: k kN r or.
 apply:Nat_induction.
   move=> r or [hyp1 hyp2]; exists emptyset.
   case: (emptyset_dichot (substrate r)).
-     move => ->; rewrite cardinal_set0; split => //. 
+     move => ->; rewrite cardinal_set0; split => //.
      split; last by move=> a /in_set0.
-     split; first by apply: setU_0. 
+     split; first by apply: setU_0.
      by move=> a b /in_set0.
     by move=> x /in_set0.
   move=> [x sxr].
@@ -2808,7 +2808,7 @@ move=> k kN hrec r or [[X0 X0f cX0] gensiz].
 (** We assume the result true for [k], and [X0] is free with [k+1] elements.
 Assume that there is a totally ordered set [C], such that any free subset in
 the complementary has at most [k] elements. Then there is a free subset with [k]
-elements, we can partition the complement into [k] subsets. With [C], this 
+elements, we can partition the complement into [k] subsets. With [C], this
 gives [k+1] sets.
  *)
 pose comp C := ((substrate r) -s C).
@@ -2847,12 +2847,12 @@ suff: exists2 C, inc C (total_suborders r) &
     have csa: cardinalp (csucc a) by apply: CS_succ.
     move => p2; rewrite -p2 in skN.
     move: (NS_in_sumr cb skN) (NS_in_suml ca skN) => bN aN.
-    move/ (cleSltP aN) /(cleSSP csa (CS_nat kN)). 
+    move/ (cleSltP aN) /(cleSSP csa (CS_nat kN)).
     rewrite -p2 (csucc_pr4 csa) (csucc_pr4 ca) - csumA.
     rewrite csum_11 => p3.
     move: (csum_le2l aN NS2 bN p3) => /cle2P [x1 [x2 [x1b x2b x12]]].
     move: x1b x2b => /setC_P [x10] /setI2_P e1 /setC_P [x20] /setI2_P e2.
-    move: (X0sr _ x10) (X0sr _ x20) => x1s x2s. 
+    move: (X0sr _ x10) (X0sr _ x20) => x1s x2s.
     case: (inc_or_not x1 C)=> x1C; last by case: e1; split => //; apply /setC_P.
     case: (inc_or_not x2 C)=> x2C; last by case: e2; split => //; apply /setC_P.
     move: torC => [_ ]; rewrite iorder_sr//; move => tc.
@@ -2868,11 +2868,11 @@ suff: exists2 C, inc C (total_suborders r) &
   move: (csucc_pr nCY); rewrite cY -/X => p3.
   have pr1: union X = substrate r.
     rewrite /X;set_extens t.
-      move=> /setU_P [y ty /setU1_P]; case => yy; last by  apply: Cs; ue. 
+      move=> /setU_P [y ty /setU1_P]; case => yy; last by  apply: Cs; ue.
       apply: s1; rewrite - sr1 -uY; union_tac.
-     move=> tsr;  apply /setU_P;case: (inc_or_not t C) => tC. 
+     move=> tsr;  apply /setU_P;case: (inc_or_not t C) => tC.
         by exists C;fprops.
-     have : inc t (union Y) by rewrite uY sr1; apply /setC_P. 
+     have : inc t (union Y) by rewrite uY sr1; apply /setC_P.
      move /setU_P=> [y ty yY]; exists y; fprops.
   have pr2:disjoint_set X.
     move=> a b; case /setU1_P =>  aY; case /setU1_P => bY.
@@ -2884,7 +2884,7 @@ suff: exists2 C, inc C (total_suborders r) &
       have:inc u (union Y) by union_tac.
       by rewrite uY sr1 => /setC_P [_ nxc].
     + by left; rewrite aY bY.
-  have pr3: alls X nonempty. 
+  have pr3: alls X nonempty.
     by move=> a; case /setU1_P => ay; [ apply: ane | ue ].
   exists X; rewrite /partition_s; split => //.
   move => x; case /setU1_P => aY; apply/total_subordersP; last by ue.
@@ -2892,8 +2892,8 @@ suff: exists2 C, inc C (total_suborders r) &
   move: (sub_trans xe1  s1).
   by rewrite /r1 /indC iorder_trans.
 (** Let [sra F X] stand for: [X] is a weak partition of [F] of totally ordered
-set with at most [k+1] elements. Let [sr C] mean: for any finite set [F], 
-there is [X] such that [sra F X] and [C \cap F] is a subset of one element of 
+set with at most [k+1] elements. Let [sr C] mean: for any finite set [F],
+there is [X] such that [sra F X] and [C \cap F] is a subset of one element of
 [X]. The previous lemma says that [sr] holds for the empty set.
 *)
 pose sra F X := [/\ (cardinal X) <=c (csucc k), partition_w X F &
@@ -2910,13 +2910,13 @@ have sre: (sr emptyset).
   set r1:= induced_order r F.
   move: (iorder_osr or Fsr) => [pa pb].
   have fsr1: finite_set (substrate r1) by ue.
-  have fk: forall x, inc x (free_subsets r1) 
+  have fk: forall x, inc x (free_subsets r1)
      -> (cardinal x) <=c (csucc k).
     move=> x  /free_subsetsP[xr1 fs1]; rewrite pb in xr1.
     apply: gensiz; apply/free_subsetsP; split.
       by apply: (@sub_trans F).
    by move=> u v ux vx uv; apply: fs1 => //; apply/iorder_gle0P => //;apply: xr1.
-  have skN: natp (csucc k) by fprops. 
+  have skN: natp (csucc k) by fprops.
   case: (emptyset_dichot F) => eF.
     have pr1:sra F (singleton emptyset).
        rewrite /sra cardinal_set1 /partition_w eF setU_1; split => //.
@@ -2934,16 +2934,16 @@ have sre: (sr emptyset).
     by apply: (sub_trans xc); apply:sub_total_suborders1.
   move: eF =>  [u]; rewrite  - pb - (proj1 px1) => /setU_P [y uy yX].
   by ex_tac; move=> t/setI2_P [] /in_set0.
-(** The set of subsets satisfying [sr] is inductive. 
+(** The set of subsets satisfying [sr] is inductive.
   Assume we have sets [Ci], totally ordered by  [sub], and let [C] be the union.
   Let [F] be a finite set, [Vf = C \cap F]. For [x] in [W], there is an index
-  [i] such that [x] is in [Ci]. Since [W] is finite, there is a greatest such 
+  [i] such that [x] is in [Ci]. Since [W] is finite, there is a greatest such
   [Ci]. We deduce [C \cap F = Ci \cap F]. Then [sr C] follows trivially.
 *)
 have isso: inductive sso.
   move=> X sX tio;rewrite sssr in sX.
   set uX:= union X.
-  have uXr: sub uX (substrate r). 
+  have uXr: sub uX (substrate r).
     apply: setU_s2 => y yX t ty.
     move: (sX _ yX) => /Zo_P [] /setP_P ysr _; apply: (ysr _ ty).
   suff uxs: inc (union X) ssr.
@@ -2954,9 +2954,9 @@ have isso: inductive sso.
   case: (emptyset_dichot w) => wne.
     move: sre; move=> [_ h];  move: (h _ fsF Fsr).
     have -> // : emptyset \cap F = w.
-    by rewrite wne; apply /set0_P; move=> y /setI2_P [/in_set0]. 
+    by rewrite wne; apply /set0_P; move=> y /setI2_P [/in_set0].
   pose f x:= choose (fun y => inc x y /\ inc y X).
-  have fp: forall x, inc x w -> (inc x (f x) /\ inc (f x) X). 
+  have fp: forall x, inc x w -> (inc x (f x) /\ inc (f x) X).
     move=> x /setI2_P [] /setU_P [y p1 p2] _.
     by apply choose_pr; exists y.
   set w1:= fun_image w f.
@@ -3014,13 +3014,13 @@ have Tc: sub T (substrate r).
   apply: (@sub_trans  (comp C)) => //; apply: sub_setC.
 have Tf: inc T (free_subsets r) by apply/free_subsetsP.
 move: (gensiz _ Tf); case: (equal_or_not  (cardinal T) (csucc k)); last first.
-  move=> pa pb; apply /cltSleP => //; split => //. 
+  move=> pa pb; apply /cltSleP => //; split => //.
 move => cTk _.
 pose Ci i := C +s1 i.
 pose Cip i F :=  finite_set F /\ sub F (substrate r)
     /\ forall X, sra F X -> forall Y, inc Y X ->
      ~ ( sub ((Ci i) \cap F) Y).
-have Cip1: forall i, inc i T -> exists F, Cip i F. 
+have Cip1: forall i, inc i T -> exists F, Cip i F.
   move=> i iT; case: (p_or_not_p (gle sso C (Ci i))) => h.
     move: (TC _ iT) => /setC_P [_]; rewrite - (Cm _ h); case; apply: setU1_1.
   ex_middle ef; case: h.
@@ -3028,7 +3028,7 @@ have Cip1: forall i, inc i T -> exists F, Cip i F.
   have cc2: sub (Ci i) (substrate r) by apply: setU1_sub => //; apply: Tc.
   apply /sub_gleP;split=> //;apply/ Zo_P; split;first by apply /setP_P.
   split => // F Fsf Fsr; ex_middle exp.
-  case: ef; exists  F;rewrite /Cip;split => //; split => // X p1 Y YX. 
+  case: ef; exists  F;rewrite /Cip;split => //; split => // X p1 Y YX.
   case: (p_or_not_p (sub ((Ci i) \cap F) Y)) => //.
   move =>  bad2; case: exp; exists X => //; ex_tac.
 pose Ciq i := choose (fun F => Cip i F).
@@ -3055,38 +3055,38 @@ have Cip3: forall i, inc i T -> sra (Ciq i) (mp i).
   move=> i iT.
   have pr1:cardinal (mp i) <=c csucc k.
     set fa:= Lf (fun k => (Ciq i) \cap k) X (mp i).
-    have ff: function fa. 
+    have ff: function fa.
       apply: lf_function; move=> t tX; apply /funI_P; ex_tac.
     move: (image_smaller ff).
     rewrite /fa; aw; set y := Imf _.
     have ->: y = (mp i).
       rewrite /y /mp/Imf lf_source.
-      set Ta := [eta intersection2 (Ciq i)]. 
+      set Ta := [eta intersection2 (Ciq i)].
       have aa: sub X (source (Lf Ta X (fun_image X Ta))) by aw.
-      have bb: lf_axiom Ta X (fun_image X Ta) 
+      have bb: lf_axiom Ta X (fun_image X Ta)
            by move=> t tx; apply /funI_P; ex_tac.
-      set_extens t. 
+      set_extens t.
         move /(Vf_image_P ff aa) => [z pa pb]; apply /funI_P; ex_tac.
         rewrite pb /fa LfV//.
       move /funI_P => [z pa pb] ;apply /(Vf_image_P ff aa); ex_tac.
       rewrite pb /fa LfV//.
     move=> le1; exact:(cleT le1 cX).
   have pr2: union (mp i) = Ciq i.
-    set_extens t. 
-      move=> /setU_P [y ty] /funI_P [z zX izy]. 
+    set_extens t.
+      move=> /setU_P [y ty] /funI_P [z zX izy].
       by apply:(@setI2_1 _ z); rewrite - izy.
     move=> ti; apply /setU_P.
     have: inc t G.
       apply /setU2_P; right; apply /setUb_P; aw; exists i => //;rewrite LgV//.
     rewrite -uX => /setU_P [y ty yX].
-    exists ((Ciq i) \cap y) => //; first by apply /setI2_P. 
+    exists ((Ciq i) \cap y) => //; first by apply /setI2_P.
     apply /funI_P; ex_tac.
   have pr3:disjoint_set (mp i).
-    move=> a b /funI_P [za zaX ->] /funI_P [zb zbX ->]. 
+    move=> a b /funI_P [za zaX ->] /funI_P [zb zbX ->].
     case: (mdX _ _ zaX zbX); first by  move=> ->; left.
     rewrite {1}/disjoint; right; apply: disjoint_pr => u.
     by move=> /setI2_P [_ ua] /setI2_P [_ ub]; empty_tac1 u; apply: setI2_i.
-  split => // Y1 /funI_P [z zX ->]. 
+  split => // Y1 /funI_P [z zX ->].
   have aux1: sub ((Ciq i) \cap z) z by apply: subsetI2r.
   exact:(sub_total_suborders2 or (toX _ zX) aux1).
 (** The sets [T] and [Y] are disjoint. But [T] intersects each element of [X]
@@ -3104,13 +3104,13 @@ have stu: sub T (union X) by rewrite uX /G; apply: subsetU2l.
 set k1:= cardinal X.
 have ksb: natp (csucc k) by fprops.
 have k1N: natp k1 by apply: (NS_le_nat cX ksb).
-move:cX; rewrite - cTk =>/eq_subset_cardP1/set_leP [T1 T1S]. 
+move:cX; rewrite - cTk =>/eq_subset_cardP1/set_leP [T1 T1S].
 move/card_eqP/esym; rewrite -/k1 => pa.
 have sm:(forall Z : Set, inc Z X -> small_set (T1 \cap Z)).
   move=>  Z ZY x y /setI2_P [xT xZ] /setI2_P [yT yZ].
   move: (T1S _ xT)  (T1S _ yT) => xt1 yt1.
   have Zr': sub Z G by rewrite -uX; apply: setU_s1.
-  move/total_subordersP: (toX _ ZY) => [Zr [orZ]]; rewrite iorder_sr// => tor. 
+  move/total_subordersP: (toX _ ZY) => [Zr [orZ]]; rewrite iorder_sr// => tor.
   case: (tor _ _ xZ yZ)=> aux.
     by move: (iorder_gle1 aux); apply: fsT.
     by symmetry; move: (iorder_gle1 aux); apply: fsT.
@@ -3126,10 +3126,10 @@ Qed.
 
 (** ----  Exercise 4.6.
 We start with some follow-ups to the previous exercise.
-The notations [H], [Hw], [C] and [Cw] are as above. We first show that a 
-non-empty bounded set of integers has a greatest element. 
+The notations [H], [Hw], [C] and [Cw] are as above. We first show that a
+non-empty bounded set of integers has a greatest element.
 It follows that if [Hw(n)] holds, then [H(k)] holds for some [k].
-If [Hw(n+h)] holds and there is a free subset with [n] elements, 
+If [Hw(n+h)] holds and there is a free subset with [n] elements,
 then [H(n+k)] holds for some [k].
  *)
 
@@ -3155,7 +3155,7 @@ move=> nN Tp neT.
 have zb:= NS0.
 have Ti: sub T (Nintcc \0c n).
   by move=> i iT; bw; move: (Tp _ iT) => lein;  apply /NintcP.
-have aux: Nat_le \0c n by  split; fprops; apply/cle0n. 
+have aux: Nat_le \0c n by  split; fprops; apply/cle0n.
 move: (sub_finite_set Ti (finite_Nintcc \0c n)) => fst.
 move: (Ninto_wor \0c n) => [/worder_total iot sio].
 rewrite - sio in Ti.
@@ -3164,18 +3164,18 @@ move: iot=> [ot _];aw => xT aux2; ex_tac.
 move=> k kT; move: (iorder_gle1 (aux2 _ kT)).
 by move /Ninto_gleP => [_ _].
 Qed.
-*)  
+*)
 
 
 
-(** Assumptions: we have two non-empty families [X] and [Y] with [m] and [n] 
-elements. Let [E46_hprop h] be the property that, whenever we take 
-[r+h] elements of [X], the union of these sets meets at least [r] elements 
+(** Assumptions: we have two non-empty families [X] and [Y] with [m] and [n]
+elements. Let [E46_hprop h] be the property that, whenever we take
+[r+h] elements of [X], the union of these sets meets at least [r] elements
 of [Y]. Let [E46_h h] be the property that [h] is the least integer satisfying
 this property. Then there is a set with at most [n+h] elements that meets
 every element of [X] and [Y].
 
-For simplicity, we assume the domains of [X] and [Y] disjoint, 
+For simplicity, we assume the domains of [X] and [Y] disjoint,
 and we define an ordering
 on the union of the domains such that [i<j] if [X(i)] meets [Y(j)].
 *)
@@ -3183,7 +3183,7 @@ on the union of the domains such that [i<j] if [X(i)] meets [Y(j)].
 
 Section Exercise46.
 Variables A X Y m n :Set.
-Hypothesis (nN: natp n) (mN: natp m). 
+Hypothesis (nN: natp n) (mN: natp m).
 Hypothesis Xpr:
   [/\ fgraph X, cardinal (domain X) = m, sub (range X) (\Po A) &
   nonempty_fam X].
@@ -3195,7 +3195,7 @@ Hypothesis disdom: disjoint (domain X) (domain Y).
 Definition E46_hprop h := forall r  Z, r <=c (m -c h) ->
    sub Z (domain X) -> cardinal Z = r +c h  ->
    exists T, [/\ sub T (domain Y),  cardinal T = r &
-   forall j, inc j T -> meet (Vg Y j) (unionb (restr X Z))]. 
+   forall j, inc j T -> meet (Vg Y j) (unionb (restr X Z))].
 
 Definition E46_hp h :=  [/\ natp h, h <=c m,  E46_hprop h &
    forall l, natp l ->  l <=c m -> E46_hprop l -> h <=c l].
@@ -3204,7 +3204,7 @@ Definition E46_conc h := exists B, [/\ (cardinal B) <=c (n +c h),
   finite_set B, allf X (meet B) &allf Y (meet B)].
 
 Definition E46_u := (domain X) \cup (domain Y).
-Definition E46_order_rel x y := 
+Definition E46_order_rel x y :=
   x = y  \/ [/\ inc x (domain X), inc y (domain Y) & meet (Vg X x) (Vg Y y)].
 Definition E46_order_r :=  graph_on E46_order_rel  E46_u.
 
@@ -3217,12 +3217,12 @@ Proof.
 have pa: (forall a, inc a  E46_u -> E46_order_rel a a).
   by move => a _; left.
 move: (graph_on_sr pa); rewrite -/E46_order_r => sr.
-have or: order E46_order_r. 
+have or: order E46_order_r.
   apply: order_from_rel;split => //.
-      move=> y x z; case => xy; first (by rewrite xy); case => yz => //. 
+      move=> y x z; case => xy; first (by rewrite xy); case => yz => //.
         by rewrite -yz; right.
       move: xy yz => [_ yY _][yX _ _];empty_tac1 y.
-    move => x y; case => // xy;  case => // yx. 
+    move => x y; case => // xy;  case => // yx.
     move: xy yx => [_ yY _][yX _ _]; empty_tac1 y.
   by move => x y _; split; left.
 split => //; move=> x y; apply /graph_on_P1.
@@ -3232,11 +3232,11 @@ Qed.
 
 Lemma Exercise4_6b h: h <=c m ->
   E46_hprop h ->  m <=c (n +c h).
-Proof. 
+Proof.
 move =>  hm hp; move: (NS_le_nat hm mN) => hN.
 move: (NS_diff h mN)(cdiff_pr hm); set r := (m -c h); move=> rN phm.
-have pa: r <=c (m -c h) by rewrite -/r; fprops. 
-have pb: sub (domain X) (domain X) by fprops. 
+have pa: r <=c (m -c h) by rewrite -/r; fprops.
+have pb: sub (domain X) (domain X) by fprops.
 have pc: cardinal (domain X) = r +c h.
    by rewrite csumC phm; move: Xpr => [_ ok _ _].
 move: (hp _ _ pa pb pc) => [T [Td cT _]].
@@ -3272,7 +3272,7 @@ split; move=> aux r Z pa pb pc;
   move: (aux _ _ pa pb pc) => [T [tdY cT aux1]]; exists T;split => // j jT.
   move: (aux1 _ jT) => [k] /setI2_P [kVg] /setUb_P [y].
   rewrite restr_d // => yd; rewrite restr_ev//.
-  have yX: inc y (domain X) by apply: pb. 
+  have yX: inc y (domain X) by apply: pb.
   have jY: inc j (domain Y)  by apply: tdY.
   move=> kV1; ex_tac; apply/rR;rewrite /E46_u; split;fprops.
   by right; split => //;exists k; apply: setI2_i.
@@ -3285,7 +3285,7 @@ Qed.
 
 (** Proprety [E46_hprop h] says that free subsets are not too big  *)
 
-Lemma Exercise4_6e h K: 
+Lemma Exercise4_6e h K:
   natp h -> E46_hprop h -> inc K (free_subsets E46_order_r) ->
   (cardinal K) <=c (n +c h).
 Proof.
@@ -3303,7 +3303,7 @@ have dj: disjoint Z Z1.
    apply: disjoint_pr => u ux uy; empty_tac1 u; saw.
 move: (csum2_pr5 dj); rewrite -uZ - csum2cr - csum2cl => cs.
 move:(proj42 Xpr) (proj42 Ypr) => cX cY.
-have cZN: natp (cardinal Z). 
+have cZN: natp (cardinal Z).
   have fsdX: finite_set (domain X) by hnf; rewrite cX; apply /NatP.
   by move: (sub_finite_set ZX fsdX) =>  /NatP.
 case: (NleT_ee cZN hN) => le1.
@@ -3336,14 +3336,14 @@ Lemma Exercise4_6f h: natp h -> E46_hprop h ->
 Proof.
 move=> hN hp.
 set r := E46_order_r.
-have hyp1: (forall x, inc x  (free_subsets r) -> (cardinal x) <=c (n +c h)). 
+have hyp1: (forall x, inc x  (free_subsets r) -> (cardinal x) <=c (n +c h)).
   by move=> t ts;apply: Exercise4_6e.
 have [x xf cx]:(exists2 x, inc x(free_subsets E46_order_r) & (cardinal x = n)).
   move: Exercise4_6a => [[oR sR] rR].
   exists (domain Y).
     apply /free_subsetsP; split; first by rewrite sR /E46_u; apply: subsetU2r.
     move=> x y; rewrite rR; move=> xY yY [_ _ ]; case => //; move=> [xX _].
-    empty_tac1 x. 
+    empty_tac1 x.
   by move: Ypr => [_ pa _].
 have nef: nonempty (free_subsets r) by ex_tac.
 move: (the_max_card_on_set_prop  (NS_sum nN hN) nef hyp1).
@@ -3364,16 +3364,16 @@ move: Exercise4_6a => [[oR sR] rR].
 exact: (Exercise4_5d oR (NS_sum nN kN)  pb).
 Qed.
 
-(** We apply the previous exercise. It gives a partition of [E] into totally 
+(** We apply the previous exercise. It gives a partition of [E] into totally
 ordered  sets. Note that an ordered set [U] is either [singleton A], where [A]
-is in [X] or [Y], or a doubleton 
+is in [X] or [Y], or a doubleton
 [(A,B)] where [A] is in [X] and [B] in [Y], and these sets meet; let [xU] be
 an element of [A] in the first case, an element of [A \cap B] in the second case.
 The set of these [xU] is a solution.*)
 
 Lemma Exercise4_6h h: E46_hp h ->  E46_conc h.
-Proof.  
-move=> hp; move: (Exercise4_6g hp) => [k [kN kh [C [pC cc altc]]]]. 
+Proof.
+move=> hp; move: (Exercise4_6g hp) => [k [kN kh [C [pC cc altc]]]].
 move: pC => [[pca pcc] pcb].
 move: Exercise4_6a => [[oR sR] rR].
 hnf in disdom.
@@ -3396,25 +3396,25 @@ have tcp2: forall x, inc x C ->
   move: (xne) => [y yx].
   case: (equal_or_not x (singleton y)) => xs.
     have: inc y (union C) by union_tac.
-    rewrite pca sR /E46_u. 
+    rewrite pca sR /E46_u.
     case /setU2_P => yc; [constructor 1 | constructor 2 ]; ex_tac.
   have [z zx yz]: exists2 z, inc z x & y <> z.
     ex_middle bad; case: xs; apply set1_pr => // z zx.
     ex_middle ty; case: bad; exists z;fprops.
-  have [i [j [ix jx ltij]]]: exists i  j, [/\ inc i x, inc j x & 
+  have [i [j [ix jx ltij]]]: exists i  j, [/\ inc i x, inc j x &
     glt E46_order_r i j].
     case: (tcp _ _ _ xC yx zx); first (by contradiction); case => h0.
        by exists y, z.
      by exists z, y.
   move: (tcp1 _ _ ltij)  => [iX jY _].
-  constructor 3; exists i, j; split => //. 
+  constructor 3; exists i, j; split => //.
   set_extens t; last by case /set2_P => ->.
   move => tx; case: (tcp _ _ _ xC tx ix); first by move => ->; fprops.
-    by move => ti; move: (tcp1 _ _ ti)  => [_ iY _]; empty_tac1 i; aw. 
+    by move => ti; move: (tcp1 _ _ ti)  => [_ iY _]; empty_tac1 i; aw.
   case: (tcp _ _ _ xC jx tx); first by move => ->; fprops.
-    by move => tj; move: (tcp1 _ _ tj)  => [jX _]; empty_tac1 j; aw. 
+    by move => tj; move: (tcp1 _ _ tj)  => [jX _]; empty_tac1 j; aw.
   move => ti tj; move: (tcp1 _ _ ti)  (tcp1 _ _ tj) => [tX _ _] [_ tY _].
-  empty_tac1 t. 
+  empty_tac1 t.
 pose xup x y:= forall i,
     ( (inc i (x \cap (domain X)) -> inc y (Vg X i) ) /\
       (inc i (x \cap (domain Y)) -> inc y (Vg Y i))).
@@ -3437,10 +3437,10 @@ have fp1: forall x, inc x C -> xup x (f x).
   by empty_tac1 i; aw.
 set B:= fun_image C f.
 have pa: (cardinal B) <=c (n +c h).
-  have sjb: (surjection (Lf f C (fun_image C f))). 
+  have sjb: (surjection (Lf f C (fun_image C f))).
     apply: lf_surjective; first by move=> t ta; apply /funI_P; exists t.
     move=> y /funI_P //.
-  move: (image_smaller (proj1 sjb)); rewrite (surjective_pr0 sjb). 
+  move: (image_smaller (proj1 sjb)); rewrite (surjective_pr0 sjb).
   aw; rewrite -/B => l1; apply:(cleT l1).
   rewrite cc; apply: csum_Mlele => //; fprops.
 have pb: finite_set B.
@@ -3461,7 +3461,7 @@ have sBA: sub B A.
       move=> [i idx zi].
       have ii2: inc i (z \cap (domain X)) by rewrite zi; fprops.
       move: (fz i) => [fa _]; move: (fa ii2) => fv; apply: (auxx _ _ idx fv).
-    move=> [i idx zi]. 
+    move=> [i idx zi].
     have ii2: inc i (z \cap (domain Y)) by rewrite zi; fprops.
     move: (fz i) => [_ fa]; move: (fa ii2) => fv; apply: (auxy _ _ idx fv).
   move=> [i [j [ltij zi]]];  move: (tcp1 _ _ ltij) => [idx jdy mt].
@@ -3480,11 +3480,11 @@ Qed.
 End Exercise46.
 
 (** Assume [A(x)] is a subset of [F] for any [x] in [E]. We want to know when
- [ E46b_hyp ] holds, namely that there exists an injection [f] such that 
- [f(x)] is in [A(x)], or when [ E46c_hyp G] holds (this is [ E46b_hyp ], where 
+ [ E46b_hyp ] holds, namely that there exists an injection [f] such that
+ [f(x)] is in [A(x)], or when [ E46c_hyp G] holds (this is [ E46b_hyp ], where
  moreover [G]  is a subset of the image of [f].
 
-Let [E46b_conc] be the assertion: for any set [H], the union of all [A(x)], 
+Let [E46b_conc] be the assertion: for any set [H], the union of all [A(x)],
 for  [x] in [H] has at least as many elements as [H], and let [E46c_conc G]
 be: for any subset [L] of [G], the number of elements [x] such that [A(x)]
 meets [L] is at least the cardinal of [L].
@@ -3493,20 +3493,20 @@ We have:  [E46b_hyp] implies [E46b_conc], and  [E46c_hyp G] implies
 [E46b_conc] and [E46c_conc G].
  *)
 
-Definition E46b_hyp E F A := 
+Definition E46b_hyp E F A :=
   exists2 f, injection_prop f E F &
   (forall x, inc x E -> inc (Vf f x) (A x)).
 
-Definition E46c_hyp E F A G := 
+Definition E46c_hyp E F A G :=
   exists f, [/\ injection_prop f E F,
   sub G (Imf f) &  (forall x, inc x E -> inc (Vf f x) (A x))].
 
-Definition E46b_conc E A := 
-  forall H, sub H E -> 
-  (cardinal H) <=c (cardinal (union (fun_image H A))). 
+Definition E46b_conc E A :=
+  forall H, sub H E ->
+  (cardinal H) <=c (cardinal (union (fun_image H A))).
 
-Definition E46c_conc E A G := 
-  forall L, sub L G -> 
+Definition E46c_conc E A G :=
+  forall L, sub L G ->
     (cardinal L) <=c (cardinal (Zo E (fun z => meet (A z) L))).
 
 
@@ -3536,13 +3536,13 @@ have Ksf: sub K (source f).
 have aux: L = Vfs f K.
    set_extens t.
     move => tL; apply /(Vf_image_P ff Ksf).
-    move: (pc _ (LG _ tL)) =>  /(Imf_P ff) [x xsf Jg]. 
+    move: (pc _ (LG _ tL)) =>  /(Imf_P ff) [x xsf Jg].
     exists x => //; apply /iim_graph_P; exists t => //; rewrite Jg; Wtac.
   move /(Vf_image_P ff Ksf) => [u ui ->]; move:ui => /iim_graph_P [v vL Jg].
   by rewrite - (Vf_pr ff Jg).
-move: (Eq_restriction1 Ksf injf). 
-rewrite -aux; move /card_eqP=> <-; apply: sub_smaller. 
-move => t /iim_graph_P [u uL jg]; move: (p1graph_source ff jg) => tf. 
+move: (Eq_restriction1 Ksf injf).
+rewrite -aux; move /card_eqP=> <-; apply: sub_smaller.
+move => t /iim_graph_P [u uL jg]; move: (p1graph_source ff jg) => tf.
 rewrite pa in tf;apply: Zo_i => //; move: (pd _ tf); rewrite - (Vf_pr ff jg).
 by move=> ua; exists u; apply /setI2_P.
 Qed.
@@ -3579,7 +3579,7 @@ have trr: transitive_r rc.
   move => x y z xy; case: (xy); first by move=> ->.
     move=> aux; case; first by move=> <-.
       by move: aux => [_ pa _] [pb _ _]; case: n01; rewrite - pa - pb.
-    move => [a2 pa pb]; case: a2. 
+    move => [a2 pa pb]; case: a2.
       by move => a2; case: n01; rewrite -a2; move : aux => [_ -> _].
     by move: aux => [pc pd pe] h; constructor 3; rewrite pe; split => //; left.
   move=> [pa pb pc]; case; first by move => <-.
@@ -3593,13 +3593,13 @@ have arr: antisymmetric_r rc.
   move=> [_ pb _]; case; first by move => <-.
     by move => [pd _ _]; case: n20; rewrite -pb -pd.
   by rewrite pb;move => [pd _ _];case: pd => pd; [ case: n20 | case: n21].
-have or: order r. 
+have or: order r.
   apply: order_from_rel;split => //.
   by move=> x y _; split; constructor 1.
 (** We consider the size of the biggest free subset *)
 set m := cardinal F.
 have pa: (exists2 x, inc x (free_subsets r) & cardinal x = m).
-  exists Fi; last by rewrite (cardinal_indexed F C1). 
+  exists Fi; last by rewrite (cardinal_indexed F C1).
   apply: Zo_i; first by apply /setP_P; rewrite sr /Et => t; fprops.
   move=> x y xFi yFi; move: xFi yFi=> /indexed_P  [_ _ qx] /indexed_P [_ _ qy].
   move /rvP => [_ _]; case  => //.
@@ -3649,7 +3649,7 @@ have pc: order_width r m.
     rewrite - (set_IU2r x1 Ei Fi); symmetry; apply /setI2id_Pl.
     move => t; case /funI_P => [z zx0 ->].
        move: (xET _ zx0); case /setU2_P.
-         move /indexed_P => [pz Pz Qz]; apply /setU2_P; right. 
+         move /indexed_P => [pz Pz Qz]; apply /setU2_P; right.
          by rewrite /f; Ytac0; apply: indexed_pi; apply: GF.
        case /setU2_P; move /indexed_P => [pz Pz Qz]; rewrite /f.
          rewrite Qz; Ytac0; apply /setU2_P; right; by apply /indexed_P.
@@ -3663,17 +3663,17 @@ have pc: order_width r m.
         saw; apply: lf_bijective.
         - move=> t /setI2_P [tx1] /indexed_P [pt PE Qt].
           by apply: Zo_i => //; rewrite -Qt pt.
-        - move=> u v /setI2_P [_] /indexed_P [pt _ Qt] 
+        - move=> u v /setI2_P [_] /indexed_P [pt _ Qt]
               /setI2_P [_] /indexed_P [pv _ Qv].
           by move=> aux; apply: pair_exten => //; ue.
-        - move=> y  /Zo_P [yE px1]. 
+        - move=> y  /Zo_P [yE px1].
           exists (J y C2); last by aw.
           by apply/setI2_P;split => //;apply:indexed_pi.
       exists (Lf P (x1 \cap Fi) H2).
         saw; apply: lf_bijective.
         + move=> t /setI2_P [tx1] /indexed_P [pt PE Qt].
           by apply: Zo_i => //; rewrite -Qt pt.
-        + move=> u v /setI2_P [_] /indexed_P [pt _ Qt] 
+        + move=> u v /setI2_P [_] /indexed_P [pt _ Qt]
             /setI2_P[_] /indexed_P  [pv _ Qv] aux.
           apply: pair_exten => //; ue.
         + move=> y =>/Zo_P [yE px1];  exists (J y C1); last by aw.
@@ -3692,15 +3692,15 @@ have pc: order_width r m.
   move=> /setU_P [y ty] /funI_P [z zH1 Az].
   move: zH1 => /Zo_P [zE J2x1].
   have le1: (gle r (J t C1) (J z C2)).
-    apply /rvP;split;fprops; constructor 3; aw. 
+    apply /rvP;split;fprops; constructor 3; aw.
     split => //; [ by right | by rewrite - Az].
   by move: (pr2_def (x1f _ _ px1 J2x1 le1))=> h; case:n21.
-(** To each element [x] of [F] we associate the set of the partition that 
+(** To each element [x] of [F] we associate the set of the partition that
 contains [x]; this is a bijection [f]; we get similarly an injection [g] on [E].
 *)
 have mN: inc m Nat by  move: fsF => /NatP.
 move: (Exercise4_5d or mN pc) => [X [[[uX deX] neX] cX toeX]].
-pose f x := choose (fun z => inc (J x C1) z /\ inc z X). 
+pose f x := choose (fun z => inc (J x C1) z /\ inc z X).
 have fp1: forall x, inc x F -> (inc (J x C1) (f x) /\ inc (f x) X).
   move=> x xF; apply choose_pr;move:(Fp1 _ xF); rewrite - sr -uX;move /setU_P.
   by move => [t t1 t2]; exists t.
@@ -3718,7 +3718,7 @@ have bijF: bijection (Lf f F X).
   + by move: aux1; aw; move=> [r1 _ _]; case: n01.
   + by move: aux1; aw; move=> [_ r1 _]; case: n21.
   + symmetry; exact (pr1_def aux1).
-  + by move: aux1 => [_ _ ]; aw. 
+  + by move: aux1 => [_ _ ]; aw.
   + by move: aux1; aw; move=> [_ r1 _]; case: n21.
 pose g x := choose (fun z => inc (J x C2) z /\ inc z X).
 have gp1: forall x, inc x E -> (inc (J x C2) (g x) /\ inc (g x) X).
@@ -3764,11 +3764,11 @@ have ph: forall x, inc x E -> inc (Vf h x) (A x).
   + by move=> [_ _].
   + by move=> [zba _]; case: n01.
   + by move=> [_ zbc _]; case: n21.
-have gp: forall t, inc t G -> inc (J t C0) (f t). 
+have gp: forall t, inc t G -> inc (J t C0) (f t).
   move=> t tG; move: (Gp1 _ tG); rewrite - sr -uX => /setU_P [y Jy yX].
   move: (fp1 _ (GF _ tG)) => [Jf1 fX].
   set z := Vf (inverse_fun (Lf f F X)) y.
-  have zF: inc z F. 
+  have zF: inc z F.
     have ->: F = target (inverse_fun (Lf f F X)) by aw.
     apply: Vf_target => //; [fct_tac | by aw ].
   have: y = Vf (Lf f F X) z by rewrite inverse_V => //; aw.
@@ -3779,11 +3779,11 @@ have gp: forall t, inc t G -> inc (J t C0) (f t).
   move=> aux1; move: (aux1 _ _ Jy p5);case => leuv;move: (iorder_gle1 leuv);
     move /rvP => [qc qd]; case => aux2.
   + by case: zt; move: (pr2_def aux2).
-  + by case: zt; move: aux2 => [_ _]; aw. 
-  + by case: n21;move: aux2=> [_ e1 _]; move: e1;aw. 
-  + by case: zt; move: (pr1_def aux2). 
-  + by case: zt; move: aux2 => [_ _]; aw. 
-  + by case: n20;move: aux2=> [_ e1 _]; move: e1;aw. 
+  + by case: zt; move: aux2 => [_ _]; aw.
+  + by case: n21;move: aux2=> [_ e1 _]; move: e1;aw.
+  + by case: zt; move: (pr1_def aux2).
+  + by case: zt; move: aux2 => [_ _]; aw.
+  + by case: n20;move: aux2=> [_ e1 _]; move: e1;aw.
 
  by exists h.
 
@@ -3804,25 +3804,25 @@ rewrite cardinal_set0.
 apply: cle0x; fprops.
 Qed.
 
-(** TODO: show that [E46c_hyp G] holds. But we do not know what to do with 
+(** TODO: show that [E46c_hyp G] holds. But we do not know what to do with
 assumption  [E46c_conc G] *)
 
 
 (** ---- Exercise 4.7. In a lattice [E], an element is said to be irreducible
-if it is never a strict supremum. 
+if it is never a strict supremum.
 
-Let [J] be the set of irreducible elements; [P] the set [J] minus the least 
+Let [J] be the set of irreducible elements; [P] the set [J] minus the least
 element (if it exists);  [S(x)] be the set of irreducible
 elements that are [ <= x]. We start with some auxiliary results. In particular,
-in a distributive lattice, if [a] is irreducible and [a <= sup(x,y)] then 
+in a distributive lattice, if [a] is irreducible and [a <= sup(x,y)] then
 [a<=x] or [a<=y]. *)
 
 Lemma char_fun_sub A A' B:  sub A B -> sub A' B ->
-  ((sub A A') <-> (forall x, inc x B -> 
+  ((sub A A') <-> (forall x, inc x B ->
      (Vf (char_fun A B) x) <=c (Vf (char_fun A' B) x))).
 Proof.
 move=> AB A'B; split.
-  move => AA' x xB; case: (inc_or_not x A) => xA. 
+  move => AA' x xB; case: (inc_or_not x A) => xA.
     rewrite char_fun_V_a // char_fun_V_a //;[ fprops | by apply: AA'].
   rewrite char_fun_V_b //; last by apply /setC_P.
   by apply: cle0x; apply: char_fun_V_cardinal.
@@ -3831,13 +3831,13 @@ move: (h _ tB); rewrite  char_fun_V_a // char_fun_V_b //; last by apply /setC_P.
 by move /(cltNge clt_01).
 Qed.
 
-Definition sup_irred r x:= 
+Definition sup_irred r x:=
   forall a b, inc a (substrate r) -> inc b (substrate r) ->
    x = sup r a b -> (x = a \/ x = b).
 
 Definition irreds r := Zo (substrate r)(sup_irred r).
 
-Definition E47S r x := Zo (substrate r) 
+Definition E47S r x := Zo (substrate r)
    (fun z => (sup_irred r z) /\ (gle r z x)).
 
 
@@ -3857,7 +3857,7 @@ move: (lattice_sup_pr lr asr bsr); rewrite -xs; move => [p2 p3 _].
 by case: h; exists  a, b; rewrite /glt;split => //;split => //; apply: nesym.
 Qed.
 
-Lemma Exercise4_8a a: distributive_lattice3 r -> 
+Lemma Exercise4_8a a: distributive_lattice3 r ->
   sup_irred r a ->
   forall x y, inc x (substrate r) -> inc y (substrate r) ->
    gle r a (sup r x y) -> (gle r a x \/ gle r a y).
@@ -3865,8 +3865,8 @@ Proof.
 move => dl1 sia x y xsr ysr sa.
 have or: order r by move: lr => [or _].
 have asr: inc a (substrate r) by order_tac.
-move:(distributive_lattice_prop2 lr) => [_  _ p1]. 
-move: ((p1 dl1) _ _ _ asr xsr ysr); rewrite (inf_comparable1 or sa) => ia. 
+move:(distributive_lattice_prop2 lr) => [_  _ p1].
+move: ((p1 dl1) _ _ _ asr xsr ysr); rewrite (inf_comparable1 or sa) => ia.
 move: (lattice_inf_pr lr asr xsr)(lattice_inf_pr lr asr ysr).
 move=> [_ px _] [_ py _].
 have r1: inc (inf r a x) (substrate r) by order_tac.
@@ -3916,7 +3916,7 @@ apply /iorder_gle0P => //; ue.
 Qed.
 
 Lemma Exercise4_7c: has_least r.
-Proof. 
+Proof.
 move: (finite_set_minimal1 (@sub_refl (substrate r)) nes).
 move=> [x xsr xp]; exists x;split => // u usr.
 move: (lattice_inf_pr lr xsr usr)=> [p1 p2 p3].
@@ -3939,7 +3939,7 @@ Proof.
 apply: (@sub_trans  (irreds r));[ apply: sub_setC | apply: Zo_S].
 Qed.
 
-Lemma Exercise4_7f:  
+Lemma Exercise4_7f:
   irreds r = E48P +s1 (the_least r).
 Proof. rewrite  setC1_K //; apply: Exercise4_7d. Qed.
 
@@ -3962,7 +3962,7 @@ move: Exercise4_7b => or xr; case: (emptyset_dichot x) => nex.
   move: (the_least_pr or  Exercise4_7c) => tlp.
   rewrite nex; exists (the_least r).
   rewrite lub_set0 //.
-apply:  (lattice_finite_sup2 lr (sub_finite_set xr fs) nex xr). 
+apply:  (lattice_finite_sup2 lr (sub_finite_set xr fs) nex xr).
 Qed.
 
 Lemma Exercise4_7j a: inc a (substrate r) ->
@@ -3979,7 +3979,7 @@ Lemma Exercise4_7k a b:
 Proof.
 move: Exercise4_7b=> or ab t.
 move /Zo_P => [p1 [p2 p3]]; apply /Zo_P; split => //; split => //;order_tac.
-Qed. 
+Qed.
 
 Lemma Exercise4_7l u: inc u (substrate r) ->
   (supremum r (E47S r u)) = u.
@@ -4037,7 +4037,7 @@ Lemma Exercise4_7n a: inc a (substrate r) ->
   exists S, [/\ finite_set S, nonempty S, sub S (substrate r),
   (forall x, inc x S -> sup_irred r x) &
   supremum r S = a].
-Proof. 
+Proof.
 move=> asr.
 have sE: sub (E47S r a) (substrate r) by apply: Zo_S.
 move: (sub_finite_set sE fs) => fsE.
@@ -4057,7 +4057,7 @@ move => /setI2_P [] /Zo_P [tsr [si ta]] /Zo_hi [_ tb]; apply /Zo_P;split;fprops.
 Qed.
 
 Lemma Exercise4_7p:
-  let tg := (irreds r) in 
+  let tg := (irreds r) in
    order_morphism (Lf (E47S r) (substrate r) (\Po tg))
    r (subp_order tg).
 Proof.
@@ -4072,7 +4072,7 @@ hnf; aw;move=> x y xsr ysr; hnf;rewrite !LfV//; split.
 by move /sub_gleP => [pa1 [pb1 pc]]; apply:Exercise4_7m.
 Qed.
 
-Lemma Exercise4_7q a: inc a (substrate r) 
+Lemma Exercise4_7q a: inc a (substrate r)
  -> sub (E47S r a) (irreds r).
 Proof. by move=> asr b => /Zo_P [pa [pb pc]]; apply /Zo_P. Qed.
 
@@ -4093,14 +4093,14 @@ Proof.
 move=> asr bsr.
 move: (lattice_sup_pr lr asr bsr)=> [p1 p2 p3].
 have isr: inc (sup r a b) (substrate r) by order_tac.
-have or: order r by move: lr => [ok _]. 
+have or: order r by move: lr => [ok _].
 move: (Exercise4_7k p1) (Exercise4_7k p2) => p4 p5.
 set_extens t; last first.
   case /setU2_P => /Zo_P  [tsr [si ta]];
        apply /Zo_P;split => //; split => //; order_tac.
 move /Zo_P=> [tsr [si ts]].
 by case: (Exercise4_8a dl3 si asr bsr ts)=> le;
- apply /setU2_P;[left | right]; apply: Zo_i. 
+ apply /setU2_P;[left | right]; apply: Zo_i.
 Qed.
 
 
@@ -4112,15 +4112,15 @@ move: Exercise4_7b => or  tsr sit Usi tsU neU.
 pose pA U := sub U (irreds r) /\ gle r t (supremum r U).
 pose pB U := exists2 x, inc x U & gle r t x.
 have sis: sub (irreds r) (substrate r) by apply: Zo_S.
-have Usr: sub U (substrate r) by apply: (@sub_trans  (irreds r)). 
+have Usr: sub U (substrate r) by apply: (@sub_trans  (irreds r)).
 move: (sub_finite_set Usr fs) => fsU.
-apply: (@finite_set_induction2 pA pB) => //. 
+apply: (@finite_set_induction2 pA pB) => //.
   move => a; rewrite /pA /pB; move=> [p1 p2].
   have :inc a (irreds r) by apply: p1; fprops.
   move /Zo_P=> [asr ai];  move: p2.
   rewrite supremum_singleton // => ta; exists a;fprops.
 move => a b aux nea; rewrite /pA /pB; move=> [p1 p2].
-have air: sub a (irreds r). 
+have air: sub a (irreds r).
   apply: (@sub_trans  (a +s1 b))  => //; fprops.
 have bir: inc b (irreds r) by apply: p1; fprops.
 have asr: sub a (substrate r) by apply: (@sub_trans  (irreds r)).
@@ -4141,20 +4141,20 @@ Lemma Exercise4_8c U: sub U (irreds r) ->
 Proof.
 move: Exercise4_7b => or Usi hU neU.
 have sis: sub (irreds r) (substrate r) by apply: Zo_S.
-have Usr: sub U (substrate r) by apply: (@sub_trans  (irreds r)). 
+have Usr: sub U (substrate r) by apply: (@sub_trans  (irreds r)).
 have fsU:= (sub_finite_set Usr fs).
 have hs := (lattice_finite_sup2 lr fsU neU Usr).
 move: (supremum_pr or Usr hs) => [[ub1 ub2] ub3].
 set_extens t => ts.
-  move: (ub2 _ ts) (Usi _ ts) => aux /Zo_P [p1 p2]. 
-  by apply /Zo_P;split => //; apply: Usr. 
+  move: (ub2 _ ts) (Usi _ ts) => aux /Zo_P [p1 p2].
+  by apply /Zo_P;split => //; apply: Usr.
 move: ts => /Zo_P [tsr [srt ltsr]].
 move: (Exercise4_8c1 tsr srt Usi ltsr neU) => [x sU tx].
 exact: (hU _ _ sU srt tx).
 Qed.
 
 
-Lemma Exercise4_8d: 
+Lemma Exercise4_8d:
   let p:= fun U => [/\ sub U (irreds r), nonempty U &
     (forall x y, inc y U -> sup_irred r x -> gle r x y -> inc x U)] in
   (forall x, inc x (substrate r) -> p (E47S r x)) /\
@@ -4162,10 +4162,10 @@ Lemma Exercise4_8d:
 Proof.
 move: Exercise4_7b=> or p; split.
   move=> x xsr; split => //.
-      by move=> t  /Zo_P [pa [pb pc]]; apply /Zo_P. 
+      by move=> t  /Zo_P [pa [pb pc]]; apply /Zo_P.
     by apply: Exercise4_7h.
-  move=> u v /Zo_P [vsr [su vx]] iu uv. 
-  apply /Zo_P; split => //; try split => //;order_tac. 
+  move=> u v /Zo_P [vsr [su vx]] iu uv.
+  apply /Zo_P; split => //; try split => //;order_tac.
 move=> U [p1 p2 p3]; rewrite (Exercise4_8c p1 p3 p2).
 exists  (supremum r U) => //.
 have sU: sub U (substrate r).
@@ -4177,11 +4177,11 @@ Qed.
 (** Let [Sb(x)] be [S(x)] without the least element of [E]. These two sets have
 the same supremum. The previous result can be rewriten as
 Let [q(U)] be the property that [U] is a subset of [P] such that [x <=y],
-[x] irreducible and [y] in [U] implies [x] in [U]. Then [Sb(x)] satisfies [q] 
+[x] irreducible and [y] in [U] implies [x] in [U]. Then [Sb(x)] satisfies [q]
 and any set satisfying [q] has the form [Sb(x)].*)
 
-Lemma Exercise4_8e: 
-  let comp:= fun X => X -s1 (the_least r) in 
+Lemma Exercise4_8e:
+  let comp:= fun X => X -s1 (the_least r) in
   let p:= fun U => (sub U E48P /\
     (forall x y, inc y U -> inc x E48P -> gle r x y -> inc x U)) in
   (forall x, inc x (substrate r) -> p (comp (E47S r x))) /\
@@ -4207,23 +4207,23 @@ have [x xsr aux]:exists2 x, inc x (substrate r) & U' = E47S r x.
     by move=> yU; move: (p2 _ _ yU xp xy).
     move: (the_least_pr or  Exercise4_7c) => [_ tle].
   move=> h; rewrite h in xy; case: nxle; move: (tle _  xsr) => aux; order_tac.
-ex_tac. 
-rewrite -aux; set_extens t. 
+ex_tac.
+rewrite -aux; set_extens t.
    move => tu; apply /setC1_P; split => //; first by apply /setU1_P; left.
    by move: (p1 _ tu) => /setC1_P [].
 move /setC1_P => [] /setU1_P; case => //.
 Qed.
 
-(** Let's consider the sets [FJ] and [FP] of increasing functions [J->d] 
+(** Let's consider the sets [FJ] and [FP] of increasing functions [J->d]
 and [P->d], respectively,  where the first set is [J] or [P],
-ordered by the opposite ordering, and the second set is 
-the doubleton [(0,1)] ordered by [0<1]. These are ordered sets. 
+ordered by the opposite ordering, and the second set is
+the doubleton [(0,1)] ordered by [0<1]. These are ordered sets.
 To each [x] we associate the characteristic function of [S(x)] and [Sb(x)].
 This give an order isomorphism from [E] onto a subset of [FJ] and [FP], because
 the conditions [p] and [q] considered above just say that the characteristic
 function is increasing.
 
-Bourbaki says that the first mapping is bijective. This is wrong, because the 
+Bourbaki says that the first mapping is bijective. This is wrong, because the
 constant function zero is never the characteristice function of [S(x)].
 We get a bijection be excluding this function. On the other hand the second
 mapping is bijective.
@@ -4238,7 +4238,7 @@ Definition E48AJIo := increasing_mappings_order E48Js E48Io.
 Definition E48APIo := increasing_mappings_order E48Ps E48Io.
 Definition E48AJI := increasing_mappings E48Js E48Io.
 Definition E48API := increasing_mappings E48Ps E48Io.
-Definition E48AJImo:=  
+Definition E48AJImo:=
   induced_order E48AJIo ((substrate E48AJIo) -s1 E48z).
 
 Lemma Exercise4_8f K: sub K (substrate r) ->
@@ -4248,11 +4248,11 @@ move: Exercise4_7b => or Ksr.
 move: (iorder_osr or Ksr) => [or1 {2} <-]; exact: (opp_osr or1).
 Qed.
 
-Lemma Exercise4_8g: 
+Lemma Exercise4_8g:
   order_on E48Js (irreds r) /\ order_on E48Ps E48P.
 Proof.
 have s1: sub (irreds r) (substrate r) by apply: Zo_S.
-by move: (Exercise4_8f s1)  (Exercise4_8f Exercise4_7e) => [p1 p2][p3 p4]. 
+by move: (Exercise4_8f s1)  (Exercise4_8f Exercise4_7e) => [p1 p2][p3 p4].
 Qed.
 
 Lemma Exercise4_8h: order_on E48Io E48I.
@@ -4271,7 +4271,7 @@ Lemma Exercise4_8iP K
   sub K (substrate r) ->
  forall f, inc f A <->
   [/\ function f, source f = K, target f =  E48I &
-  (forall i j, inc i K -> inc j K -> gle r i j -> 
+  (forall i j, inc i K -> inc j K -> gle r i j ->
      Vf f j = \1c -> Vf f i = \1c)].
 Proof.
 move=> Ksr f.
@@ -4283,7 +4283,7 @@ split.
   move => i j isr jsr ij f1.
   move:incf => [p1 p2 [p3 p4 p5] p6].
   have aux: gle o j i by apply /opp_gleP/iorder_gleP;split => //.
-  move: (p6 _ _ aux); rewrite f1;move /Ninto_gleP => [_] /(NintcP NS1). 
+  move: (p6 _ _ aux); rewrite f1;move /Ninto_gleP => [_] /(NintcP NS1).
   apply: cleA.
 move=> [ff sf tf incf].
 have aux: function_prop f (substrate o) (substrate E48Io) by split => //; ue.
@@ -4319,7 +4319,7 @@ Lemma Exercise4_8l: inc E48z (substrate E48AJIo).
 Proof.
 move:  Exercise4_8k => [[_ p1] _ ]; rewrite p1.
 have s1: sub (irreds r) (substrate r) by apply: Zo_S.
-have ta: lf_axiom (fun _ : Set => \0c) (irreds r) E48I.  
+have ta: lf_axiom (fun _ : Set => \0c) (irreds r) E48I.
    rewrite /E48I;move=> t _; fprops.
 apply /(Exercise4_8iP s1); rewrite /E48z; saw.
   by apply: lf_function.
@@ -4371,7 +4371,7 @@ apply /(Exercise4_8iP s1); rewrite /char_fun; saw.
 move=> i j isr jsr ij; rewrite !LfV//; try apply: char_fun_axioms.
 rewrite /varianti.
 Ytac jE; last by move=> zo; case: card1_nz.
-move=> _; Ytac iE => //; case: iE. 
+move=> _; Ytac iE => //; case: iE.
 move: jE isr => /Zo_hi  [_ jx] /Zo_P [pa pb]; apply /Zo_P;split => //.
 move: lr => [or _];split => //; order_tac.
 Qed.
@@ -4380,20 +4380,20 @@ Lemma Exercise4_8o x (comp:= fun X => X -s1 (the_least r)):
   inc x (substrate r) ->
   inc (char_fun (comp (E47S r x)) E48P) E48API.
 Proof.
-move: (Exercise4_7e) => s1 xsr. 
+move: (Exercise4_7e) => s1 xsr.
 apply /(Exercise4_8iP s1); rewrite  /char_fun;saw.
     apply: char_fun_f.
 move=> i j isr jsr ij; rewrite !LfV//; try apply: char_fun_axioms.
 rewrite /varianti;Ytac jE; last by move=> zo; case: card1_nz.
-move=> _; Ytac iE => //; case: iE. 
+move=> _; Ytac iE => //; case: iE.
 move:jE isr => /setC1_P [] /Zo_hi [_ jx] njl /Zo_P []/Zo_P [pa pb]/set1_P nil.
-apply /setC1_P;split => //; apply /Zo_P;split => //; split => //. 
+apply /setC1_P;split => //; apply /Zo_P;split => //; split => //.
 move: lr => [or _];order_tac.
 Qed.
 
 Lemma Exercise4_8p f: function f -> target f = E48I ->
    char_fun (Vfi1 f \1c) (source f) = f.
-Proof. 
+Proof.
 move=> ff tf;rewrite /char_fun; apply: function_exten; aw; trivial.
   apply: char_fun_f.
   by rewrite tf.
@@ -4406,7 +4406,7 @@ by rewrite -wf; apply: Vf_pr3.
 Qed.
 
 Lemma Exercise4_8qP X Y Z:  sub X Z -> sub Y Z ->
-  ((sub X Y) <-> (forall x, inc x Z -> 
+  ((sub X Y) <-> (forall x, inc x Z ->
     gle E48Io (Vf (char_fun X Z) x) (Vf (char_fun Y Z) x))).
 Proof.
 move => XZ YZ; split.
@@ -4416,7 +4416,7 @@ move => XZ YZ; split.
     rewrite (char_fun_V_a XZ xX)  (char_fun_V_a YZ (XY _ xX)); split; fprops.
   have xc: inc x (Z -s X) by apply /setC_P.
   rewrite (char_fun_V_b XZ xc).
-  case: (inc_or_not x Y) => xY. 
+  case: (inc_or_not x Y) => xY.
     rewrite (char_fun_V_a YZ xY);split;fprops; apply:cle_01.
   have xc1: inc x (Z -s Y) by apply /setC_P.
   rewrite (char_fun_V_b YZ xc1); split;fprops; apply:cle_01.
@@ -4424,7 +4424,7 @@ move=> h t tx; move: (h  _ (XZ _ tx)).
 rewrite /E48Io; move /(Ninto_gleP) => [_ _ aux]; ex_middle ty.
 have tc: inc t (Z -s Y) by  apply /setC_P;split => //; apply: XZ.
 move: aux; rewrite (char_fun_V_a XZ tx)  (char_fun_V_b YZ tc).
-by move/(cltNge clt_01). 
+by move/(cltNge clt_01).
 Qed.
 
 Lemma Exercise4_8r: r \Is E48APIo.
@@ -4436,7 +4436,7 @@ have ta: lf_axiom chrf  (substrate r) E48API.
 exists (Lf chrf (substrate r) E48API).
 move: lr => [or _]; move: Exercise4_8k => [_ [p1 p2]].
 have chrp: forall u, inc u (substrate r) -> sub (comp (E47S r u))  E48P.
-  move=> u usr; move: (Exercise4_7q usr) => aux t /setC1_P [q1 q2] => //. 
+  move=> u usr; move: (Exercise4_7q usr) => aux t /setC1_P [q1 q2] => //.
   by apply /setC1_P;split => //; apply: aux.
 saw.
   split; aw => //; apply: lf_bijective => //.
@@ -4452,10 +4452,10 @@ saw.
   have p4: sub U E48P.
     rewrite - sy /U; apply: sub_inv_im_source => //; rewrite ty.
     rewrite /E48I;apply: set1_sub; fprops.
-  have p5: (sub U E48P /\ 
+  have p5: (sub U E48P /\
       (forall x y, inc y U -> inc x E48P -> gle r x y -> inc x U)).
     split => // x z zU xE xz.
-    move: zU  => /iim_fun_P [u /set1_P ->] Jg; move: (Vf_pr fy Jg). 
+    move: zU  => /iim_fun_P [u /set1_P ->] Jg; move: (Vf_pr fy Jg).
     move: (p1graph_source fy Jg); rewrite sy => zy wv.
     apply /iim_fun_P; exists \1c; first by fprops.
     symmetry in wv; rewrite - (yp _ _ xE zy xz wv); apply: Vf_pr3 => //; ue.
@@ -4466,9 +4466,9 @@ move: Exercise4_8g Exercise4_8h => [[q1 q2] [q3 q4]] [q5 q6].
 have chrf1: forall x, inc x (substrate r) ->
   [/\ function (chrf x), source (chrf x) = substrate E48Ps &
    target (chrf x) = substrate E48Io].
-  move => z zsr; split; first (by apply: char_fun_f). 
+  move => z zsr; split; first (by apply: char_fun_f).
     by rewrite /chrf /char_fun; aw.
-    rewrite /chrf /char_fun; aw; rewrite  q6 //. 
+    rewrite /chrf /char_fun; aw; rewrite  q6 //.
 split.
 move => h; move: (Exercise4_7k h) => h1.
   move: (chrf1 _ xsr)(chrf1 _ ysr) => [q7 q8 q9] [q10 q11 q12].
@@ -4477,7 +4477,7 @@ move => h; move: (Exercise4_7k h) => h1.
   move /(Exercise4_8qP  (chrp _ xsr)  (chrp _ ysr)): aux => hh.
   by apply /imo_gleP; fprops; split => //; fprops; split => //; rewrite q4.
 move => h; apply : (Exercise4_7m xsr ysr).
-move /(imo_gleP _ q5) :h => [_ _ [_ _]]. 
+move /(imo_gleP _ q5) :h => [_ _ [_ _]].
 rewrite q4 => /(Exercise4_8qP  (chrp _ xsr)  (chrp _ ysr)).
 move=> aux t t1; case: (equal_or_not t (the_least r)) => tl.
   by rewrite tl; apply: Exercise4_7g.
@@ -4502,7 +4502,7 @@ saw.
   move:Exercise4_8d  => [_ p6].
   move=> y yf; set U := Vfi1 y \1c.
   move: yf; rewrite p5; move => [aux Wl]; move: aux.
-  move /(Exercise4_8iP s1) => [fy sy ty yp]. 
+  move /(Exercise4_8iP s1) => [fy sy ty yp].
   have p7: sub U (irreds r).
     rewrite - sy /U; apply: sub_inv_im_source => //; rewrite ty.
     rewrite /E48I;apply: set1_sub; fprops.
@@ -4513,7 +4513,7 @@ saw.
   have p9: [/\ sub U  (irreds r), nonempty U &
       (forall x y, inc y U -> sup_irred r x -> gle r x y -> inc x U)].
     split => //; move=> x z zU xE xz.
-    move: zU => /iim_fun_P [u /set1_P ->] Jg; move: (Vf_pr fy Jg). 
+    move: zU => /iim_fun_P [u /set1_P ->] Jg; move: (Vf_pr fy Jg).
     move: (p1graph_source fy Jg); rewrite sy => zy wv.
     apply /iim_fun_P;exists \1c; first by fprops.
     have xE1: inc x (irreds r) by apply: Zo_i => //; order_tac.
@@ -4533,23 +4533,23 @@ have p11:inc (chrf y) ((substrate E48AJIo) -s1 E48z).
 have chrf1: forall x, inc x (substrate r) ->
   function_prop (chrf x) (substrate E48Js) (substrate E48Io).
   move => z zsr; split; first by apply: char_fun_f.
-    by rewrite /chrf /char_fun  q2; aw. 
-  by rewrite /chrf /char_fun q6; aw. 
+    by rewrite /chrf /char_fun  q2; aw.
+  by rewrite /chrf /char_fun q6; aw.
 split.
    move: (chrf1 _ xsr)(chrf1 _ ysr) => [q7 q8 q9] [q10 q11 q12].
-   move => h; apply /iorder_gle0P=> //; apply /(imo_gleP _ q5); split;fprops. 
+   move => h; apply /iorder_gle0P=> //; apply /(imo_gleP _ q5); split;fprops.
    split => //.
    rewrite q2; apply /Exercise4_8qP; try apply: Exercise4_7q => //.
    exact (Exercise4_7k h).
-move /iorder_gleP => [pa pb] /(imo_gleP _ q5)  [_ _ [_ _]].  
+move /iorder_gleP => [pa pb] /(imo_gleP _ q5)  [_ _ [_ _]].
 rewrite q2; move/(Exercise4_8qP (Exercise4_7q xsr) (Exercise4_7q ysr)).
 by apply: Exercise4_7m.
 Qed.
 
 
-(** Let [M(x)] be the set of minimal elements that are [>x]. 
+(** Let [M(x)] be the set of minimal elements that are [>x].
 If [y] is in [M(x)] then [S(x)] is a strict subset of [S(y)] and there is [z]
-such that [z] is in [S(y)] but not in [S(x)]. These elements [z] are 
+such that [z] is in [S(y)] but not in [S(x)]. These elements [z] are
 uncomparable, and the number of such [z] is the cardinal of [M(x)].
 *)
 
@@ -4572,7 +4572,7 @@ have fpr: forall y, inc y (minimals x) ->
   (inc (f y)  (E47S r y) /\ ~ inc (f y) (E47S r x)).
   move=> y ysr; apply choose_pr.
   move: ysr => /Zo_P [ysr [[xle xney] ymin]].
-  move: (Exercise4_7k xle) => p1. 
+  move: (Exercise4_7k xle) => p1.
   case: (emptyset_dichot ((E47S r y) -s (E47S r x))) => ne.
     move: (Exercise4_7m ysr xsr (empty_setC ne)) => yx.
     case: xney;  order_tac.
@@ -4627,7 +4627,7 @@ move: Exercise4_7b => or xr; case: (emptyset_dichot x) => nex.
   move: (the_greatest_pr or  Exercise4_7c1) => tlp.
   rewrite nex; exists (the_greatest r).
   rewrite glb_set0 //.
-by apply:  (lattice_finite_inf2 lr  (sub_finite_set xr fs) nex xr). 
+by apply:  (lattice_finite_inf2 lr  (sub_finite_set xr fs) nex xr).
 Qed.
 
 Lemma Exercise4_8u: infimum r emptyset = the_greatest r.
@@ -4648,7 +4648,7 @@ move: Exercise4_7b => or xsr Tsr.
 move: (sub_finite_set Tsr fs) => ft; move: T ft Tsr.
 apply: finite_set_induction0.
   move=> ok;set im:= fun_image _ _; have ->: im = emptyset.
-    by rewrite /im; apply /set0_P => y /funI_P [z /in_set0]. 
+    by rewrite /im; apply /set0_P => y /funI_P [z /in_set0].
   rewrite Exercise4_8u.
   move: (the_greatest_pr or  Exercise4_7c1) => [_ tlp].
   by move: (tlp _ xsr) => aux; apply: (sup_comparable1 or aux).
@@ -4659,42 +4659,42 @@ move: (Exercise4_7i1 Ksr) => his.
 set aux:= fun_image _ _.
 set K1 := (fun_image K (fun z : Set => sup r z x)).
 have K1sr:sub K1 (substrate r).
-  move => t /funI_P [z zK ->]. 
+  move => t /funI_P [z zK ->].
   move: (lattice_sup_pr lr (Ksr _ zK) xsr) => [p1 _ _]; order_tac.
 move: (Exercise4_7i1 K1sr) => K1is.
 move: (lattice_sup_pr lr asr xsr) => [p1a p2a p3a].
 have saxr: inc (sup r a x) (substrate r) by order_tac.
 have ->: aux = K1 +s1 (sup r a x).
    set_extens t.
-      move /funI_P => [z zt ->]. 
+      move /funI_P => [z zt ->].
       case /setU1_P: zt => s; apply /setU1_P; [left  |right; ue].
       apply /funI_P; ex_tac.
    case /setU1_P => h; apply /funI_P.
      move /funI_P: h => [z za zb]; exists z;fprops.
    rewrite h; exists a;fprops.
 rewrite (infimum_setU1 lr Ksr his asr) (infimum_setU1 lr K1sr K1is saxr).
-move: (infimum_pr1 or his) => /(glbP or Ksr) [[p1K p2K] p3K]. 
+move: (infimum_pr1 or his) => /(glbP or Ksr) [[p1K p2K] p3K].
 move: (distributive_lattice_prop2 lr) => [_ p1 _].
 by rewrite ((p1 dl3) _ _ _ xsr p1K asr)  (hrec Ksr) -/K1 sup_C.
 Qed.
 
 
 Lemma Exercise4_8v K: all_uncomp_inP K -> exists x,
-  inc x (substrate r) /\ 
+  inc x (substrate r) /\
    (cardinal K) <=c (cardinal (minimals x)).
 Proof.
 move=> [kp1 kp2].
-(** For each [x] in [K], we consider [f(x)] the supremum of the 
+(** For each [x] in [K], we consider [f(x)] the supremum of the
 complement of [x] in [K]. If [u] is the sup of [K] we have [f(x) < u]. *)
 pose c x := K -s1 x.
-have Ks: sub K (substrate r). 
+have Ks: sub K (substrate r).
   by move => t tk;move: (kp1 _ tk) =>/setC1_P [] /Zo_P [].
 have cp: forall x, inc x K -> sub (c x) (substrate r).
   by rewrite /c => x xK t /setC1_P [tK _]; apply: Ks.
 pose f x:= supremum r (c x).
 set u := supremum r K.
 have fpr0: forall x, inc x K -> least_upper_bound r (c x) (f x).
-  by move => x xK;move: (supremum_pr1 (proj1 lr) (Exercise4_7i(cp _ xK))). 
+  by move => x xK;move: (supremum_pr1 (proj1 lr) (Exercise4_7i(cp _ xK))).
 have fpr1: forall x, inc x K -> u = sup r (f x) x.
   move => x xK; move: (cp _ xK) => asr.
   move: (supremum_setU1 lr asr (Exercise4_7i asr) (Ks _ xK)).
@@ -4702,26 +4702,26 @@ have fpr1: forall x, inc x K -> u = sup r (f x) x.
 move: lr => [or _].
 have fpr2: forall x, inc x K -> glt r (f x) u.
   move => x xK;move: (cp _ xK) => csr; move: (fpr0 _ xK).
-  move => /(lubP or csr) [[fs1 _] _]. 
+  move => /(lubP or csr) [[fs1 _] _].
   move: (lattice_sup_pr lr fs1 (Ks _ xK)) => [p1 p2 p3].
   split; first by rewrite (fpr1 _ xK); apply: p1.
   move=> fxu; rewrite -(fpr1 _ xK) -fxu in p2.
   have six: sup_irred r x.
     by  move: (kp1 _ xK) => /setC1_P [] /Zo_P [].
   have Kir: sub K (irreds r) by apply: (@sub_trans E48P) => //; apply: sub_setC.
-  have cir: sub (c x)  (irreds r). 
+  have cir: sub (c x)  (irreds r).
      apply: (@sub_trans  K) => //; apply: sub_setC.
   case: (emptyset_dichot (c x)) => ec; last first.
     move: (Exercise4_8c1 (Ks _ xK) six cir p2 ec).
     by move=> [v ] /setC1_P [vK vx] xv;case: vx; move: (kp2 _ _ xK vK xv).
   move: (fpr0 _ xK); rewrite ec lub_set0 // fxu => lu.
   have Ksx: K = singleton x.
-    by apply: set1_pr => //  t tk; ex_middle tx; empty_tac1 t; apply /setC1_P. 
+    by apply: set1_pr => //  t tk; ex_middle tx; empty_tac1 t; apply /setC1_P.
   move: (supremum_singleton or (Ks _ xK)); rewrite -Ksx -/u => ux.
   move: (kp1 _ xK) => /setC1_P [_]; case.
   move: (the_least_pr or Exercise4_7c) => ol.
   by apply: (unique_least or) => //; rewrite - ux.
-(**  Assume [x] and [y] distinct in [K]; Then obviously [x <= f(y)] and 
+(**  Assume [x] and [y] distinct in [K]; Then obviously [x <= f(y)] and
 [sup(f(x),f(y))=u]; Thus [f] is injective. *)
 
 have fpr3: forall x y, inc x K -> inc y K -> x <> y ->  gle r x (f y).
@@ -4729,7 +4729,7 @@ have fpr3: forall x y, inc x K -> inc y K -> x <> y ->  gle r x (f y).
   by move=> /(lubP or cK) [[_ ub] _]; apply: ub; apply /setC1_P.
 have fpr4: forall x y, inc x K -> inc y K -> x <> y ->
   sup r (f x) (f y) = u.
-  move=> x y xK yK xy. 
+  move=> x y xK yK xy.
   move: (fpr2 _ xK) (fpr2 _ yK) => [p1 _] [p2 _].
   have fxs: inc (f x) (substrate r) by order_tac.
   have fys: inc (f y) (substrate r) by order_tac.
@@ -4745,7 +4745,7 @@ have fpr5: forall x y, inc x K -> inc y K -> f x = f y -> x = y.
    have fxs:inc (f x) (substrate r) by move: (fpr2 _ xK) => xx; order_tac.
    by move: (fpr4 _ _ xK yK xny); rewrite /sup - sf supremum_singleton.
 (** Let [L] be the set of all these [f(x)].
-We set [v] the be the infimum of [L], [g(x)] the infimum 
+We set [v] the be the infimum of [L], [g(x)] the infimum
 of the complement of [x] in [L]. The same argument as above says [v < g(x)]  *)
 set L := fun_image K f.
 have lp1: sub L (substrate r).
@@ -4761,18 +4761,18 @@ have dp: forall x, inc x L -> sub (d x) (substrate r).
 pose g x:= infimum r (d x).
 set v := infimum r L.
 have lp2: forall x, inc x L -> greatest_lower_bound r (d x) (g x).
-  by move => x xK;move: (infimum_pr1 or (Exercise4_7i1 (dp _ xK))). 
+  by move => x xK;move: (infimum_pr1 or (Exercise4_7i1 (dp _ xK))).
 have lp3: forall x, inc x L -> v = inf r (g x) x.
   move => x xK; move: (dp _ xK) => asr.
   move: (infimum_setU1 lr asr (Exercise4_7i1 asr) (lp1 _ xK)).
   by rewrite  {1} /d  (setC1_K xK).
 have lp4: forall x, inc x L -> glt r v (g x).
   move => x xL;move: (dp _ xL) => csr; move: (lp2 _ xL).
-  move /(glbP or csr) => [[fs1 _] _]. 
+  move /(glbP or csr) => [[fs1 _] _].
   move: (lattice_inf_pr lr fs1 (lp1 _ xL)) => [p1 p2 p3].
   split; first by rewrite (lp3 _ xL); apply: p1.
   move=> gxv; rewrite -(lp3 _ xL) gxv in p2.
-  move: (sup_comparable1 or p2); rewrite sup_C. 
+  move: (sup_comparable1 or p2); rewrite sup_C.
   rewrite (distributive_rec (lp1 _ xL) csr).
   set aux2 := fun_image _ _.
   case: (emptyset_dichot (d x)) => de.
@@ -4799,7 +4799,7 @@ have lp5: forall x y, inc x L -> inc y L -> x <> y ->  gle r (g y) x.
   move => x y xL yL xy; move: (dp _ yL) => cL; move: (lp2 _ yL).
   move=> /(glbP or cL) [[_ ub] _]; apply: ub; apply /setC1_P;split => //.
 have lp6: forall x y, inc x L -> inc y L -> x <> y -> inf r (g x) (g y) = v.
-  move=> x y xL yL xy. 
+  move=> x y xL yL xy.
   move: (lp4 _ xL) (lp4 _ yL) => [p1 _] [p2 _].
   have fxs: inc (g x) (substrate r) by order_tac.
   have fys: inc (g y) (substrate r) by order_tac.
@@ -4810,7 +4810,7 @@ have lp6: forall x y, inc x L -> inc y L -> x <> y -> inf r (g x) (g y) = v.
     move: (lattice_inf_pr lr fxs (lp1 _ xL)) => [p3a p4a p5a].
     apply: p5a => //; move: (lp5 _ _ xL yL xy) => aux; order_tac.
   order_tac.
-(** Since [v< g(x)] we can choose [h(x)] such that [x< h(x) <= g(x)] and 
+(** Since [v< g(x)] we can choose [h(x)] such that [x< h(x) <= g(x)] and
 [h(x)] minimal in the interval. This is an injective function (since
 [inf(h(a),h(b)) <= inf(g(a),g(b)) = v]. *)
 pose h x := choose (fun a => gle r a (g x) /\ minimal_in_int v a).
@@ -4818,16 +4818,16 @@ have lp7: forall x, inc x L -> (gle r (h x) (g x) /\ minimal_in_int v (h x)).
   move=> x xL; apply choose_pr.
   set U:= Zo (substrate r) (fun a => glt r v a /\ gle r a (g x)).
   have Usr: sub U (substrate r) by apply: Zo_S.
-  have neU: nonempty U. 
-    move:(lp4 _ xL) => lt1;exists (g x); apply: Zo_i=> //;try order_tac. 
+  have neU: nonempty U.
+    move:(lp4 _ xL) => lt1;exists (g x); apply: Zo_i=> //;try order_tac.
     split => //; order_tac; order_tac.
-  move: (finite_set_minimal1 Usr neU) => [a aU etc]. 
+  move: (finite_set_minimal1 Usr neU) => [a aU etc].
   move: aU => /Zo_P [a1 [a2 a3]].
-  exists a; split => //; split => // b bv ba. 
-  apply: etc => //; apply: Zo_i => //; try split => //; order_tac. 
+  exists a; split => //; split => // b bv ba.
+  apply: etc => //; apply: Zo_i => //; try split => //; order_tac.
 set M := fun_image L h.
 have Mm: sub M (minimals v).
-  move=> t /funI_P [z zL ->]; move: (lp7 _ zL) => [p1 p2]. 
+  move=> t /funI_P [z zL ->]; move: (lp7 _ zL) => [p1 p2].
   apply: Zo_i => //; order_tac.
 have ->: cardinal L = cardinal M.
   apply /card_eqP; exists (Lf h L M); saw; apply: lf_bijective.
@@ -4856,7 +4856,7 @@ We first characterise the sup and inf in a product. We show that the product
 of dlattices is a dlattice, that the product of totally ordered sets is
 a dlattice. *)
 
-Lemma setX_lattice_sup g (r :=  order_product g) x y 
+Lemma setX_lattice_sup g (r :=  order_product g) x y
    (z := sup r x y) (t := inf r x y):
   order_fam g -> (allf g lattice) ->
   inc x (substrate r) -> inc y (substrate r) ->
@@ -4873,14 +4873,14 @@ have zsr: inc z (substrate r).
 have tsr: inc t (substrate r).
   by move: (inf_pr or xsr ysr hi) => [pa _ _]; rewrite /t; order_tac.
 move: (xsr) (ysr); rewrite {1 2} (proj2(order_product_osr ofg)) => xsr1 ysr1.
-have sd: sub xy (prod_of_substrates g) by move=> u; case /set2_P => ->. 
+have sd: sub xy (prod_of_substrates g) by move=> u; case /set2_P => ->.
 move: (sup_in_product ofg sd) => [pa pb].
 move: hs;rewrite -pa; move => hs; move: (pb hs) => hz.
 move: (inf_in_product ofg sd) => [pc pd].
 move: hi;rewrite -pc; move => hi; move: (pd hi) => ht.
 clear pa pb pc pd hs hi.
 have fgf: fgraph (fam_of_substrates g) by rewrite /fam_of_substrates; fprops.
-have aidf: forall i, inc i (domain g) -> 
+have aidf: forall i, inc i (domain g) ->
    [/\ inc i (domain (fam_of_substrates g)),
      function (pr_i (fam_of_substrates g) i),
     sub xy (source (pr_i (fam_of_substrates g) i)) &
@@ -4892,13 +4892,13 @@ have aidf: forall i, inc i (domain g) ->
     have sxy: sub xy (source (pr_i (fam_of_substrates g) i)).
       by rewrite /pr_i; aw.
    split => //; set_extens u.
-     move => /(Vf_image_P fp sxy) [w wxy ->]. 
+     move => /(Vf_image_P fp sxy) [w wxy ->].
      move: (sxy _ wxy); rewrite {1} /pr_i lf_source => ws.
      rewrite pri_V //; move: wxy;case /set2_P => ->; fprops.
   have ixxy: inc x xy by rewrite /xy; fprops.
   have iyxyy: inc y xy by rewrite /xy; fprops.
   by case /set2_P=> ->; apply /(Vf_image_P fp sxy);
-     [exists x | exists y] => //;rewrite pri_V. 
+     [exists x | exists y] => //;rewrite pri_V.
 split => //.
   move => i idg; move: (f_equal (Vg^~ i) hz); rewrite !LgV//; move => ->.
   by move: (aidf _ idg) => [qa qb qc ->].
@@ -4931,7 +4931,7 @@ have aux: forall t, inc t (substrate r) -> [/\ fgraph t, domain t = domain g &
   move => i idt; move: (hh _ idt); rewrite LgV//; ue.
 move: (aux _ xyzsr) (aux _ xyxzsr) => [g1 d1 v1] [g2 d2 v2].
 apply: fgraph_exten => // ; [ ue | rewrite d1 => i idg].
-move:  (aux _ xsr) (aux _ ysr) (aux _ zsr). 
+move:  (aux _ xsr) (aux _ ysr) (aux _ zsr).
 move => [_ _ xsi][_ _ ysi][_ _ zsi].
 move: (xsi _ idg)(ysi _ idg)(zsi _ idg) => xsa ysa zsa.
 rewrite (xyxzv  _ idg) (xyzv _ idg) (yzv _ idg)  (xyv _ idg) (xzv _ idg).
@@ -4944,13 +4944,13 @@ Lemma setX_torder_dlattice g:
 Proof.
 move => ofg alg.
 have aux: forall i, inc i (domain g) -> lattice (Vg g i).
-  move => i idg; move: (alg _ idg); apply: total_order_lattice.  
+  move => i idg; move: (alg _ idg); apply: total_order_lattice.
 split; first by apply: setX_lattice => //.
 apply: setX_dlattice => //.
-move => i idg; move: (alg _ idg); apply: total_order_dlattice.  
+move => i idg; move: (alg _ idg); apply: total_order_dlattice.
 Qed.
 
-Lemma setX_lattice_finite_sup 
+Lemma setX_lattice_finite_sup
    g (r :=  order_product g) E (z := supremum r E):
   order_fam g -> (forall i, inc i (domain g) -> lattice (Vg g i)) ->
   finite_set E -> sub E (substrate r) -> nonempty E ->
@@ -4966,7 +4966,7 @@ move => i idg.
 have pc: sub E (productb (fam_of_substrates g)).
   by move: sEs; rewrite (proj2 (order_product_osr _)) /prod_of_substrates.
 move: (sup_in_product ofg pc) => [ha hb].
-move: hs; rewrite - ha => hc; rewrite /z /r (hb hc); aw; rewrite LgV//. 
+move: hs; rewrite - ha => hc; rewrite /z /r (hb hc); aw; rewrite LgV//.
 have fgf: fgraph (fam_of_substrates g) by rewrite /fam_of_substrates; fprops.
 have idf: inc i (domain (fam_of_substrates g)) by rewrite /fam_of_substrates;aw.
 have fp: function (pr_i (fam_of_substrates g) i) by fprops.
@@ -4979,7 +4979,7 @@ ex_tac;by rewrite pri_V //;  apply:pc.
 Qed.
 
 
-(** We say that [A] is a sublattice if the sup and and of two 
+(** We say that [A] is a sublattice if the sup and and of two
 elements of [A] is in [A]. If [E] is a lattice, then [A] is a lattice,
 sup and inf coincide *)
 
@@ -4996,7 +4996,7 @@ Proof.
 move => lr sla sa.
 move: (lr) => [or lr1].
 move: (iorder_osr or sa) => [orA srA].
-have auxP: forall a b, inc a A -> inc b A -> (gle rA a b <-> gle r a b). 
+have auxP: forall a b, inc a A -> inc b A -> (gle rA a b <-> gle r a b).
    move => a b aA bA; exact :(iorder_gle0P _ aA  bA).
 have pa: forall a b, inc a A -> inc b A ->
   (least_upper_bound rA (doubleton a b) (sup r a b) /\
@@ -5064,8 +5064,8 @@ have [C CB cs]: exists2 C, sub C B & cardinal C = csucc n.
     case: (finite_or_infinite (CS_cardinal B)).
       by move /NatP => fb; apply/cleSltP.
     by move => ib; apply: cle_fin_inf => //; apply /NatP.
-  move: (cardinal_le_aux1 pa) => /(eq_subset_cardP (csucc n)). 
-  move/set_leP => [C CB eq]; exists C => //. 
+  move: (cardinal_le_aux1 pa) => /(eq_subset_cardP (csucc n)).
+  move/set_leP => [C CB eq]; exists C => //.
   by symmetry;rewrite - (card_nat snb); apply /card_eqP.
 have scA: sub C A by apply: sub_trans CB sbA.
 have aiC : forall x, inc x C -> sup_irred (induced_order r A) x.
@@ -5124,15 +5124,15 @@ have nex: nonempty xbs.
   case: (emptyset_dichot xbs) => // xe.
   move: cs.
   have ->: C = singleton x.
-    by apply: set1_pr => // t tC; ex_middle tnx; empty_tac1 t; apply /setC1_P. 
+    by apply: set1_pr => // t tC; ex_middle tnx; empty_tac1 t; apply /setC1_P.
   rewrite cardinal_set1 - succ_zero => bad; case: nz.
   by rewrite (csucc_inj CS0 (CS_nat nN) bad).
 have allc:(forall i, inc i (domain g) -> lattice (Vg g i)).
-   move => i idg; move: (alg _ idg); apply: total_order_lattice.  
+   move => i idg; move: (alg _ idg); apply: total_order_lattice.
 move:  (sub_trans sxbsC (sub_trans scA asr)) => scbssr.
 move: (setX_lattice_finite_sup ofg allc fsx scbssr nex).
 set xb:= (supremum r xbs); rewrite -/r; move => [xbsr xbgr].
-have sr: (prod_of_substrates g) = substrate r 
+have sr: (prod_of_substrates g) = substrate r
    by rewrite (proj2 (order_product_osr _)).
 have xxb: gle r x xb.
   apply /(order_product_gleP); rewrite sr;split => //.
@@ -5144,7 +5144,7 @@ have xxb: gle r x xb.
     by move => h; rewrite - (supremum_pr2 ori h); apply: sb.
   have sc: sub (fun_image xbs (Vg^~ i)) (substrate (Vg g i)).
      move => t /funI_P [z zbs ->].
-     move: (scbssr _ zbs); rewrite - sr; move /(prod_of_substratesP). 
+     move: (scbssr _ zbs); rewrite - sr; move /(prod_of_substratesP).
      by move => [_ _]; apply.
   have sd: inc  (Vg (mx i) i) (fun_image xbs (Vg ^~i)).
     by apply/funI_P; exists (mx i)=> //; apply /setC1_P;split => //; apply: xne.
@@ -5157,30 +5157,30 @@ with [a] in [A] and [c] in [C] then [x  <= a]*)
 have exfr: forall a, inc a xbs -> not (ocomparable r x a).
   move => a /setC1_P [aC ax]; case => lxa.
     by move: (frC _ _ xC aC lxa) => naw; case: ax.
-    by move: (frC _ _ aC xC lxa). 
+    by move: (frC _ _ aC xC lxa).
 move: (sublattice_pr lg slA asr) => [lrA sra supa infa].
 move: (sublattice_dr lg slA asr dlg) => dlA.
 have hx: forall a b, inc a A -> inc b A ->
    gle r x (sup r a b) -> gle r x a \/ gle r x b.
    move => a b aA bA.
    have auxP: forall a b, inc a A -> inc b A ->
-       (gle (induced_order r A) a b <-> gle r a b). 
+       (gle (induced_order r A) a b <-> gle r a b).
        by move => s t sA tA; apply: iorder_gle0P.
    move: (Exercise4_8a lrA dlA (aiC _ xC)); rewrite -/r sra => h.
    move: (scA _ xC) => xA.
    move: (proj1 (slA _ _ aA bA)) => sA.
    move /(auxP _ _ xA sA).
    move : (h _ _ aA bA); rewrite - (supa _ _ aA bA) => ra rb.
-   by move: (ra rb); case; [left | right ]; apply /auxP. 
+   by move: (ra rb); case; [left | right ]; apply /auxP.
 have hx1:  forall a b, inc a A -> inc b xbs  ->
    gle r x (sup r a b) -> gle r x a.
   move => a b aA bb sab.
   move: (exfr _ bb) => nc.
   move: bb => /setC1_P [bC _].
   by case: (hx _ _ aA (scA _ bC) sab) => // lxb; case: nc; left.
-(** let's write [C] as the set of all [f(i)], and consider 
+(** let's write [C] as the set of all [f(i)], and consider
 [s(i+1)= sup (s(i),f(i))], and [s(1) = f(0)] *)
-have [f [bf sf tf]]: 
+have [f [bf sf tf]]:
    exists f, bijection_prop f (Nint n) xbs.
   suff: Nint n \Eq xbs => //.
    apply /card_eqP; rewrite (card_Nint nN).
@@ -5190,9 +5190,9 @@ have ff: function f by fct_tac.
 pose Ei i := Vfs f (Nint i).
 have Eiz: Ei \0c = emptyset.
   have aux: (sub emptyset (source f))by fprops.
-  rewrite /Ei Nint_co00. 
+  rewrite /Ei Nint_co00.
   by apply /set0_P =>t /(Vf_image_P ff aux) [s] /in_set0.
-have Eis: forall i, inc i Nat -> i <c n -> 
+have Eis: forall i, inc i Nat -> i <c n ->
      Ei (csucc i) = (Ei i) +s1 (Vf f i).
   move => i iN sin; rewrite /Ei.
   move: (NS_succ iN) => siN.
@@ -5215,7 +5215,7 @@ have Eio: Ei \1c = singleton (Vf f \0c).
    by move => z;case /setU1_P => // /in_set0.
 pose sei i := supremum r (Ei i).
 have sen: sei n = xb.
-  rewrite /sei /Ei - sf -/(Imf _). 
+  rewrite /sei /Ei - sf -/(Imf _).
   by rewrite  (surjective_pr0 (proj2 bf)) tf.
 have tb: forall i, inc i Nat -> i <c n -> inc (Vf f i) xbs.
   by move => i iN ltin; Wtac; rewrite sf; apply /NintP.
@@ -5227,7 +5227,7 @@ have sel: forall i, natp i -> i <=c n -> i <> \0c ->
     (sub (Ei i) xbs /\ least_upper_bound r (Ei i) (sei i)).
   move => i iN lein inz.
   have sa:sub (Nint i) (source f).
-     rewrite sf; apply: Nint_M1 => //. 
+     rewrite sf; apply: Nint_M1 => //.
   have nei: nonempty (Ei i).
      exists (Vf f \0c); apply /(Vf_image_P ff sa).
       exists \0c => //; apply /NintP => //.
@@ -5244,13 +5244,13 @@ have ses:  forall i, inc i Nat -> i <c n -> i <> \0c ->
   have se: has_supremum r (Ei i) by exists (sei i).
   move: (sub_trans sa scbssr) => sc.
   have sd: inc (Vf f i) (substrate r)  by apply: scbssr; apply: tb.
-  by move: (supremum_setU1 lg sc se sd); rewrite -h. 
-(** Each [s(i)] is in [A]. Thus [x <= s(i+1)] implies [x <= s(i)] 
+  by move: (supremum_setU1 lg sc se sd); rewrite -h.
+(** Each [s(i)] is in [A]. Thus [x <= s(i+1)] implies [x <= s(i)]
    By induction [x <= s(1)] absurd *)
 suff: gle r x (sei \1c) by rewrite seo=> h;case:(exfr _  (tb _ NS0 zl)); left.
-rewrite - sen in xxb;move/cge1P: (zl); move: {-1} \1c (cleR CS1). 
+rewrite - sen in xxb;move/cge1P: (zl); move: {-1} \1c (cleR CS1).
 apply: (Nat_induction4 NS1 nN xxb) => i /cge1P  [_ /nesym] inz ltin.
-have iN:= (NS_lt_nat ltin nN). 
+have iN:= (NS_lt_nat ltin nN).
 rewrite (ses _ iN ltin inz); apply: hx1 (tb _ iN ltin).
 move: i {ltin } iN (proj1 ltin) inz.
 apply: Nat_induction; first by  move => _ [].
@@ -5258,7 +5258,7 @@ move => t tN hrec stn _.
 have tn: t <c n  by apply /cleSltP.
 have ftA: inc (Vf f t) A by apply/scA /sxbsC /(tb _ tN).
 case: (equal_or_not t \0c) => tnz.
-    by rewrite tnz succ_zero seo - tnz. 
+    by rewrite tnz succ_zero seo - tnz.
 rewrite (ses _ tN tn tnz);apply (slA _ _ (hrec (proj1 tn)  tnz) ftA).
 Qed.
 
@@ -5267,7 +5267,7 @@ of [P] in [n] in a finite distributive lattice. Then the set [F]
 is isomorphic to a sublattice of [n] totally ordered sets. *)
 
 Lemma fun_image_exten x f g:
-   (forall t, inc t x -> f t = g t) -> fun_image x f = fun_image x g. 
+   (forall t, inc t x -> f t = g t) -> fun_image x f = fun_image x g.
 Proof.
 by move => h; set_extens t; move => /funI_P [z zx ->];
   apply /funI_P; ex_tac; rewrite h.
@@ -5278,8 +5278,8 @@ Lemma Exercise4_9b r (P := E48P r) n:
   lattice r -> distributive_lattice1 r -> finite_set (substrate r) ->
   nonempty (substrate r) ->
   natp n -> order_width (induced_order r P) n ->
-  exists g A f, 
-    let r' := (order_product g) in 
+  exists g A f,
+    let r' := (order_product g) in
     [/\ order_fam g, (allf g total_order), cardinal (domain g) = n,
     sub A (substrate r') & sublattice r' A /\
     order_isomorphism f r (induced_order r' A)].
@@ -5316,10 +5316,10 @@ case: (equal_or_not n \0c) => nnz.
   set g:= Lg emptyset id.
   have c1: order_fam g by  rewrite /g; hnf; aw => x; case; case.
   have c2: (allf g total_order) by rewrite /g; hnf; aw => x /in_set0.
-  have c3: cardinal (domain g) = n. 
+  have c3: cardinal (domain g) = n.
      by rewrite /g nnz; aw; rewrite cardinal_set0.
   set r' := (order_product g).
-  have srr: substrate r' = singleton emptyset. 
+  have srr: substrate r' = singleton emptyset.
     rewrite /r' (proj2 (order_product_osr _)) //.
     rewrite /prod_of_substrates /fam_of_substrates /g; aw.
     by apply: setXb_0'.
@@ -5335,7 +5335,7 @@ case: (equal_or_not n \0c) => nnz.
     move => x y; rewrite /A srr => /set1_P -> /set1_P ->.
     rewrite (sup_comparable1 or' aux) (inf_comparable1 or' aux); split;fprops.
   by rewrite iorder_substrate.
-(**  To each element of the partition we add [e], the least element of [F]. 
+(**  To each element of the partition we add [e], the least element of [F].
 This gives a family of totally ordered sets [Xi] *)
 pose Xf i := i +s1 zr.
 have sXr: forall x, inc x X1 -> sub (Xf x) (substrate r).
@@ -5350,10 +5350,10 @@ have c2:  (allf g total_order).
   suff: gle r x y \/ gle r y x by case => le1;[left | right];apply /iorder_gleP.
   have sa: sub s (substrate r).
      apply: sub_trans sr'; move => t; rewrite /Xf; fprops.
-  move: xa ; case /setU1_P. 
+  move: xa ; case /setU1_P.
     move: ya; case /setU1_P.
         move: (proj2 to1); rewrite iorder_sr // => h.
-        move => iys ixs; move: (h _ _ ixs iys). 
+        move => iys ixs; move: (h _ _ ixs iys).
         case => h1; [left | right]; apply: (iorder_gle1 h1).
      by move => -> ixs; right; apply: zrl; apply: sa.
   by move => ->;  left; apply: zrl; apply: sr'.
@@ -5377,7 +5377,7 @@ have For: forall i x, inc i X1 -> sub (Fo i x) (substrate r).
 pose fo i x := the_greatest (induced_order r (Fo i x)).
 have fop: forall i x, inc i X1 -> inc x (substrate r) ->
    greatest (induced_order r (Fo i x)) (fo i x).
-   move => i x iX xsr. 
+   move => i x iX xsr.
    have idg: inc i (domain g)  by rewrite /g; aw.
    move: (For _ x iX) => sf.
    move:(c2 _ idg) => tor.
@@ -5386,14 +5386,14 @@ have fop: forall i x, inc i X1 -> inc x (substrate r) ->
      by rewrite /g LgV//; rewrite iorder_trans.
    have ori: order (induced_order (Vg g i) (Fo i x)).
      by rewrite so;apply: (proj1 (iorder_osr or _)).
-   move:(the_greatest_pr (ori) (finite_subset_torder_greatest 
+   move:(the_greatest_pr (ori) (finite_subset_torder_greatest
            tor (Fof _ _ iX) (Fon _ _ xsr) (Fos _ _ iX))).
    by rewrite so.
 pose fp x := Lg X1 (fun i => fo i x).
 set r' := order_product g.
 move: (order_product_osr c1) => [ppa ppb].
 have ta: forall x, inc x (substrate r) ->  inc (fp x) (substrate r').
-   rewrite  ppb /prod_of_substrates /fp/g/fam_of_substrates. 
+   rewrite  ppb /prod_of_substrates /fp/g/fam_of_substrates.
    move => x xsr; apply/setXf_P;aw;split;fprops.
    move => i iX1; rewrite !LgV//.
    move: (fop _ _ iX1 xsr) => [h _]; move: h.
@@ -5401,7 +5401,7 @@ have ta: forall x, inc x (substrate r) ->  inc (fp x) (substrate r').
    have s3: sub (Fo i x) (Xf i) by apply: Zo_S.
    rewrite (iorder_sr or  (sub_trans s3 s2)) (iorder_sr or s2); apply: s3.
 set A:= fun_image (substrate r) fp.
-have c4: sub A (substrate r'). 
+have c4: sub A (substrate r').
   by rewrite /A; move => t /funI_P [z zsr ->]; apply: ta.
 (** We note that [S(x)] is the union of the [gi(x)]. By associativity
  of the sup, and since [x = sup S(x)], we get [x = sup (fi x)].
@@ -5409,10 +5409,10 @@ have c4: sub A (substrate r').
 case: (emptyset_dichot X1) => X1ne.
    by case: nnz;rewrite - cX1 X1ne cardinal_set0.
 move: (X1ne) => [repX repXX].
-have sxp: forall x, inc x (substrate r) ->  
+have sxp: forall x, inc x (substrate r) ->
     E47S r x = unionb (Lg X1 (fun i => Fo i x)).
    move: pX1 => [[pa pc] pb].
-   move => x xsr; set_extens t. 
+   move => x xsr; set_extens t.
      move /Zo_P => [tsr [si le1]]; apply /setUb_P; aw.
      case: (equal_or_not t zr).
        by move => ->; exists repX => //; rewrite LgV//; apply: Fozr.
@@ -5420,17 +5420,17 @@ have sxp: forall x, inc x (substrate r) ->
      have : inc t P by  apply: Zo_i; [ apply: Zo_i | move /set1_P].
      rewrite -pa => /setU_P [y ty yx];ex_tac; rewrite LgV//; apply: Zo_i => //.
      rewrite /Xf; fprops.
-  move => /setUb_P [y ]; rewrite Lgd=> y1; rewrite LgV//; move=>/Zo_P. 
+  move => /setUb_P [y ]; rewrite Lgd=> y1; rewrite LgV//; move=>/Zo_P.
   rewrite /Xf; aw; move => [sa sb]; case/ setU1_P: sa => ty; apply /Zo_P.
     have: inc t P by rewrite  -pa; union_tac.
     by move => /Zo_P [] /Zo_P [ra rb] _.
-  move: (Exercise4_7d lr fsr nesr) => /Zo_P. 
+  move: (Exercise4_7d lr fsr nesr) => /Zo_P.
   by  rewrite  -/zr; move => [sc sd]; split => //; ue.
-have sxp1: forall x, inc x (substrate r) -> 
+have sxp1: forall x, inc x (substrate r) ->
      x = supremum r (fun_image X1 (fun l  => supremum r (Fo l x))).
   move => x xsr; move: (sxp _ xsr) => aux.
   set X :=  (Lg X1 (Fo^~ x)).
-  move: (f_equal (supremum r) aux). 
+  move: (f_equal (supremum r) aux).
   rewrite (Exercise4_7l lr fsr nesr xsr).
   have suXdr: sub (unionb X) (substrate r).
     move =>z /setUb_P; rewrite /X; aw;move => [y yx1]; rewrite LgV// => /Zo_P.
@@ -5452,17 +5452,17 @@ have sxp1: forall x, inc x (substrate r) ->
   move: (sup_A2 or ra rb rc rd) => [_ xx]; move: (xx re).
   rewrite /sup_graph /h -/X Lg_range Lg_range.
   have -> : (fun_image (unionb X) id) = (unionb X).
-     set_extens t; first by by move /funI_P => [a au ->]. 
-     move => tu; apply /funI_P; ex_tac. 
+     set_extens t; first by by move /funI_P => [a au ->].
+     move => tu; apply /funI_P; ex_tac.
   move => ->.
-  have ww: forall l, inc l X1 -> 
+  have ww: forall l, inc l X1 ->
     range (restr (Lg (unionb X) id) (Vg X l)) =  (Fo l x).
      move => l lx1; rewrite {2}/X; aw.
      have qa: fgraph (restr (Lg (unionb X) id) (Fo l x)) by fprops.
      have qb: sub (Fo l x) (domain (Lg (unionb X) id)).
         aw; rewrite /X => s sf; apply /setUb_P; aw; ex_tac; rewrite LgV//.
      move: (qb); aw => qc; rewrite LgV//.
-     set_extens t. 
+     set_extens t.
        by move /(range_gP qa); aw;move => [u uF ->]; rewrite ! LgV//; apply: qc.
      by move => tf; apply/(range_gP qa); aw; ex_tac; rewrite !LgV//; apply: qc.
   move => xv; rewrite {1} xv.
@@ -5470,7 +5470,7 @@ have sxp1: forall x, inc x (substrate r) ->
   by apply: fun_image_exten => t tx; rewrite (ww _ tx).
 have sxp2: forall x, inc x (substrate r) ->
      x = supremum r (fun_image X1 (fun i => (fo i x))).
-   move => x xsr; rewrite {1} (sxp1 _ xsr); congr (supremum r). 
+   move => x xsr; rewrite {1} (sxp1 _ xsr); congr (supremum r).
    apply: fun_image_exten => i iX.
    symmetry; apply: (supremum_pr2 or).
    move: (For _ x iX) => sr1.
@@ -5487,7 +5487,7 @@ have bf: bijection f.
    rewrite (sxp2 _ usr) (sxp2 _ vsr); congr (supremum r _).
    apply: fun_image_exten => t tx.
    by move: (f_equal (Vg^~t) suv); rewrite /fp !LgV//.
-have c3: cardinal (domain g) = n by rewrite /g; aw. 
+have c3: cardinal (domain g) = n by rewrite /g; aw.
 have sxp3: forall x, inc x (substrate r) ->
    sub (fun_image X1 (fo^~ x)) (substrate r).
   move => x xsr t=> /funI_P [z z1 ->].
@@ -5498,7 +5498,7 @@ have c6: order_isomorphism f r (induced_order (order_product g) A).
   move: (iorder_osr ppa c4) => [pa' pb'].
   split => //.
   move => x y xsr ysr; move: (bla _ xsr) (bla _ ysr) => f1a f2a.
-  have f3a: inc (fp x) (prod_of_substrates g) by move: (c4 _ f1a); ue. 
+  have f3a: inc (fp x) (prod_of_substrates g) by move: (c4 _ f1a); ue.
   have f4a: inc (fp y) (prod_of_substrates g) by move: (c4 _ f2a); ue.
   rewrite ! LfV//; split.
     move => lexp; apply /iorder_gle0P => //;apply /(order_product_gleP);split => //.
@@ -5520,11 +5520,11 @@ have c6: order_isomorphism f r (induced_order (order_product g) A).
     move:(iorder_gle1 xx) => le1' [_ le2] _. order_tac.
     rewrite (sxp2 _ xsr); move: (sxp3 _ xsr) => Xsr.
     move: (Exercise4_7i lr fsr nesr Xsr) => hsX.
-  move: (supremum_pr1 or hsX) => /(lubP or Xsr)  [_]. 
+  move: (supremum_pr1 or hsX) => /(lubP or Xsr)  [_].
   apply; split; first by exact.
   by move => t /funI_P [z zi ->]; apply: ale1.
 (** It suffices to show that [A] is a sublattice *)
-have allg: (forall i, inc i (domain g) -> lattice (Vg g i)). 
+have allg: (forall i, inc i (domain g) -> lattice (Vg g i)).
   move => i idg; move: (c2 _ idg);apply: total_order_lattice.
 exists g, A, f; simpl; split => //; split => //.
 move => x y xA yA.
@@ -5541,7 +5541,7 @@ have srp: forall t, inc t (substrate r') ->  (fgraph t /\ domain t = domain g).
   move /setXb_P => [sb -> _]; saw.
 move: (Exercise4_7o lr xsr ysr) => Sinf.
 move: (lattice_sup_pr lr xsr ysr) (lattice_inf_pr lr xsr ysr).
-set sxy := sup r x1 y1; set ixy:= inf r x1 y1. 
+set sxy := sup r x1 y1; set ixy:= inf r x1 y1.
 move => [qa qb qc][qd qe qf].
 have sxyr: inc sxy (substrate r) by order_tac.
 have ixyr: inc ixy (substrate r) by order_tac.
@@ -5553,7 +5553,7 @@ split.
   apply: fgraph_exten => //; rewrite d2; first by symmetry.
   red; move => i idg;rewrite (sxy2p _ idg);move: (c2 _ idg); rewrite dgX in idg.
   rewrite /fp !LgV// => toi.
-  have fop1: forall t, inc t (substrate r) -> 
+  have fop1: forall t, inc t (substrate r) ->
      (inc (fo i t) (Fo i t) /\ forall u, inc u (Fo i t) -> gle r u (fo i t)).
     move => t tsr; move: (fop _ _ idg tsr) => [].
     rewrite (iorder_sr or (For _ t idg)) => t1 t2; split; first by exact.
@@ -5569,7 +5569,7 @@ split.
   have le2 : gle r (fo i y1) (fo i sxy).
     apply: v6; apply: Zo_i => //; order_tac.
   move: v5 => /Zo_P [v51 v52].
-  have : inc (fo i sxy) (irreds r). 
+  have : inc (fo i sxy) (irreds r).
      have pi: sub P  (irreds r) by apply: sub_setC.
      move: v51; case /setU1_P.
        move => fi; apply: pi; move: pX1 => [[<- _]_ ]; union_tac.
@@ -5593,7 +5593,7 @@ move: (srp _ ixy2s) (srp _ (c4 _ (bla _ ixyr))) => [fg1 d1] [fg2 d2].
 apply: fgraph_exten => //; rewrite d2; first by symmetry.
 red;move => i idg; rewrite (ixy2p _ idg); move: (c2 _ idg); rewrite dgX in idg.
 rewrite /fp ! LgV// => toi.
-have fop1: forall t, inc t (substrate r) -> 
+have fop1: forall t, inc t (substrate r) ->
      (inc (fo i t) (Fo i t) /\ forall u, inc u (Fo i t) -> gle r u (fo i t)).
     move => t tsr; move: (fop _ _ idg tsr) => [].
     rewrite (iorder_sr or (For _ t idg)) => t1 t2; split; first by exact.
@@ -5613,13 +5613,13 @@ have le2 : gle r (fo i ixy) (fo i y1) by apply: v4; apply: Zo_i => //;order_tac.
 have sr11 : inc (fo i x1) (Xf i)by move: sr1; rewrite /g LgV//.
 have sr22 : inc (fo i y1) (Xf i)by move: sr2; rewrite /g LgV//.
 case: (tot _ _ sr11 sr22) => le3.
-  rewrite (inf_comparable1 too le3).  
+  rewrite (inf_comparable1 too le3).
   move: (iorder_gle1 le3) => le4.
   have le5: gle r (fo i x1) y1 by order_tac.
   move: (qf _ v12 le5) => l6.
   have l7: gle r (fo i x1) (fo i ixy) by apply: v6; apply: Zo_i => //.
   order_tac.
-rewrite inf_C (inf_comparable1 too le3).  
+rewrite inf_C (inf_comparable1 too le3).
 move: (iorder_gle1 le3) => le4.
 have le5: gle r (fo i y1) x1 by order_tac.
 move: (qf _ le5 v32) => l6.
@@ -5632,7 +5632,7 @@ product of [n] totally ordered sets; let [ Ex4_10_conc r n] be
 [r] is the intersection of [n] total orders. We show that these are equivalent,
 and give two examples. *)
 
-Definition Ex4_10_hyp r n:= 
+Definition Ex4_10_hyp r n:=
    exists g A f,
      [/\ order_fam g, (allf g total_order), cardinal (domain g) = n ,
      sub A (substrate (order_product g)) &
@@ -5649,7 +5649,7 @@ Definition shift_mod_n n k :=
    Lf (fun i => ((i +c k) %%c n)) (Nint n)(Nint n).
 
 Lemma shift_mod_n_ax n k:
- natp n -> n <> \0c -> natp k -> 
+ natp n -> n <> \0c -> natp k ->
  forall i, inc i (Nint n) -> inc ((i +c k) %%c n) (Nint n).
 Proof.
 move => nN nz kB i /(NintP nN) => iin; apply  /(NintP nN).
@@ -5680,10 +5680,10 @@ Qed.
 
 
 Lemma shift_mod_n_fb n k:
-  natp n  -> n <> \0c -> k <c n -> 
+  natp n  -> n <> \0c -> k <c n ->
   bijection (shift_mod_n n k).
 Proof.
-move => nN nz kn. 
+move => nN nz kn.
 move: (NS_le_nat (proj1 kn) nN) => kN.
 apply: lf_bijective.
   by apply: shift_mod_n_ax.
@@ -5722,7 +5722,7 @@ move => y  /(NintP nN) yn.
   have kyn:= cleT (proj1 kn) le2.
   move: (cdiff_pr kyn) => eq1.
   move: (NS_diff k (NS_sum yN nN)) => dN.
-  have lt1: (y +c n) -c k <c n. 
+  have lt1: (y +c n) -c k <c n.
     apply : (csum_lt2l kN dN nN); rewrite eq1.
     by apply: csum_Mlteq.
   exists ((y +c n) -c k); first by apply /(NintP nN).
@@ -5730,7 +5730,7 @@ move => y  /(NintP nN) yn.
   by rewrite csumC in eq1; rewrite eq1 (Y_false (cleNgt le2)) cdiff_pr1.
 Qed.
 
-Lemma Exercise4_10a r n: 
+Lemma Exercise4_10a r n:
    order r -> inc n Nat -> n <> \0c -> Ex4_10_hyp r n ->  Ex4_10_conc r n.
 Proof.
 move => or nN nnz [g [A [f [ofg alt cdg saf isf]]]].
@@ -5738,7 +5738,7 @@ move => or nN nnz [g [A [f [ofg alt cdg saf isf]]]].
 [J], the set of integers [<n]. For each [k], [shift_mod_n] give a
 well-orderings on [I], thus a total ordering on the lex product of the family
 *)
-have [h [bh sh th]]: 
+have [h [bh sh th]]:
    exists h, bijection_prop h (Nint n) (domain g).
   by apply /card_eqP; rewrite (card_Nint nN) cdg.
 move: (Nintco_wor n) => [].
@@ -5767,7 +5767,7 @@ pose opk k := order_prod (ork k) g.
 have opk_ax: forall k, k <c n -> orprod_ax (ork k) g.
   by move => k kn; move: (orkp _ kn) => [sr _ wo].
 have opk_total: forall k, k <c n -> total_order (opk k).
-   move => k kn;move: (opk_ax _ kn) => ax;  apply: orprod_total=> //. 
+   move => k kn;move: (opk_ax _ kn) => ax;  apply: orprod_total=> //.
 (** The ordering on the product [F] is the intersection of these [n]
    total orderings. *)
 set F := substrate (order_product g).
@@ -5792,7 +5792,7 @@ have ne1: nonempty (Lg (Nint n) opk).
   by exists (J \0c  (opk \0c)); apply /funI_P; exists \0c.
 have conc1: (order_product g) = intersectionb (Lg (Nint n) opk).
   set_extens t.
-    move => tg; apply /(setIb_P ne1); aw => i ib; rewrite LgV//.  
+    move => tg; apply /(setIb_P ne1); aw => i ib; rewrite LgV//.
    by move/(NintP nN): ib => lin; apply (oplc1 _ lin).
   move /(setIb_P ne1); aw => h1; move: (h1 _ zi); rewrite LgV// => tz.
   move: (opk_total _ lt0n) => [[gr0 _] _].
@@ -5804,12 +5804,12 @@ have conc1: (order_product g) = intersectionb (Lg (Nint n) opk).
   move: (pa' _ lt0n) =>  /(orprod_gleP (opk_ax _ lt0n)) [xsr ysr _ _ _].
   rewrite - eq1; apply /order_product_gleP;split => //; move => i idg.
   have pc: gle (Vg g i) (Vg x i) (Vg x i).
-    move: xsr => /prod_of_substratesP [fgx dx hx]. 
-    move: (hx _ idg) (ofg _ idg) => xsr1 odg. 
+    move: xsr => /prod_of_substratesP [fgx dx hx].
+    move: (hx _ idg) (ofg _ idg) => xsr1 odg.
     by order_tac.
   move: (idg); rewrite -th  => idh.
   move: (bij_surj bh idh) => [k]; rewrite sh => /(NintP nN) kn Wk.
-  move: (pa' _ kn) => /(orprod_gleP (opk_ax _ kn)) [_ _ ww]. 
+  move: (pa' _ kn) => /(orprod_gleP (opk_ax _ kn)) [_ _ ww].
   case: ww; first by move => <-.
   move => [j [jsk lta lea]].
   case: (equal_or_not i j); first by move => ->; exact (proj1 lta).
@@ -5835,13 +5835,13 @@ pose opkA k := induced_order (opk k) A.
 have altA: forall k, k <c n -> (total_order (opkA k)).
    move => k kn; move: (opk_total _ kn) => to1.
    by apply: total_order_sub => //; rewrite (opksr _ kn).
-have opkAi: (induced_order (order_product g) A) 
+have opkAi: (induced_order (order_product g) A)
     = intersectionb (Lg (Nint n) opkA).
   rewrite /opkA /induced_order conc1.
   have ne2:nonempty (Lg (Nint n) (fun k => opk k \cap coarse A)).
-    by exists (J \0c((opk \0c) \cap coarse A)); apply /funI_P; exists \0c. 
+    by exists (J \0c((opk \0c) \cap coarse A)); apply /funI_P; exists \0c.
   move :(setIb_P ne2) (setIb_P ne1); aw => ia ib.
-  set_extens t. 
+  set_extens t.
     move => /setI2_P [ta tb]; apply /ia => i id; rewrite LgV//.
     by apply /setI2_P;split => //; move /ib: ta; aw => k; move: (k _ id); rewrite LgV//.
   move => pa'; apply /setI2_P;  move /ia: pa' => k; split.
@@ -5858,7 +5858,7 @@ have qc: A = target f.
   by move: isf => [_ _ [_ _ tf] _ ]; rewrite tf qb'.
 have qd: substrate (induced_order (order_product g) A) = source ibf.
   by rewrite iorder_sr //; rewrite /ibf; aw.
-set orkEi := Vfs (ext_to_prod ibf ibf) 
+set orkEi := Vfs (ext_to_prod ibf ibf)
     (induced_order (order_product g) A).
 have orkEip:  order_isomorphism ibf (induced_order (order_product g) A) orkEi.
   by apply: order_transportation.
@@ -5868,13 +5868,13 @@ have eq0: orkEi = r.
   have tibf: target ibf = source f by rewrite /ibf; aw.
   have sibf: source ibf = target f by rewrite /ibf; aw.
   hnf in mk; rewrite sibf in mk.
-  have ffi: forall z, inc z (source f) -> 
+  have ffi: forall z, inc z (source f) ->
       (inc (Vf f z) (target f) /\ Vf ibf (Vf f z) = z).
       move => e zf;split; [  Wtac; fct_tac | by rewrite inverse_V2].
   apply: order_exten => // => x y; split => cp1.
      have xs: inc x (substrate orkEi) by order_tac.
      have ys: inc y (substrate orkEi) by order_tac.
-     rewrite - tk tibf in xs ys.  
+     rewrite - tk tibf in xs ys.
      move: (ffi _ xs) (ffi _ ys) => [pa' pb'] [pc pd].
      by rewrite (mf _ _ xs ys) (mk _ _ pa' pc) pb' pd.
   have xs: inc x (substrate r) by order_tac.
@@ -5893,11 +5893,11 @@ have orkEp: forall k, k<c n ->
      by rewrite /ibf; aw;rewrite -qc /opkA iorder_sr // srkn.
   move: (order_transportation bif (conj ok srk)).
   rewrite -/ibf -/(orkE k) => ois.
-  move: (ois) => [_ o2 [bk sk tk] mk].  
-  have sr1: substrate (orkE k) = substrate r. 
+  move: (ois) => [_ o2 [bk sk tk] mk].
+  have sr1: substrate (orkE k) = substrate r.
         by rewrite - tk /ibf; aw; move: isf => [_ _ [_ <- _]_].
   split => //; split; [ exact | move => x y xsr ysr].
-  rewrite - tk in xsr ysr. 
+  rewrite - tk in xsr ysr.
   move: (bij_surj bk xsr) => [x' x's ->].
   move: (bij_surj bk ysr) => [y' y's ->].
   move: tor => [_]; rewrite - sk => tor.
@@ -5919,13 +5919,13 @@ move: (ext_to_prod_fi fif fif); set hf := (ext_to_prod ibf ibf) => fh.
 rewrite /intersectionb  (inj_image_setIf _ _ fh).
 have ne2: nonempty (Nint n) by exists \0c; aw.
  aw; set_extens t; move => /(setIt_P _ ne2) hp;
-    apply /(setIt_P _ ne2) => j; move: (R_inc j) => ri; move: (hp j); rewrite !LgV//. 
+    apply /(setIt_P _ ne2) => j; move: (R_inc j) => ri; move: (hp j); rewrite !LgV//.
 Qed.
 
 
 (** Converse is easy *)
 
-Lemma Exercise4_10b r n: 
+Lemma Exercise4_10b r n:
   order r -> natp n -> n <> \0c -> Ex4_10_conc r n -> Ex4_10_hyp r n.
 Proof.
 move => or nN nz [g [og altg cdg ssr rb]].
@@ -5947,7 +5947,7 @@ have srA: sub A (substrate (order_product g)).
    have aux: fgraph (fam_of_substrates g) by rewrite /fam_of_substrates; fprops.
   rewrite sr1.
   move => t /funI_P [z zi ->]; rewrite /f/cst_graph; aw.
-  apply /prod_of_substratesP;split;aww. 
+  apply /prod_of_substratesP;split;aww.
   by move => i idg; rewrite LgV//; rewrite ssr.
 exists g, A, ff;split => //.
 move: (iorder_osr or1 srA) => [pa' pb'].
@@ -5957,7 +5957,7 @@ move: srA ;rewrite sr1 => srA.
 move:(ta _ xE) (ta _ yE) => xA yA.
 move: (srA _ xA) (srA _ yA) => fxA fyA; rewrite !LfV//.
 split.
-  move => le1; apply /iorder_gle0P => //;apply /order_product_gleP; split => //. 
+  move => le1; apply /iorder_gle0P => //;apply /order_product_gleP; split => //.
   move => i idg; rewrite /f/cst_graph !LgV//.
   move: le1; rewrite /gle/related rb => le1.
   exact: (setIb_hi le1 idg).
@@ -5965,19 +5965,19 @@ move => h; move :(iorder_gle1 h); move /order_product_gleP => [_ _ ali].
 rewrite /gle/related rb; apply: setIb_i.
   case: (emptyset_dichot (domain g)) => neg.
     by case: nz; rewrite - cdg neg cardinal_set0.
-  by apply /domain_set0P. 
+  by apply /domain_set0P.
 move => i idg; move: (ali _ idg); rewrite /f/cst_graph !LgV//.
 Qed.
 
 (** Let's say that [r1] and [r2] are orthogonal if they have the same substrate
-and if any pair of two distinct elements are comparable by exactly one of 
+and if any pair of two distinct elements are comparable by exactly one of
 the two orderings.
 
 In this case, the union [r3] is a total ordering.
-If we replace [r2] by its opposite 
+If we replace [r2] by its opposite
 we get [r4], and [r1] is the intersection of [r3] and [r4] *)
 
-Definition orthogonal_order r r' := 
+Definition orthogonal_order r r' :=
    forall x y, inc x (substrate r) -> inc y (substrate r) -> x <> y ->
    exactly_one (ocomparable r x y) (ocomparable r' x y).
 
@@ -5988,7 +5988,7 @@ Proof.
 move => or or' ss otr; set r'' := r \cup r'.
 have gu: sgraph r'' by apply: setU2_graph; fprops.
 have sr1: substrate r'' = substrate r.
-  set_extens t. 
+  set_extens t.
      move /(substrate_P gu).
     case; case => [y];case /setU2_P => h; try substr_tac;rewrite ss; substr_tac.
   move => tsr; apply /(substrate_P gu);left.
@@ -5998,7 +5998,7 @@ suff ors: order (r \cup r').
   rewrite sr1 => x y xsr ysr; case: (equal_or_not x y) => exy.
      rewrite -exy; left; order_tac; ue.
   move: (otr _ _ xsr ysr exy) => [h _].
-  rewrite/ocomparable /gle /related /r''; aw; case:h; case => cxy; 
+  rewrite/ocomparable /gle /related /r''; aw; case:h; case => cxy;
    try (solve [left; fprops]); right; fprops.
 split => //.
     by hnf;rewrite sr1 => y ysr; apply /setU2_P;left; order_tac.
@@ -6044,7 +6044,7 @@ move => x y; case /setU2_P => le1; case /setU2_P=> le2; try order_tac.
     by move: (otr _ _ xsr ysr xney) => [_]; case.
 Qed.
 
-Lemma orthogonal_union_inter r r' 
+Lemma orthogonal_union_inter r r'
    (r1 := r \cup r') (r2 := r \cup opp_order r'):
    order r -> order r' -> substrate r = substrate r' -> orthogonal_order r r' ->
    [/\ total_order r1, total_order r2,
@@ -6054,7 +6054,7 @@ move => or or' ssr ort1.
 move: (opp_osr or') => [or'' sr''].
 rewrite - ssr in sr''.
 have cc: forall x y, ocomparable r' x y <-> ocomparable (opp_order r') x y.
-   move => x y; split. 
+   move => x y; split.
      by case => pa; [right | left]; apply /opp_gleP.
    by case => pa; [right | left]; apply /opp_gleP.
 have ort2: orthogonal_order r  (opp_order r').
@@ -6078,7 +6078,7 @@ by rewrite - pt -eq1; order_tac.
 Qed.
 
 (** We show that [r] is isomorphic to a subset of a product of two
-totally ordered sets iff there is [r'] orthogonal to it. 
+totally ordered sets iff there is [r'] orthogonal to it.
 One way is immediate.
 *)
 
@@ -6109,12 +6109,12 @@ set rA:= Vg g iA; set rB:= Vg g iB.
 have toA: total_order rA by apply: alt.
 have toB: total_order rB by apply: alt.
 move: (toA) (toB) => [orA _] [orB _].
-pose prA x := Vg (Vf f x) iA; pose prB x := Vg (Vf f x) iB. 
+pose prA x := Vg (Vf f x) iA; pose prB x := Vg (Vf f x) iB.
 pose cmp x y := x = y \/ (glt rA (prA x) (prA y) /\ (glt rB (prB y) (prB x))).
 pose cmp' x y := [/\ inc x E, inc y E & cmp x y].
 set r' := graph_on cmp E.
 have samer: r' = graph_on cmp' E.
-  by set_extens t => /Zo_P [pa pb];  
+  by set_extens t => /Zo_P [pa pb];
    move /setX_P: (pa) => [pd pe pf];apply /Zo_P;split => //; move : pb => [_ _].
 have rr': forall x, inc x E -> cmp x x by move => x _; left.
 move: (graph_on_sr rr'); rewrite -/r' => sr'.
@@ -6123,7 +6123,7 @@ have or': order r'.
        move => y x z pa pb.
        case: (equal_or_not y z); [ by move => <- | move => ynz].
        case: pa; [by  move => ->|  move => [la lb]].
-       case: pb; first by  move => h; contradiction.  
+       case: pb; first by  move => h; contradiction.
        move => [lc ld]; right; split; order_tac.
     move => x y.
        case; [by  move => ->|  move => [la _]].
@@ -6172,29 +6172,29 @@ move => x y xsr ysr xny; split.
   right; left; rewrite sprc; split => //; right;split => //; split => //;fprops.
   by left;  right;  apply: sprb.
 have ynx: y <> x by apply:nesym.
-move => [ca cb]; case:ca => ca; move: (sprd _ _ ca) => [pa pb]; 
+move => [ca cb]; case:ca => ca; move: (sprd _ _ ca) => [pa pb];
  case: cb; move/sprc => [_ _];case => //; move => [pc pd]; order_tac.
 Qed.
 
 
-(** Example. Let [E] be finite with [n] elements, 
-   [F] the set of singletons and complement of singletons, ordered by inclusion. 
+(** Example. Let [E] be finite with [n] elements,
+   [F] the set of singletons and complement of singletons, ordered by inclusion.
 The least [m] satisfying the condition is [n]. *)
 
-Lemma Exercise4_10d E n 
+Lemma Exercise4_10d E n
   (F := (fun_image E singleton) \cup (fun_image E (fun z => E -s1 z)))
   (r := sub_order F):
   natp n -> cardinal E = n ->
-  ( Ex4_10_hyp r n /\ 
+  ( Ex4_10_hyp r n /\
    forall m, natp m -> Ex4_10_hyp r m -> n <=c m).
-Proof. 
+Proof.
 move=> nN cen.
 move:(sub_osr F) => [or sr].
 (** The case [n= 0] is trivial *)
 case: (equal_or_not n \0c) => nz.
-  split; last by move=> m mb _; rewrite nz; apply: cle0n. 
+  split; last by move=> m mb _; rewrite nz; apply: cle0n.
   set g := Lg emptyset id.
-  have pa: order_fam g 
+  have pa: order_fam g
      by rewrite /g;hnf;aw;move => t /in_set0.
   move: (order_product_osr pa) => [pb pb'].
   move: empty_function_function => [pc pd pe].
@@ -6216,7 +6216,7 @@ have pa: forall a, inc a E -> inc (singleton a) F.
   move => a ae; apply /setU2_P; left; apply /funI_P; ex_tac.
 have pb: forall a, inc a E -> inc (E -s1 a) F.
   move => a ae; apply /setU2_P; right; apply /funI_P; ex_tac.
-have pc: forall a b, inc a E -> inc b E -> a <> b -> 
+have pc: forall a b, inc a E -> inc b E -> a <> b ->
    gle r (singleton a) (E -s1 b).
   move => a b aE bE and; apply /sub_gleP;split;fprops.
   move => t /set1_P ->; apply /setC1_P;split => //.
@@ -6227,22 +6227,22 @@ split.
   (** We have two injections [E -> F], the first one with image [F1].
       We define here the inverse mapping*)
   set F1:= fun_image E singleton.
-  pose ra x := (union x). 
+  pose ra x := (union x).
   pose rb x :=  (union (E -s x)).
   have splitF: forall x, inc x F ->
-    ( [/\ inc x F1, inc (ra x) E & x = singleton (ra x)] 
+    ( [/\ inc x F1, inc (ra x) E & x = singleton (ra x)]
      \/ [/\ inc x (F -s F1), inc  (rb x) E & x = E -s1 (rb x)]).
      move => x; rewrite /F -/F1 /ra /rb => xF.
      case: (inc_or_not x F1) => xF1.
       by left; move: (xF1) => /funI_P [z zE h]; rewrite {2 4} h !setU_1.
      right;move: (xF) => /setU2_P; case => //; move /funI_P => [z zE zv].
-     set t := (E -s x). 
+     set t := (E -s x).
      have ->: t = singleton z by rewrite /t zv  setC_K // => q /set1_P ->.
      by rewrite setU_1; split => //; apply /setC_P.
   (** Let [I] be the set of integers less than [n] and [h] a bijection
       [I -> E]; by permutation [hk n] is another bijection. *)
   apply (Exercise4_10b or nN nz).
-  have [h [bh sh th]]: 
+  have [h [bh sh th]]:
    exists h, bijection_prop h (Nint n) E.
      by apply /card_eqP; rewrite card_Nint.
   move: (Nintco_wor n) => [].
@@ -6293,7 +6293,7 @@ split.
     case: (splitF _ xF); move => [qa qb qc].
       by constructor 1; split => //; order_tac;apply: bce.
     by constructor 4; split => //; order_tac; apply: bce.
-  have dr3: forall k x y, k <c n -> inc x F -> inc y F -> 
+  have dr3: forall k x y, k <c n -> inc x F -> inc y F ->
        r1 k x y \/ r1 k y x.
     move => k x y kn xF yF.
     case: (splitF _ xF) =>[] [qa qb qc]; case: (splitF _ yF)=> [] [qd qe qf].
@@ -6314,7 +6314,7 @@ split.
 (** the relation is antisymmetric and transitive *)
    have dr4: forall k x y, k<c n -> r1 k x y -> r1 k y x -> x = y.
       move => k x y kn c1 c2.
-      move: (dr1 _ _ _ c1) => [xF yF]; case: c1. 
+      move: (dr1 _ _ _ c1) => [xF yF]; case: c1.
       - move => [xF1 yF1 le1].
           have sa: inc x (F -s F1) -> False by move /setC_P => [].
           have sb: inc y (F -s F1) -> False by move /setC_P => [].
@@ -6352,7 +6352,7 @@ split.
     move: vn; rewrite {1} pnv; move / (cltSleP pnN) => tc.
     exact (clt_leT (conj luv uv) tc).
   have QB: forall u, inc u (substrate rI) -> gle rI u (cpred n).
-     move => u; rewrite srI => /(NintP nN) uc. 
+     move => u; rewrite srI => /(NintP nN) uc.
      apply /(Nintco_gleP nN);split => //.
      by move: uc; rewrite {1} pnv;move /(cltSleP pnN).
   have dr5: forall k x y z, k<c n -> r1 k x y -> r1 k y z -> r1 k x z.
@@ -6401,7 +6401,7 @@ split.
      rewrite eq1 eq2;apply: QB; apply: bce => //.
      case: (splitF _ zF); last by  move => [_ ok _].
      by move: p2 => /setC_P [_ qa]  [qb _].
-    - move => [xF1 yF1 le1].  
+    - move => [xF1 yF1 le1].
       have sa: inc x F1 -> False by move: xF1 => /setC_P [].
       have sb: inc y F1 -> False by move: yF1 => /setC_P [].
       case: (splitF _ xF); first by move => [].
@@ -6415,7 +6415,7 @@ split.
         by move: ta => /setC_P [].
       constructor 4;split => //; order_tac.
   pose ork k := (graph_on (r1 k) F).
-  have dr6: forall k, k <c n -> 
+  have dr6: forall k, k <c n ->
     (total_order (ork k) /\ substrate (ork k) = F).
     move => k kn.
     have srk: substrate (ork k) = F.
@@ -6442,9 +6442,9 @@ split.
       by rewrite ys => /setC_P [_] /set1_P.
     - case: (equal_or_not (rb x) (ra y)) => ns; last first.
          case: exy; apply: extensionality =>//.
-         rewrite ys xs; move => z /set1_P ->; apply /setC_P. 
+         rewrite ys xs; move => z /set1_P ->; apply /setC_P.
          by split => // /set1_P; apply: nesym.
-      have Es: E = singleton (rb x).  
+      have Es: E = singleton (rb x).
         apply: set1_pr => // z zE; ex_middle zb.
         have zx: inc z x by rewrite xs; apply/setC_P;split => //; move /set1_P.
         move: (sxy _ zx); rewrite ys -ns; move /set1_P => //.
@@ -6457,7 +6457,7 @@ split.
         by move: (sxy _ h1); rewrite {2} ys => /setC_P [_] /set1_P.
       move: h1; rewrite {1}xs => /setC_P aux; ex_middle ok;case:aux;split => //.
       by move /set1_P; apply:nesym.
-  (** It remains to show that the intersection is the given ordering 
+  (** It remains to show that the intersection is the given ordering
      We first show that each element of [E] is a greatest element and least *)
   have zz : \0c <c n by apply /strict_pos_P1.
   have zn: inc \0c (Nint n) by  apply /NintP.
@@ -6474,13 +6474,13 @@ split.
     set k := Yo (y = cpred n) \0c (csucc y).
     move: (NS_le_nat (proj1 yn) nN) => yN.
     have kn:  k <c n.
-      rewrite /k; Ytac cyn => //. 
+      rewrite /k; Ytac cyn => //.
       rewrite pnv; apply /(cltSleP pnN).
       apply /(cleSltP yN); split => //.
-      by apply /(cltSleP pnN); ue. 
+      by apply /(cltSleP pnN); ue.
     have srhk: (source (hk k)) = (Nint n) by rewrite /hk/shift_mod_n; aw.
     have cpsh: inc (cpred n) (source (hk k)) by rewrite srhk.
-    have qh: inc (hi k x) (source (hk k)). 
+    have qh: inc (hi k x) (source (hk k)).
       by move: (bce _ _ kn xE); rewrite srI srhk.
     move: (bcp _ kn) => [ta tb].
     have tc: inc (cpred n) (source (shift_mod_n n k)).
@@ -6519,7 +6519,7 @@ split.
     set_extens t => te.
       have gr: sgraph r by fprops.
       move: (gr _ te); rewrite /pairp; set x := P t; set y := Q t => pt.
-      apply: (setIb_i lne); aw => i idn; rewrite LgV//. 
+      apply: (setIb_i lne); aw => i idn; rewrite LgV//.
       move: idn => /(NintP nN) => idn.
       move: te; rewrite -pt -/(related r x y) -/(gle r x y).
       rewrite  -/(related (ork i) x y) -/(gle (ork i) x y).
@@ -6555,7 +6555,7 @@ split.
         move: (hii _ rx); move => [k kn hl].
         case: (aux _ kn) => [][p1 p2 p3] //.
         case: p3; last by move => [_ ok].
-        by move => ta; rewrite xs ys /setC1_P => z /set1_P ->; apply /setC1_P. 
+        by move => ta; rewrite xs ys /setC1_P => z /set1_P ->; apply /setC1_P.
       have b2: inc y (F -s F1) -> False by move /setC_P => [].
       have b1: inc x F1 -> False by move: xF1 => /setC_P  [].
       move: (hij _ ry); move => [k kn hl].
@@ -6580,13 +6580,13 @@ split.
 (** Converse. We first eliminate the case [m=0] *)
 move => m mN h.
 set F1:= fun_image E singleton.
-case: (emptyset_dichot E). 
+case: (emptyset_dichot E).
     by move => ee //; case: nz; rewrite - cen ee // cardinal_set0.
 case: (equal_or_not m \0c) => mz.
   move => [a aE]; move: (pd _ aE) (pa _ aE) (pb _ aE) => nab aF bF.
   move: h => [g [A [f [ofg atg cdg asg [_ _ [bf sf tf] _]]]]].
   rewrite sr in sf; rewrite - sf in aF bF.
-  case: nab;  apply (bij_inj bf aF bF). 
+  case: nab;  apply (bij_inj bf aF bF).
   have ff: function f by fct_tac.
   move: (Vf_target ff aF) (Vf_target ff bF) => w1 w2.
   move:(order_product_osr ofg)=> [op sp].
@@ -6615,7 +6615,7 @@ have gei_pr: forall i, inc i (domain g) ->
   move: (iorder_osr (proj1 to1) sdf)=> [or2 _].
   exact (the_greatest_pr or2 h1).
 pose gej i := union (gei i).
-have gej_pr: forall i, inc i (domain g) -> 
+have gej_pr: forall i, inc i (domain g) ->
     (inc (gej i) E /\ singleton (gej i) = gei i).
   move => i idg; move: (gei_pr _ idg) => [h1 _].
   move: (proj1 (atg _ idg)) => o1.
@@ -6627,13 +6627,13 @@ have gej_pr: forall i, inc i (domain g) ->
 case: (cleT_el (CS_nat nN) (CS_nat mN)) => // ltmn.
 move: (fun_image_smaller (domain g) gej).
 set F2:= fun_image (domain g) gej; rewrite cdg => aux.
-have ss: ssub F2 E. 
+have ss: ssub F2 E.
    split.
      by move => t /funI_P [z zdg ->]; case: (gej_pr _ zdg).
    move: (cle_ltT aux ltmn).
    by rewrite  - cen; move => [_ h1]; dneg xx; rewrite xx.
 move: (setC_ne ss) => [xc] /setC_P [xce nxcf2].
-have cp1: forall i, inc i (domain g) -> 
+have cp1: forall i, inc i (domain g) ->
    gle (Vg g i) (singleton xc) (E -s1 xc).
   move => i idg; move:  (gej_pr _ idg) (gei_pr _ idg) => [qa qb] [].
   have scf1: inc (singleton xc) F1 by  apply /funI_P; exists xc.
@@ -6659,20 +6659,20 @@ Qed.
 (** ---- Exercise 4.11 Pure and Mobile sets.
 
 Let's assume that [R] is a set whose elements are finite subsets of [A].
-We say that [R] is mobile when, 
+We say that [R] is mobile when,
 if [X] and [Y] are two distinct elements of [R], for any [z] in [X \cap Y]
 there is a  subset [Z] of [X \cup Y] in [R] not containing [z].
 We say that [P] is pure if no subset of [P] is in [R].  *)
 
 Definition mobile_r R :=  forall X Y, inc X R -> inc Y R -> X <> Y ->
-  forall z, inc z (X\cap Y) 
+  forall z, inc z (X\cap Y)
    ->  exists Z, [/\ inc Z R, sub Z (X \cup Y) & ~ (inc z Z)].
-Definition min_incl_r R := 
+Definition min_incl_r R :=
    Zo R (fun z => forall x, inc x R -> sub x z -> z = x).
 
 
 (** Examples: R is mobile if (a) it contains the empty set, (b) it is formed of  all finite sets whose cardinal is [>n], (c) it is formed of all doubletons, (d)
-it contains all singletons (e.g., it is formed of all all sets with 
+it contains all singletons (e.g., it is formed of all all sets with
 cardinal [<= n]  *)
 
 Lemma Ex4_11_ex0 R: inc emptyset R -> mobile_r R.
@@ -6681,7 +6681,7 @@ move => er x y xr yr xy z zi.
 by exists emptyset;split;fprops; move => /in_set0.
 Qed.
 
-Lemma Ex4_11_ex1 A n 
+Lemma Ex4_11_ex1 A n
    (R := Zo (\Po A) (fun z => finite_set z /\ n <c cardinal z)):
   natp n -> mobile_r R.
 Proof.
@@ -6696,11 +6696,11 @@ case: (p_or_not_p (sub X Y)) => sxy.
   move/NatP: fsz; move/setU2id_Pl: (sxy) => -> fsz.
   apply:(clt_leT nX); apply /(cltSleP  fsz); rewrite  - (csucc_pr2 zY).
   by  move/(strict_sub_smaller): fsy; apply.
-case: (emptyset_dichot (X -s Y)) => cne. 
+case: (emptyset_dichot (X -s Y)) => cne.
     by case: sxy; exact: (empty_setC cne).
 move: (rep_i cne); set w := rep (X -s Y) => /setC_P [wa wb].
 have ta: sub  ((Y -s1 z) +s1 w) ((X \cup Y) -s1 z).
-  move => t /setU1_P; case. 
+  move => t /setU1_P; case.
     move /setC1_P => [pa pb]; apply /setC1_P; fprops.
   move => ->; apply /setC1_P; split;fprops;  contradict wb; ue.
 apply: clt_leT (sub_smaller ta).
@@ -6714,10 +6714,10 @@ Lemma Ex4_11_ex2 A
   mobile_r R.
 Proof.
 move => X Y /Zo_P [] /setP_P Xa dx /Zo_P [] /setP_P Ya dy xnz z zi.
-set Z:= (X \cup Y) -s1 z. 
+set Z:= (X \cup Y) -s1 z.
 have ta: sub Z (X \cup Y) by move => a /setC_P [].
 exists Z; split => //;last by move => /setC1_P [_].
-apply: Zo_i. 
+apply: Zo_i.
   apply /setP_P; apply: (sub_trans ta); move => a; case /setU2_P; fprops.
 move: zi;move /setI2_P => [z1 z2].
 have [u unz xu]: exists2 u, u <> z & X = doubleton z u.
@@ -6736,9 +6736,9 @@ have ->: Z = doubleton u v.
 by rewrite cardinal_set2 => // uv; case: xnz; rewrite xu vu uv.
 Qed.
 
-Lemma Ex4_11_ex3a A R: 
+Lemma Ex4_11_ex3a A R:
   (forall x, inc x R -> sub x A) ->
-  (forall x, inc x A -> inc (singleton x) R) ->  
+  (forall x, inc x A -> inc (singleton x) R) ->
   mobile_r R.
 Proof.
 move => RA h X Y xr yr xny z /setI2_P [zX zY].
@@ -6748,16 +6748,16 @@ case: (p_or_not_p (sub X Y)) => xsy.
   exists (singleton w);split => //.
       apply: h; apply: (RA _ yr _ ra).
     by move => t /set1_P ->; apply /setU2_P;right.
-  move /set1_P; contradict rb; ue. 
+  move /set1_P; contradict rb; ue.
 have [w wx wny]: exists2 w, inc w X & ~ (inc w Y).
   ex_middle bad; case: xsy => t tx; ex_middle ty; case: bad; ex_tac.
 exists (singleton w);split => //.
     apply: h; apply: (RA _ xr _ wx).
   by move => t /set1_P  ->; apply /setU2_P; left.
-by move /set1_P => zw; case: wny ; rewrite - zw. 
+by move /set1_P => zw; case: wny ; rewrite - zw.
 Qed.
- 
-Lemma Ex4_11_ex3b A n 
+
+Lemma Ex4_11_ex3b A n
    (R := Zo (\Po A) (fun z => nonempty z /\ cardinal z <=c n)):
     natp n -> n <> \0c -> mobile_r R.
 Proof.
@@ -6811,28 +6811,28 @@ Qed.
 
 Definition pure R P:= forall x, sub x P -> ~(inc x R).
 Definition set_of_pure A R:= Zo (\Po A) (pure R).
-Definition max_pure A R P:= 
+Definition max_pure A R P:=
  [/\ sub P A, pure R P & forall p, pure R p -> sub P p -> sub p A -> P = p].
 
 
 Lemma set_of_pureP A R x:
    inc x (set_of_pure A R) <-> (sub x A /\ pure R x).
-Proof.  
+Proof.
 split; first by  move /Zo_P => [] /setP_P.
 by move => [pa pb]; apply: Zo_i => //; apply /setP_P.
 Qed.
 
 Lemma Ex4_11_ex0_pure A R : inc emptyset R -> set_of_pure A R = emptyset.
-Proof. 
+Proof.
 move => er; apply /set0_P => y; apply /set_of_pureP.
 move=>[_ h]; apply: h er; fprops.
 Qed.
 
 Lemma Ex4_11_ex1_pure A n
   (R := Zo (\Po A) (fun z => finite_set z /\ n <c cardinal z)):
-  inc n Nat -> 
+  inc n Nat ->
   [/\  set_of_pure A R = Zo (\Po A) (fun z => cardinal z <=c n),
-    (n <=c cardinal A -> 
+    (n <=c cardinal A ->
      forall M, sub M A -> (max_pure A R M <-> cardinal M = n)) &
     (cardinal A  <=c n ->
       (set_of_pure A R = \Po A
@@ -6847,7 +6847,7 @@ have pa: forall P, sub P A -> pure R P -> cardinal P <=c n.
   have fsc: finite_c (csucc n) by apply /NatP; fprops.
   move: (card_card (CS_succ n)) => csn.
   move: (cle_fin_inf fsc fcp).
-  rewrite - csn; move => /eq_subset_cardP1/set_leP [z zp]. 
+  rewrite - csn; move => /eq_subset_cardP1/set_leP [z zp].
   move /card_eqP; rewrite  csn => zc.
   case: (pb _ zp);apply: Zo_i.
       apply /setP_P; apply: (sub_trans zp pa).
@@ -6865,7 +6865,7 @@ split.
    move => ca M mc; split.
      move => [_ ma mb]; ex_middle ce1; move: (pa _ mc ma) => le1.
      have cm: cardinal M <c n by split.
-     have ss: ssub M A.  
+     have ss: ssub M A.
        by split => // bad; rewrite -bad in ca; case: ce1; apply:cleA.
      move: (rep_i (setC_ne ss)); set w := rep _.
      move => /setC_P [sa sb];  move: (csucc_pr sb);  set p := M +s1 w => cp.
@@ -6903,13 +6903,13 @@ have pa:forall M, sub M A -> small_set M -> pure R M.
   by case: ab;apply: (mb _ _ am bm).
 have pb: forall M, sub M A -> pure R M -> small_set M.
   move => M ma mb a b am bm; ex_middle ab.
-  have sd: sub (doubleton a b) M by move => t; case /set2_P => ->.  
+  have sd: sub (doubleton a b) M by move => t; case /set2_P => ->.
   case: (mb _ sd); apply: Zo_i => //;  last by apply: cardinal_set2.
   by apply /setP_P;apply:(sub_trans sd ma).
 split.
    set_extens t => /Zo_P [ta tb];apply: Zo_i => //;
       [ apply: pb | apply: pa] => //; apply /setP_P => //.
-move => neA M; split. 
+move => neA M; split.
   move => [mc ma mb];move: (pb _ mc ma) => md; split; first by exact.
   case: (small_set_pr md) => // me.
   move: (rep_i neA) => rA.
@@ -6934,7 +6934,7 @@ move: (rep_i em) => rm.
 by move: (set1_sub rm) => sm; case: (mb _ sm); apply: asr; apply: ma.
 Qed.
 
-Lemma Ex4_11_minR_P2 R: 
+Lemma Ex4_11_minR_P2 R:
    (forall x, inc x R -> finite_set x) ->
    (forall P, pure R P <-> pure (min_incl_r R) P).
 Proof.
@@ -6944,8 +6944,8 @@ move =>  pr x xp xR; move: (Ex4_11_minR_pr fr xR) => [y yx ym].
 case: (pr _ (sub_trans yx xp) ym).
 Qed.
 
-(** We define [mobile_ext] to have all properties but minimality. 
-Adding minimality does not change the set of pures. We give a characteristic 
+(** We define [mobile_ext] to have all properties but minimality.
+Adding minimality does not change the set of pures. We give a characteristic
 property of the pures  *)
 
 Definition mobile_ext R A:=
@@ -6953,7 +6953,7 @@ Definition mobile_ext R A:=
       (forall x, inc x R -> finite_set x),
        mobile_r R  &
       ~ (inc emptyset R)].
-  
+
 
 Lemma Ex4_11_minR_pr3 A R (R' := min_incl_r R):
   mobile_ext R A ->
@@ -6967,18 +6967,18 @@ have ta: ~ inc emptyset R' by  move /Zo_P => [ta] _.
 split => // w => /Zo_S wr;fprops.
 Qed.
 
-Definition pure_prop1 A S := 
+Definition pure_prop1 A S :=
   (nonempty S) /\ (forall x, inc x S -> sub x A).
-Definition pure_prop2 S := 
+Definition pure_prop2 S :=
   (inductive (sub_order S)).
-Definition pure_prop3 A S := 
+Definition pure_prop3 A S :=
   (forall M N, sub M A -> sub N A -> ~ inc M S ->  ~ inc N S ->
     inc (M \cap N) S ->
     forall x, inc x (M \cup N) -> ~ (inc ((M \cup N) -s1 x) S)).
 Definition pure_prop4  S :=
   (forall x y, inc x S -> sub y x -> inc y S).
 Definition pure_prop5 A S :=
-  forall x, sub x A -> ~ (inc x S) -> 
+  forall x, sub x A -> ~ (inc x S) ->
      exists y, [/\ sub y x, finite_set y & ~ (inc y S)].
 
 Lemma pure_properties_res1 A R:
@@ -7023,9 +7023,9 @@ Qed.
 
 
 Lemma pure_properties_res2 A R (S:= set_of_pure A R):
-  mobile_ext R A -> 
+  mobile_ext R A ->
   [/\ pure_prop1 A S, pure_prop2 S, pure_prop3 A S,
-  pure_prop4 S &  pure_prop5 A S]. 
+  pure_prop4 S &  pure_prop5 A S].
 Proof.
 move => h;  move: (pure_properties_res1 h) => pe.
 move: h => [pa pb pc pd].
@@ -7038,7 +7038,7 @@ have auxP: forall s, sub s A ->
   by move => [u ys yr] /set_of_pureP [sa pr];move: (pr _ ys yr).
 have p5: pure_prop5 A S.
   move => x xA; move /(auxP _ xA) => [y yx yr].
-  by exists y; split;fprops;apply /(auxP _ (sub_trans yx xA)); exists y. 
+  by exists y; split;fprops;apply /(auxP _ (sub_trans yx xA)); exists y.
 have p4: forall x y, inc x S -> sub y x -> inc y S.
     move => x y /set_of_pureP [xA pr] yx; apply /set_of_pureP.
 split; first by apply: (sub_trans yx xA).
@@ -7054,14 +7054,14 @@ have sa: sub ((M \cup N) -s1 x) A.
 apply / (auxP _ sa).
 move: nM nN => /(auxP _ MA) [M' mm' mr] /(auxP _ NA)  [N' nn' nr].
 case: (equal_or_not M' N') => nmn.
-  have qd: sub M' (M \cap N). 
+  have qd: sub M' (M \cap N).
      move => t tm'; apply /setI2_P; split;[fprops | apply: nn'; ue].
-  by move: iR => /set_of_pureP [_ h]; move: (h  _ qd). 
+  by move: iR => /set_of_pureP [_ h]; move: (h  _ qd).
 case: (inc_or_not x (M' \cap N')) => xi.
   move: (pc _ _ mr nr nmn _ xi) => [Z [zr za zb]]; ex_tac.
-  move => t tz. 
+  move => t tz.
   have tx: t <> x by dneg tx; ue.
-  move: (za _ tz); case /setU2_P => tt; 
+  move: (za _ tz); case /setU2_P => tt;
        apply /setC1_P;split => //; apply /setU2_P;[left | right]; fprops.
 case: (inc_or_not x M') => xm'.
 have xn': ~ (inc x N') by  move => bad; case: xi; apply /setI2_P.
@@ -7072,7 +7072,7 @@ Qed.
 
 Lemma pure_properties_res3: exists A S,
   [/\ pure_prop1 A S, pure_prop2 S, pure_prop3 A S, pure_prop5 A S &
-   ~  (pure_prop4 S)]. 
+   ~  (pure_prop4 S)].
 Proof.
 have xx: (substrate (sub_order (singleton C2))) = (singleton C2).
   by rewrite (proj2 (sub_osr _)).
@@ -7082,7 +7082,7 @@ by split; fprops; move => x /set1_P ->; fprops.
   move => y yh;  move: (ha _ yh); rewrite xx;aw; move /set1_P=> ->.
   by apply /sub_gleP;split;fprops.
 move => m n ma mn /set1_P ta /set1_P tb /set1_P tc.
-  case: ta; apply: extensionality => //; rewrite -tc. 
+  case: ta; apply: extensionality => //; rewrite -tc.
   by apply: subsetI2l.
 move => x xtp /set1_P xntp; exists emptyset; aw; split;fprops.
     apply: emptyset_finite.
@@ -7097,7 +7097,7 @@ Lemma pure_properties_res4 A S:
 Proof.
 move => p2 p4.
 move => M MA nMS.
-case: (finite_or_infinite_set M) => ifm; first by exists M; split. 
+case: (finite_or_infinite_set M) => ifm; first by exists M; split.
 set T := fun_image (Zo (\Po M) (fun z => ~(inc z) S)) cardinal.
 have zt: inc (cardinal M) T.
 apply /funI_P; exists M => //; apply: Zo_i; aww; apply :setP_Ti.
@@ -7108,10 +7108,10 @@ have net: nonempty T by ex_tac.
 move: (tc _ (@sub_refl T) net) => [cy []].
 rewrite iorder_sr //; last by rewrite ta; fprops.
 move => cyt aux1.
-have cym: forall y, inc y T -> cy <=c y. 
+have cym: forall y, inc y T -> cy <=c y.
   move => y yt.
   by move: (iorder_gle1 (aux1 _ yt)) => /graph_on_P1 [_ _].
-move: cyt => /funI_P [N pa cN]. 
+move: cyt => /funI_P [N pa cN].
 move: pa => /Zo_P [] /setP_P NL nNS.
 have icy: cardinalp cy by rewrite cN; fprops.
 case: (finite_or_infinite icy) => ifcy.
@@ -7120,11 +7120,11 @@ move: (infinite_card_limit2 ifcy) => [ya ocy ly].
 move: cN; rewrite -(card_card icy);move /card_eqP=> [f [bf sf tf]].
 pose vfi i := Vfs f i.
 have ff: function f by fct_tac.
-have fa: forall i, i <=o cy -> sub i (source f). 
+have fa: forall i, i <=o cy -> sub i (source f).
   by move => i ic; rewrite sf; move: ic => [_ _ ].
 have fb: forall i j, i<=o cy -> j <=o cy -> i <=o j -> sub (vfi i) (vfi j).
-  move => i j iy jy ji t; rewrite /vfi; move: (fa _ iy) (fa _ jy) => isf jsf. 
-  move => /(Vf_image_P ff isf) [u ui wu]; apply /(Vf_image_P ff jsf). 
+  move => i j iy jy ji t; rewrite /vfi; move: (fa _ iy) (fa _ jy) => isf jsf.
+  move => /(Vf_image_P ff isf) [u ui wu]; apply /(Vf_image_P ff jsf).
   by exists u => //; move: ji => [_ _ ]; apply.
 have sc: forall i, i <o cy -> cardinal (vfi i) <c cy.
    move => i iy; rewrite /vfi.
@@ -7133,7 +7133,7 @@ have sc: forall i, i <o cy -> cardinal (vfi i) <c cy.
      move: (fa _ (proj1 iy)) => sfa.
      move: (restriction1_fb (proj1 bf) sfa) => bf1.
      by exists (restriction1 f i); split => //; rewrite /restriction1; aw.
-  by apply /(ocle2P icy (proj31_1 iy)). 
+  by apply /(ocle2P icy (proj31_1 iy)).
 have sd: forall i, i <o cy -> inc (vfi i) S.
   move => i iy; move: (sc _ iy) => cs; ex_middle nvs.
   have cvt: inc (cardinal (vfi i)) T.
@@ -7141,7 +7141,7 @@ have sd: forall i, i <o cy -> inc (vfi i) S.
      by apply/setP_P;apply: sub_trans NL; rewrite -tf; apply:fun_image_Starget1.
   case: (cltNge cs (cym _ cvt)).
 set Z:= fun_image cy vfi.
-have za: sub Z S.  
+have za: sub Z S.
    move => t /funI_P [z zy ->]; apply: sd.
    by move: zy => /(oltP ya).
 move:(sub_osr S) => [zc pb].
@@ -7157,8 +7157,8 @@ have zd: total_order (induced_order (sub_order S) Z).
     rewrite vx vy; apply: fb.
 move: (p2 Z zb zd) => [X []]; rewrite pb => X1 X2.
 have aux: forall i, i <o cy -> sub (vfi i) X.
-  move => i iy. 
-  have h: inc  (vfi i) Z. 
+  move => i iy.
+  have h: inc  (vfi i) Z.
     by apply /funI_P;exists i => //; move:  iy => /(oltP ya).
   by move: ( X2 _ h) => /sub_gleP [_ _].
 have nt: sub N X.
@@ -7174,7 +7174,7 @@ Qed.
 
 Lemma pure_properties_res5 A S:
  pure_prop1 A S -> pure_prop3 A S -> pure_prop4 S -> pure_prop5 A S ->
- exists R, 
+ exists R,
     [/\ mobile_ext R A,
         S = (set_of_pure A R) &
         (forall x z, inc x R -> inc z R -> sub x z -> z = x)].
@@ -7206,14 +7206,14 @@ have pe: forall M, sub M A -> ~ (inc M S) -> exists2 N, sub N M & inc N R.
   move: (sub_trans zt ym) => zM.
   exists z=> //; apply: Zo_i; first by apply /setP_P; apply: (sub_trans zM MA).
   move: ta => /Zo_P [_ zs]; split => //.
-  move => v vz nvs; symmetry; apply: tb => //; apply: Zo_i => //. 
+  move => v vz nvs; symmetry; apply: tb => //; apply: Zo_i => //.
   apply /setP_P; apply: (sub_trans vz zt).
 have pf: mobile_r R.
   move => M N MR NR; move: (MR) (NR) => /Zo_P []  /setP_P MA [nMS Mm]
      /Zo_P  [] /setP_P NA [nNS Nm] MN z zi.
-  have qa: inc (M \cap N) S. 
+  have qa: inc (M \cap N) S.
      move: (@subsetI2l M N)(@subsetI2r M N) => ta tb.
-     ex_middle ins; move: (Mm _ ta ins) => tc; case: MN; apply: Nm => //; ue. 
+     ex_middle ins; move: (Mm _ ta ins) => tc; case: MN; apply: Nm => //; ue.
   have qb: inc z (M \cup N) by move: zi=> /setI2_P [zm _]; apply /setU2_P; left.
   move: (p3 _ _ MA NA nMS nNS qa _ qb).
   set Z := ((M \cup N) -s1 z) => zs.
@@ -7228,12 +7228,12 @@ have pg: S = set_of_pure A R.
       move => x xp => /Zo_P [_ [bad xb]]; case: bad; exact: (p4 _ _ tS xp).
   move  /set_of_pureP =>  [ta pt]; ex_middle ts.
   move: (pe _ ta ts) => [N nt nr]; by move: (pt _ nt).
-by exists R. 
+by exists R.
 Qed.
 
 Lemma pure_properties_res6 A S:
  pure_prop1 A S -> pure_prop2 S -> pure_prop3 A S -> pure_prop4 S ->
- exists R, 
+ exists R,
     [/\ mobile_ext R A,
         S = (set_of_pure A R) &
       (forall x z, inc x R -> inc z R -> sub x z -> z = x)].
@@ -7248,7 +7248,7 @@ Definition mobile_alt R :=
   exists G, [/\ inc G R, sub G (E \cup F), inc y G & ~ (inc x G)].
 
 Lemma pure_properties_res7 A R:
-  (forall x, inc x R -> sub x A) -> 
+  (forall x, inc x R -> sub x A) ->
   (forall x, inc x R -> finite_set x)  -> ~ (inc emptyset R) ->
   (forall x z, inc x R -> inc z R -> sub x z -> z = x) ->
   (mobile_r R <-> mobile_alt R).
@@ -7280,7 +7280,7 @@ have pc: prop (cardinal (P z \cup Q z)) by exists z;fprops.
 have pcN: natp (cardinal (P z \cup Q z)).
   by apply /NatP; apply: finite_union2;apply: rf.
 case: (least_int_prop2 pcN pc).
-   move => [z' zt cu]. 
+   move => [z' zt cu].
    move: (card_nonempty (cle0 cu)) => ue.
    move: zt => /Zo_P [] /setX_P [_ pr' _] _.
    have pe: P z' = emptyset by apply /set0_P => t tp; empty_tac1 t; aw; left.
@@ -7295,7 +7295,7 @@ have smp' t: inc t T -> csucc m <=c  cardinal (P t \cup Q t).
 have czm'':= (cleA czm (smp' _ zmt)).
 move: zmt => /Zo_P [] /setX_P; set E := P zm; set F := Q zm.
 move => [_ ER FR] [EnF namEF]; rewrite -/E -/F in czm''.
-have smp'': forall U V, inc U R -> inc V R -> U <> V -> 
+have smp'': forall U V, inc U R -> inc V R -> U <> V ->
     cardinal (U \cup V) <c csucc m -> am U V.
   move => U V ur vr uv cle; ex_middle bad.
   have aux: inc (J U V) T by apply: Zo_i; aw; fprops; apply /setXp_P.
@@ -7305,20 +7305,20 @@ move: (xEF) => /setI2_P [xE xF].
 move: (mr _ _ ER FR EnF _ xEF) => [G [GR Gu xG]].
 case: (inc_or_not y G) => yG; first by exists G.
 case: (emptyset_dichot (G -s E)) => nge.
-   case: yG; rewrite - (rmin _ _ GR ER (empty_setC nge)). 
+   case: yG; rewrite - (rmin _ _ GR ER (empty_setC nge)).
    by move: yEF; case /setC_P.
 move: (rep_i nge); set t := rep _ => zd.
 have fsa: finite_set (E \cup F) by apply /NatP ; ue.
 have cs1: cardinal  (F \cup G) <c csucc m.
   rewrite setU2_C - czm''; move/ strict_sub_smaller: fsa; apply.
   move: yEF => /setC_P [ya yb].
-  split => bad; first by  case /setU2_P; fprops. 
+  split => bad; first by  case /setU2_P; fprops.
   have: inc y (E \cup F) by  fprops.
   by rewrite - bad; case /setU2_P.
-have nGF: F <> G by move => bad; case: xG; ue. 
+have nGF: F <> G by move => bad; case: xG; ue.
 have xGF: inc x (F -s G) by apply /setC_P.
-have zGF: inc t (F \cap G). 
-  move: zd => /setC_P[za zb]; apply /setI2_P; split => //; move:(Gu _ za). 
+have zGF: inc t (F \cap G).
+  move: zd => /setC_P[za zb]; apply /setI2_P; split => //; move:(Gu _ za).
   case/setU2_P => //.
 move: (smp'' _ _ FR GR nGF cs1 _ _ zGF xGF).
 move => [H [HR hfg xH zH]].
@@ -7330,7 +7330,7 @@ have cs2: cardinal  (E \cup H) <c csucc m.
   split; [exact |  move => bad].
   have: inc t (E \cup F) by  move: zGF => /setI2_P [sa _]; fprops.
   by rewrite - bad; case /setU2_P => //; move: zd => /setC_P [].
-have yEH: inc y (E -s H). 
+have yEH: inc y (E -s H).
   move: yEF => /setC_P [ye nyf]; apply /setC_P;split => //.
   move => yh; case: nyf; move: (hfg _ yh); case /setU2_P=> //.
 have nEH: E <> H by move => bad; move: yEH => /setC_P; rewrite bad; case.
@@ -7364,16 +7364,16 @@ move=>  [srA fsa mr ner] minr.
 move: (mr); rewrite (pure_properties_res7 srA fsa ner minr) => mr'.
 pose p E F x y G:=  [/\ inc G R, sub G (E \cup F), inc y G& ~ (inc x G)].
 pose cmr E F x y := choose (p E F x y).
-have cmrp: forall E F x y, inc E R -> inc F R -> inc x (E \cap F) 
+have cmrp: forall E F x y, inc E R -> inc F R -> inc x (E \cap F)
    -> inc y ( E -s F) -> p E F x y (cmr E F x y).
-  move => E F x y er fr xef yef; apply:choose_pr. 
+  move => E F x y er fr xef yef; apply:choose_pr.
   have ef: E <> F by move => ef; move: yef=> /setC_P []; rewrite ef.
-  exact (mr' _ _ er fr ef x y xef yef) . 
+  exact (mr' _ _ er fr ef x y xef yef) .
 have ind0:  forall m, natp m -> m <> \0c ->
      forall f, ppr8_hyp R f m -> exists g, ppr8_conc R emptyset f g  m.
   move => m mN mnz f [fgf df fR unp].
   pose xv i := rep ((Vg f i) -s (unionb (restr f (Nint i)))).
-  have xvp1: forall i, i <c m -> 
+  have xvp1: forall i, i <c m ->
      inc (xv i) ((Vg f i) -s (unionb (restr f (Nint i)))).
      move => i im; move: (unp _ im); rewrite /xv; set s := unionb _ => ss.
      apply: rep_i; case: (emptyset_dichot (Vg f i -s s)) => // ve.
@@ -7383,21 +7383,21 @@ have ind0:  forall m, natp m -> m <> \0c ->
   have dd: forall i, i<c m -> sub (Nint i) (domain f).
      move => i im;move: (proj1 im) => im1.
      have iN: inc i Nat by apply: (NS_le_nat im1 mN).
-     rewrite df; apply:Nint_M1 => //. 
+     rewrite df; apply:Nint_M1 => //.
   have xvp3: forall i j, j <c i -> i <c m -> ~(inc (xv i) (Vg f j)).
      move => i j ji im xvi; move: (xvp1 _ im)  => /setC_P [_]; case.
      have iN: natp i by apply: (NS_le_nat (proj1 im) mN).
      have aux: inc j (Nint i) by  apply /(NintP iN).
      move : (dd _ im) => dmf; apply /setUb_P;aw; exists j => //; rewrite LgV//.
   clear xvp1.
-  pose nextB i Bi:= 
-       Lg Nat (fun j => Yo (inc (xv i) (Vg Bi j)) 
+  pose nextB i Bi:=
+       Lg Nat (fun j => Yo (inc (xv i) (Vg Bi j))
           (cmr (Vg Bi j) (Vg Bi i) (xv i) (xv j)) (Vg Bi j)).
   move: (induction_term0 nextB f) (induction_terms nextB f).
   set fB := induction_term nextB f => fBa fBb.
   pose B i j := Vg (fB i) j.
   have Ba: forall j, B \0c j = Vg f j.
-    by move  => j; rewrite /B fBa. 
+    by move  => j; rewrite /B fBa.
   have Bp: forall i, natp i -> forall j, i<=c j -> j <c m ->
     [/\ inc (B i j) R,
      sub (B i j) (Vg f j \cup (unionb (restr f (Nint i)))),
@@ -7499,7 +7499,7 @@ move: (cpred_pr rN rnz);move: (cpred_pr1 (CS_cardinal B)); rewrite sr => ->.
 set r':= cardinal B; move => [r'N rsr'].
 have mrN: natp  (m +c r) by fprops.
 have mrN': natp (m +c r')  by fprops.
-have mrnz: m +c r <> \0c. 
+have mrnz: m +c r <> \0c.
    move: (csum_M0lt  rN mnz); rewrite csumC =>h.
    by move: (cle_ltT (cle0n rN) h) => [_ /nesym].
 move: (ind0 _ mrN mrnz _ h8) => [Ap [fgAp dAp Apr sApu sAu]].
@@ -7514,7 +7514,7 @@ suff: exists g : Set, ppr8_conc R (B +s1 x) Ap g m.
   move /setC_P=> [ta tb]; apply /setC_P;split => //.
   move: ta => /setUb_P  [y yd ty]; apply: (sApu y _ _ ty).
   by move: yd; rewrite dAp => /(NintP mrN).
-have ta: m +c r' <=c m +c r. 
+have ta: m +c r' <=c m +c r.
   apply: csum_Mlele; fprops; rewrite rsr'; fprops.
 case: (inc_or_not x (unionb Ap)) => xu; last first.
   set Ap' := restr Ap (Nint (m +c r')).
@@ -7531,14 +7531,14 @@ case: (inc_or_not x (unionb Ap)) => xu; last first.
      have imr:= (clt_leT im ta).
     move => ns; move: (sAu _ imr); case => t tq.
     have iN: inc i Nat by apply (NS_le_nat (proj1 imr) mrN).
-    have tr: sub (Nint i) (domain Ap'). 
+    have tr: sub (Nint i) (domain Ap').
      rewrite td; apply: (Nint_M1 mrN' (proj1 im)).
     have ts: sub (Nint (m +c r) -s1 i) (domain Ap).
       by  move => z /setC_P; rewrite dAp; move => []; aw.
     move: (ns _ tq) => /setUb_P;aw.
     move => [y yi]; rewrite LgV// => tv; apply /setUb_P; aw.
    move: yi =>  /(NintP iN) [ti1 ti2].
-    have yk: inc y (Nint (m +c r) -s1 i). 
+    have yk: inc y (Nint (m +c r) -s1 i).
         apply /setC1_P; split => //; apply /(NintP mrN); exact: cle_ltT ti1 imr.
     exists y=> //; rewrite LgV// - tc //; exact: cle_ltT ti1 im.
   move: (Hrec _ _ _ r'N mN h8' (refl_equal r') mnz).
@@ -7546,7 +7546,7 @@ case: (inc_or_not x (unionb Ap)) => xu; last first.
   have sa: sub (unionb Ap') (unionb Ap).
     move => t /setUb_P;rewrite td; move => [y yi yv].
     apply /setUb_P; rewrite dAp.
-     move: yi => /(NintP mrN') yi; exists y=> //; 
+     move: yi => /(NintP mrN') yi; exists y=> //;
        last by rewrite -(tc _ yi).
      apply /(NintP mrN); exact: (clt_leT yi ta).
   move => i im t tv; move: (g4 _ im _ tv).
@@ -7567,7 +7567,7 @@ have swp4: forall i, i <c m +c r' -> swap i <> ix.
    move => i [ily nr]; rewrite /swap; Ytac eq1; last by Ytac0.
    by rewrite -eq1; apply:nesym.
 have swp5: forall i, i <c m +c r' -> (swap i <c m +c r /\ swap i <> ix).
-   move => i ilt; split; [ apply: swp3 (clt_leT ilt ta) | by apply: swp4 ]. 
+   move => i ilt; split; [ apply: swp3 (clt_leT ilt ta) | by apply: swp4 ].
 pose uni i:= (unionb (restr Ap (Nint (m +c r) -s1 i))).
 pose xv1 i := rep ((Vg Ap i) -s (uni i)).
 have xvp1: forall i, i <c ( m +c r) -> inc (xv1 i) ((Vg Ap i) -s (uni i)).
@@ -7581,7 +7581,7 @@ have xvp3: forall i j, i <c m +c r -> j <c m +c r -> i <> j ->
   move => i j ilt jlt ij; move: (xvp1 _ ilt) => /setC_P [_ h]; dneg h1.
   have tb: sub (Nint (m +c r) -s1 i) (domain Ap).
     by rewrite dAp => t /setC_P [].
-  have ji: inc j (Nint (m +c r) -s1 i).  
+  have ji: inc j (Nint (m +c r) -s1 i).
     by  apply /setC1_P;split;fprops; apply /(NintP mrN).
   apply /setUb_P;exists j => //;aw; trivial; rewrite LgV//.
 pose Bi i := Yo (inc x (Vg Ap i))(cmr (Vg Ap i) (Vg Ap ix) x (xv1 i)) (Vg Ap i).
@@ -7593,7 +7593,7 @@ have bip: forall i, i<c m +c r -> i <> ix ->
       have pb: inc (xv1 i) (Vg Ap i -s Vg Ap ix).
        apply /setC_P;split;fprops; apply: xvp3 => //.
        apply: (cmrp  _ _ _ _ (Apr _ im) (Apr _ ixd) pa pb).
-   split;fprops; apply: subsetU2l. 
+   split;fprops; apply: subsetU2l.
 set Bf := Lg (Nint (m +c r')) (fun z => Bi (swap z)).
 have h8': ppr8_hyp R Bf (m +c r').
   rewrite /Bf;split => //.
@@ -7604,22 +7604,22 @@ have h8': ppr8_hyp R Bf (m +c r').
   move => i im; rewrite LgV; [ move => ns | by apply /NintP].
   move: (swp5 _ im)=> [s1 s2]; move: (bip _ s1 s2) => [p1 p2 p3 p4].
   have iN: inc i Nat by apply (NS_le_nat (proj1 im) mrN').
-  have pa:fgraph (Lg (Nint (m +c r')) (fun z => Bi (swap z))).  
+  have pa:fgraph (Lg (Nint (m +c r')) (fun z => Bi (swap z))).
     by fprops.
    have pb:  sub (Nint i) (Nint (m +c r')).
      by apply: Nint_M1 => //; move: im =>[].
-  move: (ns _ p3)  => /setUb_P [y];rewrite restr_d. 
+  move: (ns _ p3)  => /setUb_P [y];rewrite restr_d.
   move => ya; move: (ya) => /(NintP iN) yi.
-  have ph:=(clt_ltT yi im). 
+  have ph:=(clt_ltT yi im).
   have ph':=(clt_leT ph ta).
   have pc: inc y (Nint (m +c r')) by apply /NintP.
   rewrite !LgV//; move: (xvp1 _ s1) => /setC_P [_ pd] pe; case: pd.
   have pf: sub (Nint (m +c r) -s1 swap i) (domain Ap).
     by move => t; rewrite dAp => /setC_P [].
   have pg: inc (swap y) (Nint (m +c r) -s1 swap i).
-    apply /setC_P; split. 
-       apply/(NintP mrN); apply: swp3 => //. 
-    move /set1_P; move: yi => [_]; rewrite - {1} (swp2 i) -{1} (swp2 y). 
+    apply /setC_P; split.
+       apply/(NintP mrN); apply: swp3 => //.
+    move /set1_P; move: yi => [_]; rewrite - {1} (swp2 i) -{1} (swp2 y).
     by move => h1 h2; case: h1; rewrite h2.
   apply /setUb_P;exists (swap y); aw; bw => //.
   move: (swp5 _ ph)=> [s3 s4]; move: (bip _ s3 s4) => [q1 q2 _].
@@ -7647,7 +7647,7 @@ Lemma pure_properties_res9 A R (U := set_of_pure A R):
     fgraph f ->  domain f = Nint n ->
     (forall i, i <c n -> sub (Vg f i) A) ->
     (forall i, i <c n -> ~ inc (Vg f i) U) ->
-    (forall i, i <c n -> 
+    (forall i, i <c n ->
       inc ((Vg f i) \cap (unionb (restr f (Nint i)))) U) ->
     ~ (inc ((unionb f) -s B) U).
 Proof.
@@ -7664,9 +7664,9 @@ have Bip: forall i, i <c n -> (inc (Bi i) R /\ sub (Bi i) (Vg f i)).
    apply: (choose_pr h).
 set f':= Lg (Nint n) Bi.
 have h8: ppr8_hyp R f' n.
-  rewrite /f';split => //.  
+  rewrite /f';split => //.
         fprops.
-      by aw.  
+      by aw.
     move => i lin; rewrite LgV//; [by move: (Bip _ lin) =>[] | by apply /NintP].
   move => i lin; rewrite LgV; [ move => sb |  by apply /NintP].
   move:  (Bip _ lin) => [pa _].
@@ -7678,9 +7678,9 @@ have h8: ppr8_hyp R f' n.
       by apply: Nint_M1 => //; move: lin => [].
     have sd: sub (Nint i) (domain (Lg (Nint n) Bi)) by aw.
     have se: sub (Nint i) (domain f) by rewrite df.
-    move /setUb_P; aw; move => [y ys]. 
+    move /setUb_P; aw; move => [y ys].
     move: (sc _ ys) => yi; rewrite ! LgV// => tc.
-    apply setI2_P;split => //. 
+    apply setI2_P;split => //.
          by move: (Bip _ lin) => [_]; apply.
      apply /setUb_P; exists y; aw; bw => //.
      have yn: y<c n by apply /NintP.
@@ -7688,7 +7688,7 @@ have h8: ppr8_hyp R f' n.
   move: (ifu _ lin) => /set_of_pureP [_ pb].
   by move: (pb _ pc); case.
 move: (NS_le_nat (proj1 cb) nN) => rN.
-move: (cdiff_nz cb). 
+move: (cdiff_nz cb).
 move: (cdiff_pr (proj1 cb)).
 move: (NS_diff (cardinal B) nN);set m := n -c cardinal B.
 rewrite csumC;move=> mN rmn mnz.
@@ -7704,8 +7704,8 @@ apply /setC_P;split => //;apply /setUb_P; rewrite df; ex_tac.
 by move: yi =>  /(NintP nN) yi; move: (Bip _ yi) => [_]; apply.
 Qed.
 
-(** Pure sets and max pure sets are (a) there is no pure set, (b) 
-   pure sets have cardinal [<=n]; max pure have cardinal [n], (c) 
+(** Pure sets and max pure sets are (a) there is no pure set, (b)
+   pure sets have cardinal [<=n]; max pure have cardinal [n], (c)
 pure sets are small; max pure are singletons, (d) the only pure set is empty.
 *)
 
@@ -7714,11 +7714,11 @@ Section Exercice4_11.
 Variables A R: Set.
 Hypothesis mnr: mobile_ext R A.
 
-Lemma Exercise4_11a: 
-  inductive (sub_order (set_of_pure A R)). 
+Lemma Exercise4_11a:
+  inductive (sub_order (set_of_pure A R)).
 Proof. by apply: pure_properties_res1. Qed.
 
-Lemma Exercise4_11b x: sub x A -> pure R x -> 
+Lemma Exercise4_11b x: sub x A -> pure R x ->
   exists2 y, sub x y & max_pure A R y.
 Proof.
 move => xa px.
@@ -7729,25 +7729,25 @@ have xsr: inc x (substrate po).
 move: (inductive_max_greater or Exercise4_11a xsr).
 move => [m]; rewrite /po/maximal sr.
 move => [mp xm] /sub_gleP [_ _ sm]; move: mp => /set_of_pureP.
-move=> [ma prm]; exists m => //; split => // p pp cmp pa; symmetry; apply: xm.  
+move=> [ma prm]; exists m => //; split => // p pp cmp pa; symmetry; apply: xm.
 by apply /sub_gleP;split => //; apply: Zo_i => //; apply /setP_P.
 Qed.
 
-(** If  [M] is maximal pure and [x] is not in [M] then  [Ex4_11EM M x] 
+(** If  [M] is maximal pure and [x] is not in [M] then  [Ex4_11EM M x]
    is the unique subset of [M] such that adjoining [x] gives an element of [R]*)
 
 Lemma Exercise4_11c M x: max_pure A R M -> inc x (A -s M) ->
   exists !z, [/\ inc z (\Po A), sub z M & inc (z +s1 x) R].
 Proof.
 move: mnr => [q1 q2 q3 q4].
-move => [pm1 pm2 mpx] /setC_P [xA nxm]. 
+move => [pm1 pm2 mpx] /setC_P [xA nxm].
 apply /unique_existence; split; last first.
   move => a b [aA aM saR] [bA bM sbR].
   ex_middle nab.
   have ne1: ~ inc x a by move => xa; case: nxm; apply: aM.
   have ne2: ~ inc x b by  move => xa; case: nxm; apply: bM.
   have ne3: (a +s1 x) <> (b +s1 x).
-    move => eta; case: nab. 
+    move => eta; case: nab.
     by rewrite - (setU1_K ne1) - (setU1_K ne2) eta.
   have xc: inc x ((a +s1 x) \cap (b +s1 x)) by fprops.
   move: (q3 _ _ saR sbR ne3 _ xc); move => [Z [Zr sz nxz]].
@@ -7767,11 +7767,11 @@ have zM: sub z M.
   by move: (ts _ td); case /setU1_P.
 move: (pm2 _ zM) => zR.
 have zt: sub z t by move => u /setC1_P [].
-case: (inc_or_not x t) => xy.    
+case: (inc_or_not x t) => xy.
   move: (setC1_K xy) => tc.
   exists z;split => //; first by (apply /setP_P; apply: (sub_trans zt tA)).
   by rewrite /z tc.
-case: zR; have -> //: z = t. 
+case: zR; have -> //: z = t.
 set_extens s; first by move /setC1_P => [].
 by move => st; apply /setC1_P;split => //; dneg sx; rewrite - sx.
 Qed.
@@ -7781,12 +7781,12 @@ Definition Ex4_11EM M x := select (fun z => (sub z M /\ inc (z +s1 x) R))
 
 Lemma Exercise4_11d M x: max_pure A R M -> inc x (A -s M) ->
   (sub (Ex4_11EM M x) M /\ inc ((Ex4_11EM M x) +s1 x) R).
-Proof. 
+Proof.
 move => pa pb; rewrite /Ex4_11EM.
 pose p z := sub z M /\ inc (z +s1 x) R; rewrite -/p -/(p _).
 move:(Exercise4_11c pa pb) => [z [[qa qb qc] zb]].
 have h:(singl_val2 (inc ^~ (\Po A)) p).
-  move => a b aP [r1 r2] bP [r3 r4].  
+  move => a b aP [r1 r2] bP [r3 r4].
   by rewrite - (zb _ (And3 aP r1 r2)) (zb _ (And3 bP r3 r4)).
 by rewrite - (select_uniq h qa (conj qb qc)).
 Qed.
@@ -7798,22 +7798,22 @@ move => mm xa.
 move: (Exercise4_11d mm xa) => [pa pb]; apply: Zo_i => // t tr ts.
 move: (mm) => [m1 m2 m3].
 case: (inc_or_not x t) => xt; last first.
-  have ta: sub t (Ex4_11EM M x). 
+  have ta: sub t (Ex4_11EM M x).
     move => s st; move: (ts _ st); case /setU1_P => // sx; case: xt; ue.
   by move: (m2 _ (sub_trans ta pa) tr).
 set x0 := Ex4_11EM M x.
-have qa: [/\ inc x0 (\Po A), sub x0 M & inc (x0 +s1 x) R]. 
+have qa: [/\ inc x0 (\Po A), sub x0 M & inc (x0 +s1 x) R].
    rewrite /x0;split => //; apply /setP_P => //; apply: (sub_trans pa m1).
 set x1 :=  (t -s1 x).
 have ta: t = x1 +s1 x by symmetry;apply:setC1_K.
 have tb: sub (t -s1 x) M.
   move => s /setC1_P [sa sb]; move: (ts _ sa); case /setU1_P => //; apply: pa.
-have qb: [/\ inc x1 (\Po A), sub x1 M & inc (x1 +s1 x) R]. 
+have qb: [/\ inc x1 (\Po A), sub x1 M & inc (x1 +s1 x) R].
   rewrite /x1;split => //; [by apply /setP_P; apply: (sub_trans tb m1) | ue ].
-move /unique_existence: (Exercise4_11c mm xa) => [_ un]. 
+move /unique_existence: (Exercise4_11c mm xa) => [_ un].
 by rewrite (un _ _ qa qb).
 Qed.
- 
+
 Lemma Exercise4_11f M x y: max_pure A R M -> inc x (A -s M) ->
   inc y (Ex4_11EM M x) -> max_pure A R ((M +s1 x) -s1 y).
 Proof.
@@ -7821,7 +7821,7 @@ move => mxpm xam ye; move: (Exercise4_11d mxpm xam) => [pa pb].
 move: (mxpm) (xam) => [ma pm mpm] /setC_P [xa xm].
 set T := ((M +s1 x) -s1 y).
 have tpP: forall u, inc u T <->  ((inc u M \/ u = x) /\ u <> y).
-  move => u; split. 
+  move => u; split.
    by move /setC1_P =>[sa sb]; split => //; apply /setU1_P.
   by move => [sa sb]; apply /setC1_P;split => //; apply /setU1_P.
 have tA: sub T A.  move => t /tpP []; case; [fprops | by  move => ->].
@@ -7841,9 +7841,9 @@ split; first by exact.
   have ZM: sub Z M.
     move => t tZ;move: (Zt _ tZ); case /setU2_P.
       case /setU1_P; [ by apply: pa | by move => tx; case: xZ; ue].
-    move => tz; move: (zt _ tz) => /tpP [ta tb]. 
+    move => tz; move: (zt _ tz) => /tpP [ta tb].
     case: ta => //;move => tx; case: xZ; ue.
-  by case: (pm _ ZM). 
+  by case: (pm _ ZM).
 move => p pp sp pA.
 case: (inc_or_not y p) => yp.
    have st: sub (M +s1 x) A by  move => t; case /setU1_P; fprops; move => ->.
@@ -7860,9 +7860,9 @@ move: (pA _ vp) => vA.
 have pt: pure R (T +s1 v).
   have sa: sub (T +s1 v) p by move => t; case /setU1_P;[ apply:sp | move => ->].
   move => b ba; apply: pp;  apply: (sub_trans ba sa).
-have nvM: inc v (A -s M). 
-    apply /setC_P; split => //; move => vm. 
-    by case: vT; apply/tpP;split => //; [ left | apply:nesym ].
+have nvM: inc v (A -s M).
+    apply /setC_P; split => //; move => vm.
+    by case: vT; apply/tpP;split => //; left.
 have xnv: x <> v by move => xv;case: vT; apply /tpP;split; fprops.
 move: (Exercise4_11d mxpm nvM); move => [sE iteR].
 set Sx := ((Ex4_11EM M x) +s1 x).
@@ -7874,7 +7874,7 @@ case: (inc_or_not y Sv) => yEv; last first.
     move => t; case /setU1_P => te; apply/setU1_P; fprops; left.
     apply /tpP; split; first by left; apply: sE.
     dneg ty; apply /setU1_P; left; ue.
-  by move: (pt _ BM).  
+  by move: (pt _ BM).
 have yEx: inc y Sx by rewrite /Sx;fprops.
 have nSxv: Sx <> Sv.
   dneg sxv; have: inc x Sx by rewrite /Sx; fprops.
@@ -7895,9 +7895,9 @@ Qed.
 
 
 (** Two maximal pure sets are equipotent. Let [C = M - N].
-If [C] is empty, then [M] is a subset of [N] and [M=N]. 
-If [C] is finite, we take [a] in [C] and [b] in [ (Ex4_11EM N a) - M] (it 
-exists by purity of [M]. Then [ N - a + b] is maximal pure, has the same 
+If [C] is empty, then [M] is a subset of [N] and [M=N].
+If [C] is finite, we take [a] in [C] and [b] in [ (Ex4_11EM N a) - M] (it
+exists by purity of [M]. Then [ N - a + b] is maximal pure, has the same
 cardinal as [N] and has same cardinal as [M] by induction. *)
 
 
@@ -7911,15 +7911,15 @@ apply: finite_set_induction0.
    move => M M' iz mp mp'.
    symmetry in iz; move: (empty_setC iz) => l1.
    move: mp mp' => [mp0 mp1 mp2] [mp5 mp3 mp4].
-   rewrite (mp2 _ mp3 l1 mp5);fprops. 
+   rewrite (mp2 _ mp3 l1 mp5);fprops.
 move => C a Hrec naC M N cv Mp Np.
 have : inc a (C +s1 a) by fprops.
 rewrite cv; move => /setC_P [aM naN].
-have aAN: inc a (A -s N) by apply /setC_P; split => //;apply (proj31 Mp). 
+have aAN: inc a (A -s N) by apply /setC_P; split => //;apply (proj31 Mp).
 move:(Exercise4_11d Np aAN) => [seN teR].
 case: (emptyset_dichot ((Ex4_11EM N a) -s M)) => esd.
   move: (empty_setC esd) => s1.
-  have s2: sub  ((Ex4_11EM N a) +s1 a) M 
+  have s2: sub  ((Ex4_11EM N a) +s1 a) M
      by move => t; case /setU1_P; fprops => ->.
   by move: (proj32 Mp _ s2).
 move: esd => [b] /setC_P [bt nb].
@@ -7933,7 +7933,7 @@ have pa: C  = M -s T.
     move /setC1_P => [] /setU1_P; case => // ta _;case: naC; ue.
   move => /setC_P  [tm] /setC1_P aux.
   have ntb: t <> b by move=> tb; case: nb; ue.
-  case: (equal_or_not t a) => nta. 
+  case: (equal_or_not t a) => nta.
      by case: aux; split; [ rewrite nta;fprops | exact].
   case: (inc_or_not t N) => ntN; first by case: aux; split; [ fprops | exact].
   have: inc t (C +s1 a) by rewrite cv; apply /setC_P; split.
@@ -7950,14 +7950,14 @@ by rewrite - (csucc_inj cb ca ss);apply/card_eqP; apply:Hrec.
 Qed.
 
 Lemma finite_set_strong_induction (s : property) :
-  (forall x : Set, finite_set x -> 
+  (forall x : Set, finite_set x ->
     (forall y : Set, ssub y x -> s y) -> s x) ->
   forall x : Set, finite_set x -> s x.
 Proof.
 move=> IH.
-suff IH1 : forall n, 
+suff IH1 : forall n,
      natp n -> (forall x, cardinal x = n -> s x).
-  move=> x fx.   
+  move=> x fx.
   apply: (IH1 (cardinal x)) => //.
   by apply/card_finite_setP.
 apply: (@Nat_induction1
@@ -7972,12 +7972,12 @@ Qed.
 
 Lemma Exercise4_11d' M x M' : max_pure A R M -> inc x (A -s M) ->
   sub M' A -> sub M' M -> inc (M' +s1 x) R -> M' = Ex4_11EM M x.
-Proof. 
+Proof.
 move => pa pb sm'a sm'm icm'xr; rewrite /Ex4_11EM.
 pose p z := sub z M /\ inc (z +s1 x) R; rewrite -/p -/(p _).
 move:(Exercise4_11c pa pb) => [z [[qa qb qc] zb]].
 have h:(singl_val2 (inc ^~ (\Po A)) p).
-  move => a b aP [r1 r2] bP [r3 r4].  
+  move => a b aP [r1 r2] bP [r3 r4].
   by rewrite - (zb _ (And3 aP r1 r2)) (zb _ (And3 bP r3 r4)).
 apply: select_uniq => //.
 by apply/setP_i.
@@ -7989,7 +7989,7 @@ Qed.
 
 (* This proof is due to the collaborators of Nicolas Bourbaki *)
 Lemma Exercise4_11h M N:
-  max_pure A R M -> max_pure A R N -> 
+  max_pure A R M -> max_pure A R N ->
   sub (M -s N) (unionb (Lg (N -s M) (fun z => (Ex4_11EM M z)))).
 Proof.
 move => mp np y ymn.
@@ -7997,7 +7997,7 @@ have /setC_P[ym yn] := ymn.
 have yIA : inc y A by have [H _ _] := mp; apply: H.
 apply/setUb_P1.
 suff IH : forall K, finite_set K ->
-   (forall M, max_pure A R M -> 
+   (forall M, max_pure A R M ->
               inc y M ->
               K = Ex4_11EM N y -s M ->
               exists2 x : Set, inc x K & inc y (Ex4_11EM M x)).
@@ -8011,7 +8011,7 @@ suff IH : forall K, finite_set K ->
   apply/setC_P; split => //.
   have [||senyn _] // := (@Exercise4_11d N y); first by apply/setC_P.
   by apply: senyn.
-move=> {M mp ymn ym}.  
+move=> {M mp ymn ym}.
 apply: (@finite_set_strong_induction
   (fun K => forall M : Set,
 max_pure A R M ->
@@ -8081,7 +8081,7 @@ have [iy'emx'|niy'emx'] := inc_or_not y' (Ex4_11EM M x'); last first.
   have smx'm' : sub (Ex4_11EM M x') M'.
     move=> z izemx'.
     apply/setC1_P; split => //; last first.
-      by move=> ezy'; case: niy'emx'; rewrite -ezy'. 
+      by move=> ezy'; case: niy'emx'; rewrite -ezy'.
     apply/setU1_P; left.
     have [|semx'm _] := @Exercise4_11d _ x' mp.
       by apply/setC_P.
@@ -8165,7 +8165,7 @@ by apply/setU1_P; left.
 Qed.
 
 (** If one complement is finite, then [M] and [N] are equipotent.
-Otherwise we use [ Exercise4_11k ] and an upper bound of the cardinal of the 
+Otherwise we use [ Exercise4_11k ] and an upper bound of the cardinal of the
 union. It follows that [ Card(M-N) <= Card(N-M) and vice versa. *)
 
 Lemma  Exercise4_11i M N: max_pure A R M -> max_pure A R N ->
@@ -8201,7 +8201,7 @@ have l2: (forall i, inc i (domain f2) -> Vg f2 i <=c cardinal C1).
    move: (q2 _ tf);  apply: sub_finite_set; fprops.
 move: (cleT le1 (notbig_family_sum h1' cd1 l1)) => l3.
 move: (cleT le2 (notbig_family_sum h2' cd2 l2)) => l4.
-apply/card_eqP;  apply: cardinal_setC3; exact: (cleA l3 l4). 
+apply/card_eqP;  apply: cardinal_setC3; exact: (cleA l3 l4).
 Qed.
 
 End Exercice4_11.

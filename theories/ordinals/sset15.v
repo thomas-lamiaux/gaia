@@ -4,7 +4,7 @@
 
 (* $Id: sset15.v,v 1.5 2018/09/04 07:57:59 grimm Exp $ *)
 
-From mathcomp Require Import ssreflect ssrfun ssrbool eqtype ssrnat. 
+From mathcomp Require Import ssreflect ssrfun ssrbool eqtype ssrnat.
 From gaia Require Export sset13c sset14.
 
 Set Implicit Arguments.
@@ -64,7 +64,7 @@ Hypothesis sd: domain f = domain g.
 Hypothesis hg:  (allf g (fun x => \2c <=c x)).
 
 
-Lemma compare_sum_prod0 a b : \2c <=c a -> \2c <=c b -> 
+Lemma compare_sum_prod0 a b : \2c <=c a -> \2c <=c b ->
    a +c b <=c a *c b.
 Proof.
 move => ag2 bg2.
@@ -92,8 +92,8 @@ case: (cleT_el  (CS_nat NS3) (CS_cardinal (domain g))); last first.
 move/ cardinal_ge3 =>[i [k1 [k2 [idg k1dg k2dg [ik1 ik2 k12]]]]].
 rewrite /cprod /csum.
 set Pr := (productb g); set (Sr := (disjointU g)).
-suff [h2 [hp6 hp8]]: exists h2, 
-  ( (forall j x, inc j (domain g) -> inc x (Vg g j) -> inc (h2 j x) Pr) 
+suff [h2 [hp6 hp8]]: exists h2,
+  ( (forall j x, inc j (domain g) -> inc x (Vg g j) -> inc (h2 j x) Pr)
   /\ (forall j k x y, inc j (domain g) ->inc k (domain g) ->
     h2 j x = h2 k y -> (x = y /\ j = k))).
   set hh:= Lf (fun z => h2 (Q z) (P z)) (disjointU g) (productb g).
@@ -103,7 +103,7 @@ suff [h2 [hp6 hp8]]: exists h2,
   apply: inj_source_smaller; apply: lf_injective.
     by  move=> z zf; move: (disjointU_hi zf) => [p1 p2 p3]; apply: hp6.
   move=> u v ud vd; move: (disjointU_hi ud) => [p1 p2 p3].
-  move: (disjointU_hi vd) => [p4 p5 p6] eq. 
+  move: (disjointU_hi vd) => [p4 p5 p6] eq.
   by move: (hp8 _ _ _ _ p1 p4 eq) => [sp sq]; apply: pair_exten.
 have gp j: inc j (domain g) -> inc \0c   (Vg g j) /\ inc \1c (Vg g j).
   move =>jdf; move: (proj33 (hg jdf)); rewrite - (proj2 (proj2 constants_v)).
@@ -117,8 +117,8 @@ have hp2:  forall j x y, inc j (domain g) -> (hh j x = hh j y) -> x = y.
 have hp3:  forall j k x y, inc j (domain g) -> inc k (domain g)-> j <> k ->
      (hh j x =  hh k y) -> (x = \0c /\  y = \0c).
   move=> j l x y jdf ldf jl sh;split.
-    by move: (f_equal (Vg^~ j) sh); rewrite /hh !LgV//; Ytac0; Ytac0. 
-  by move: (f_equal (Vg^~  l) sh); rewrite /hh !LgV//; Ytac0; Ytac0. 
+    by move: (f_equal (Vg^~ j) sh); rewrite /hh !LgV//; Ytac0; Ytac0.
+  by move: (f_equal (Vg^~  l) sh); rewrite /hh !LgV//; Ytac0; Ytac0.
 pose h1 j := Lg (domain g) (fun z => Yo (z = j) \0c \1c).
 have hp4: forall j, inc j (domain g) ->  inc (h1 j) Pr.
   move => j jdf; apply /setXb_P;rewrite /h1 Lgd;split;fprops.
@@ -133,28 +133,28 @@ have hp7: forall j k x, inc j (domain g) ->inc k (domain g) ->
   hh j x <>  h1 k.
   move=> j k x jdf kdf; rewrite /hh /h1.
   suff [z [zdf z1 z2]]: (exists z, [/\ inc z (domain g), z <> j & z <> k]).
-    move=> eq; move: (f_equal (Vg ^~z) eq). 
-    by rewrite !LgV//; Ytac0; Ytac0; fprops. 
+    move=> eq; move: (f_equal (Vg ^~z) eq).
+    by rewrite !LgV//; Ytac0; Ytac0; fprops.
   case: (equal_or_not j i) => ji.
     case: (equal_or_not k k1) => kk1.
     - exists k2; rewrite ji kk1;split; fprops.
-    - exists k1; rewrite ji; split;fprops. 
+    - exists k1; rewrite ji; split;fprops.
   case: (equal_or_not k i) => kk1; last by exists i; split; fprops.
   case: (equal_or_not k1 j) => jk2.
      exists k2; rewrite kk1 - jk2; split; fprops.
   exists k1; rewrite kk1; split; fprops.
 move=> j k x y jdf kdf; rewrite /h2; Ytac e1.
   Ytac e2.
-    by move=>  sh1; move: (hp5 _ _ jdf sh1) => aux; rewrite e1 e2 aux. 
+    by move=>  sh1; move: (hp5 _ _ jdf sh1) => aux; rewrite e1 e2 aux.
   by move => aux; case: (hp7 _ _ y kdf jdf).
 Ytac e2 => sh1; first by case: (hp7 _ _ x jdf kdf).
 case: (equal_or_not j k) => e3.
-  split => //;rewrite e3 in sh1; apply: (hp2 _ _ _ kdf sh1). 
+  split => //;rewrite e3 in sh1; apply: (hp2 _ _ _ kdf sh1).
 by move: (hp3 _ _ _ _ jdf kdf e3 sh1) => [aux1 aux2].
 Qed.
 
 
-Lemma compare_sum_prod2: 
+Lemma compare_sum_prod2:
   (forall i, inc i (domain f) ->  Vg f i <=c Vg g i) ->
   csum f <=c cprod g.
 Proof.
@@ -178,9 +178,9 @@ have Dp1: forall i, inc i (domain f) -> sub (D i) (source h).
 pose A i := Vfs h (D i).
 have Dp2: forall i, inc i (domain f) -> (cardinal (A i)) <c (Vg g i).
   move: (bh)  => [ih _].
-  move=> i idf;move: (alt1 _ idf) => aux. 
+  move=> i idf;move: (alt1 _ idf) => aux.
   rewrite /A (cardinal_image (Dp1 _ idf) ih) (cardinal_indexed).
-  by rewrite (card_card (proj31_1 aux)). 
+  by rewrite (card_card (proj31_1 aux)).
 have fh: function h by fct_tac.
 have Dp3: forall i, inc i (domain f) -> sub (A i) (target h).
   by move=> i idf; apply: fun_image_Starget1.
@@ -190,9 +190,9 @@ have Dp4: forall i F, inc i (domain f) -> sub F (target h) ->
   have idg: inc i (domain g) by ue.
   exists (restriction1 (pr_i g i) F).
   split => //; rewrite /restriction1; aw; trivial.
-  apply: restriction1_fs; first by  apply: pri_f => //. 
+  apply: restriction1_fs; first by  apply: pri_f => //.
   by rewrite /pr_i; aw.
-have Dp5: forall i, inc i (domain f) -> 
+have Dp5: forall i, inc i (domain f) ->
   (cardinal (Vfs (pr_i g i) (A i))) <c (Vg g i).
   move=> i idf; exact:(cle_ltT (Dp4 _ _ idf (Dp3 _ idf)) (Dp2 _ idf) ).
 have Dp6: forall i, inc i (domain f) -> exists xi, inc xi (Vg g i) /\
@@ -201,7 +201,7 @@ have Dp6: forall i, inc i (domain f) -> exists xi, inc xi (Vg g i) /\
   have fp: function (pr_i g i) by apply: pri_f => //; ue.
   have st: sub T (Vg g i).
     by move: (@fun_image_Starget1 _ fp (A i)); rewrite {2} /pr_i lf_target.
-  rewrite -{1} (card_card (proj32_1 ( (alt1 _ idf)))); move=> [_ neq]. 
+  rewrite -{1} (card_card (proj32_1 ( (alt1 _ idf)))); move=> [_ neq].
   ex_middle nex; case: neq;apply:f_equal; apply:extensionality =>//.
   have sAi: sub (A i) (source (pr_i g i)).
     by rewrite /pr_i; aw; rewrite -th; apply:  Dp3.
@@ -211,7 +211,7 @@ have Dp6: forall i, inc i (domain f) -> exists xi, inc xi (Vg g i) /\
   move=> wy; case: ney; ex_tac.
 pose k i:= choose (fun xi => inc xi (Vg g i) /\
           (forall y : Set, inc y (A i) -> Vf (pr_i g i) y <> xi)).
-have kp: forall i, inc i (domain f) -> 
+have kp: forall i, inc i (domain f) ->
    (inc (k i) (Vg g i) /\  (forall y, inc y (A i) -> Vf (pr_i g i) y <> (k i))).
   move=> i idf; apply choose_pr; apply: (Dp6 _ idf).
 set x := Lg (domain g) k.
@@ -223,7 +223,7 @@ move: ysg; rewrite sh; move /setUb_P.
 rewrite/disjointU_fam;aw.
 move=> [i idf]; rewrite LgV// => yd.
 have xA: inc x (A i).
-  by rewrite /A Wy; apply /(Vf_image_P (proj1 ih)(Dp1 _ idf)); exists y. 
+  by rewrite /A Wy; apply /(Vf_image_P (proj1 ih)(Dp1 _ idf)); exists y.
 move: (kp _ idf) => [_ p2]; move: (p2 _ xA).
 rewrite sd in idf; rewrite th in xth.
 by rewrite pri_V // /x LgV.
@@ -240,7 +240,7 @@ move=> fgf fgg sd ale1.
 set K:= Zo (domain f) (fun i => \2c <=c  (Vg g i)).
 have kdf: sub K (domain f) by apply: Zo_S.
 have kdg: sub K (domain g) by ue.
-have aux: forall i, inc i ((domain f) -s K) ->   
+have aux: forall i, inc i ((domain f) -s K) ->
   (Vg f i = \0c /\  Vg g i = \1c).
   move=> i => /setC_P [idf] /Zo_P aux.
   have le1:=(ale1 _ idf).
@@ -267,7 +267,7 @@ Proof.
 move => pb.
 set d := domain X.
 set w := Zo d (fun z => ~ (inc z z)).
-case: (p_or_not_p (inc w d)) => wp. 
+case: (p_or_not_p (inc w d)) => wp.
   case: (p_or_not_p (inc w w)) => h2; first by move: (h2) => /Zo_hi bad.
   by case: (h2); apply: Zo_i.
 pose mzY Y z := (forall u, inc u Y -> Vg X z <=c Vg X u).
@@ -278,7 +278,7 @@ have lep Y: sub Y d -> nonempty Y -> (inc (lev Y) Y /\ mzY Y (lev Y)).
   set Z := fun_image Y (Vg X).
   have neZ: nonempty Z by exists (Vg X y); apply /funI_P; exists y.
   have cZ: cardinal_set Z.
-    by move => t /funI_P [z zy ->]; apply: pb; apply: yd. 
+    by move => t /funI_P [z zy ->]; apply: pb; apply: yd.
   move:(cle_wor' cZ neZ) => [/funI_P [t ty ->] qb].
   by exists t; apply: (Zo_i ty) => u uy; apply:qb; apply:funI_i.
 pose lew Y:= Yo (nonempty (d -s Y)) (lev (d -s Y)) w.
@@ -286,7 +286,7 @@ have lewe Y: nonempty (d -s Y) ->
    (inc (lew Y)  (d -s Y) /\ mzY (d -s Y) (lew Y)).
   by move => ne; rewrite /lew; Ytac0; apply: lep => //; apply: sub_setC.
 have lewb Y: inc (lew Y) (d +s1 w).
-  apply/setU1_P;case: (p_or_not_p (nonempty (d -s Y))) => h. 
+  apply/setU1_P;case: (p_or_not_p (nonempty (d -s Y))) => h.
     by move: (lewe _ h) => [] /setC_P [ok _] _; left.
   by right;rewrite /lew; Ytac0.
 move: (cantor (CS_cardinal d)); set a := _ ^c _ => lt1.
@@ -324,7 +324,7 @@ case: (p_or_not_p (inc w (target f))) => wt; last first.
     split; last by exact.
     split; [exact |  move => x y xsf ysf sv].
     case: (equal_or_not (Vf f x) w) => le1.
-       case: wt; rewrite -le1; Wtac. 
+       case: wt; rewrite -le1; Wtac.
     rewrite sf in xsf ysf.
     have ox:= (Os_ordinal oa xsf).
     have oy:= (Os_ordinal oa ysf).
@@ -338,14 +338,14 @@ case: (p_or_not_p (inc w (target f))) => wt; last first.
 pose pri i :=  (inc i (source f) /\ w = Vf f i).
 have [i0 iv0]: exists i, pri i by move: ((proj2 sjf) _ wt) => [i0]; exists i0.
 have oi0: ordinalp i0 by move: (proj1 iv0); rewrite sf; apply: (Os_ordinal oa).
-move: (least_ordinal4 oi0 iv0). 
+move: (least_ordinal4 oi0 iv0).
 set qi :=least_ordinal _ _;move=> [oq [qsf qv] ql].
-rewrite sf in qsf;move: qv; rewrite (fv _ qsf) /lef /lew. 
+rewrite sf in qsf;move: qv; rewrite (fv _ qsf) /lef /lew.
 set e := Imf (R qi).
 case: (p_or_not_p (nonempty (d -s e))) =>h qv.
   move: (lewe _ h) => [ /setC_P [wd _] _]; case: wp.
   by move: wd;rewrite /lew - qv.
-have sr1 := sRi _ qsf.  
+have sr1 := sRi _ qsf.
 have sa1: sub (segment r qi) (source f) by rewrite sf - sr ;apply: sub_segment.
 have fr:=(proj1 (restriction1_fs ff sa1)).
 have pa1: forall i, inc i qi -> (inc (Vf f i) d /\  Vf f i <> w).
@@ -393,7 +393,7 @@ exists g; split => // u v.
 rewrite composef_domain => us vs uv.
 rewrite !composef_ev //;rewrite -/(Vf g u) -/ (Vf g v).
 have aux: domain (graph g) = qi.
-  rewrite (domain_fg fg) /g /restriction_to_image /restriction2 corresp_s. 
+  rewrite (domain_fg fg) /g /restriction_to_image /restriction2 corresp_s.
   by aw; rewrite sr1.
 rewrite aux in us vs; rewrite (gV  _ us) (gV  _ vs).
 move: (pa1 _ us) => [wfu wfuw].
@@ -421,22 +421,22 @@ Qed.
 
 Definition cardinal_pos_fam g := (allf g (fun z => \0c <c z)).
 
-Lemma compare_sum_prod5  x  : 
+Lemma compare_sum_prod5  x  :
   fgraph x -> cardinal_pos_fam x ->
   \csup (range x) <=c cprod x.
 Proof.
 move => fx  xi.
 set A := Zo (domain x) (fun a => \2c <=c (Vg x a)).
 have pa: (forall i, inc i ((domain x) -s A) -> (Vg x i) = \1c).
-  move=> i /setC_P [idx ] /Zo_P h. 
+  move=> i /setC_P [idx ] /Zo_P h.
   move: (xi _ idx) => [xx yy]; ex_middle x1; case: h; split => //.
-  apply: (cge2 (proj32 xx) (nesym yy) x1). 
-have Ax: sub A (domain x) by apply: Zo_S.  
+  apply: (cge2 (proj32 xx) (nesym yy) x1).
+have Ax: sub A (domain x) by apply: Zo_S.
 set g := (Lg A (Vg x)).
 have fgg: fgraph g by rewrite /g ; fprops.
 have dg: domain g = A by rewrite /g; aw.
 have gs: (forall i : Set, inc i (domain g) -> \2c <=c Vg g i).
-  by rewrite /g dg => i iA; rewrite LgV//; move: iA => /Zo_P [_]. 
+  by rewrite /g dg => i iA; rewrite LgV//; move: iA => /Zo_P [_].
 have cs: cardinal_set (range x).
   move => t /(range_gP fx) [z zy ->]; exact: (proj32_1(xi _ zy)).
 move: (compare_sum_prod1 fgg gs); rewrite (cprod_one_unit Ax pa) - /g.
@@ -455,11 +455,11 @@ have s1:= (cleT cle_12 le3).
 case: (inc_or_not j A) => jA.
    rewrite -dg in jA; move: (csum_increasing6 (pb _ jA) jA).
    rewrite {1}/g LgV//; ue.
-have jc: inc j ((domain x) -s A) by apply /setC_P. 
+have jc: inc j ((domain x) -s A) by apply /setC_P.
 by rewrite (pa _ jc).
 Qed.
 
-Lemma infinite_increasing_power_bound0 X: 
+Lemma infinite_increasing_power_bound0 X:
   fgraph X -> cardinal_fam X ->
   cprod X <=c (\csup (range X)) ^c (cardinal (domain X)).
 Proof.
@@ -471,8 +471,8 @@ apply: card_sup_ub.
 apply: (inc_V_range fX idx).
 Qed.
 
-Lemma infinite_increasing_power_bound1 X: 
-  fgraph X -> ordinal_fam X -> 
+Lemma infinite_increasing_power_bound1 X:
+  fgraph X -> ordinal_fam X ->
   cprod (Lg (domain X) (fun z => \aleph (Vg X z))) <=c
   \aleph (\osup (range X)) ^c (cardinal (domain X)).
 Proof.
@@ -488,10 +488,10 @@ apply:infinite_increasing_power_bound0; rewrite/Y; fprops; hnf; aw.
 move => i idx; rewrite LgV//; fprops.
 Qed.
 
-  
+
 Lemma infinite_increasing_power4 X (Y:= Lg (domain X)(fun z => \aleph (Vg X z)))
   (a := \osup (range X)):
-  ofg_Mlt_lto X -> limit_ordinal (domain X) -> 
+  ofg_Mlt_lto X -> limit_ordinal (domain X) ->
   (cardinal (domain X) <=c \aleph a /\  \aleph a <c (cprod Y)).
 Proof.
 move => pa pb.
@@ -524,15 +524,15 @@ have sd:  domain Y = domain Z by rewrite /Y /Z; aw.
 have inc1: (forall i, inc i (domain Y) -> Vg Y i <c Vg Z i).
   rewrite /Y/Z; aw; move => i idx; rewrite !LgV//; apply: aleph_lt_ltc.
   apply: xi => //; [ by apply: ldx | apply: (oltS (Os_ordinal odx idx)) ].
-apply: (clt_leT (compare_sum_prod fgY fgZ sd inc1)).  
+apply: (clt_leT (compare_sum_prod fgY fgZ sd inc1)).
 set X1 := fun_image (domain X) osucc.
 have scx1: sub X1 (domain X) by move =>t /funI_P [z zd ->]; apply: ldx.
-have <-: cprod (restr Y X1) = cprod Z.  
+have <-: cprod (restr Y X1) = cprod Z.
   have ->: cprod (restr Y X1)  = cprodb X1 (fun z => \omega (Vg X z)).
     by apply:cprodb_exten => i ii; rewrite /Y; aw; rewrite LgV//; apply: scx1.
   rewrite /Z -/(cprodb  _ _); apply:cprod_Cn2; split.
   +  move => t td; apply /funI_P; ex_tac.
-  + move => u v ud vd. 
+  + move => u v ud vd.
     exact: (osucc_inj (Os_ordinal odx ud)(Os_ordinal odx  vd)).
   + by move => y /funI_P.
 apply: cprod_increasing1 => //; last by rewrite  /Y; aw.
@@ -541,7 +541,7 @@ Qed.
 
 Lemma infinite_increasing_power5 X (Y:= Lg (domain X)(fun z => \aleph (Vg X z)))
   (a := \osup (range X)):
-  ofg_Mlt_lto X -> limit_ordinal (domain X) -> 
+  ofg_Mlt_lto X -> limit_ordinal (domain X) ->
   [/\  \aleph a <c cprod Y,
      cprod Y <=c \aleph a ^c cardinal (domain X) &
      \aleph a ^c cardinal (domain X) <=c \2c ^c \aleph a].
@@ -565,8 +565,8 @@ move => fx cy alz xi.
 have osr: cardinal_set (range x).
   move => t /(range_gP fx) [z zy ->]; exact: (proj32_1(alz _ zy)).
 apply: cleA.
-rewrite - cprod_of_same /cst_graph; apply: cprod_increasing => //; aww. 
-  move=>t td; rewrite LgV//. 
+rewrite - cprod_of_same /cst_graph; apply: cprod_increasing => //; aww.
+  move=>t td; rewrite LgV//.
   by apply: card_sup_ub => //; apply /(range_gP fx); ex_tac.
 move: (infinite_product_prop2 cy); set f := ordinal_iso _.
 move => [[bf sf tf] fp].
@@ -575,18 +575,18 @@ have ff: function f by fct_tac.
 have pa: partition_w_fam g (domain x).
   rewrite /g; split;fprops.
      apply: mutually_disjoint_prop; aw.
-     move=> i j z iy jy; rewrite !LgV//. 
+     move=> i j z iy jy; rewrite !LgV//.
      move=> /funI_P [a ay av] /funI_P [b iby bv].
-     rewrite av in bv. 
+     rewrite av in bv.
      have asf: inc (J a i) (source f) by rewrite sf; fprops.
      have bsf: inc (J b j) (source f) by rewrite sf; fprops.
      exact (pr2_def (bij_inj bf asf bsf bv)).
-   set_extens t. 
-     move /setUb_P; aw; move => [a ay];rewrite LgV//;move /funI_P => [b ny ->]. 
+   set_extens t.
+     move /setUb_P; aw; move => [a ay];rewrite LgV//;move /funI_P => [b ny ->].
      rewrite -/y -tf; Wtac; rewrite sf; fprops.
    rewrite -/y -tf => ytf; move: (bij_surj bf  ytf) => [z zs zv].
    move: zs; rewrite sf => /setX_P; rewrite -tf; move => [pz za zb].
-   apply /setUb_P; exists (Q z) => //;aw;trivial;rewrite LgV//; apply /funI_P. 
+   apply /setUb_P; exists (Q z) => //;aw;trivial;rewrite LgV//; apply /funI_P.
    by exists (P z) => //; rewrite  pz.
 rewrite (cprod_An pa).
 rewrite {1} /g; aw.
@@ -594,7 +594,7 @@ rewrite - cprod_of_same /cst_graph; apply: cprod_increasing => //;aw; trivial.
 move=> a ay; rewrite LgV // LgV //.
 set h :=  (restr x (Vg g a)).
 have fgr: fgraph h by rewrite /h;fprops.
-have s1:  sub (Vg g a) (domain x). 
+have s1:  sub (Vg g a) (domain x).
   rewrite /g => t; rewrite LgV//; move /funI_P => [z zy ->]; rewrite -/y - tf.
   Wtac; rewrite sf; fprops.
 have pb: (forall b, inc b (domain h) -> \0c <c Vg h b).
@@ -608,19 +608,19 @@ apply card_ub_sup => //; first by apply: CS_sup.
 move => i  /(range_gP fx) [j jdx ->].
 rewrite -/y -tf in jdx; move:(bij_surj bf jdx) => [z zf ->].
 move: (zf); rewrite sf => /setX_P [pz py qy].
-move: (infinite_card_limit2 cy) => [oy _ yp]. 
+move: (infinite_card_limit2 cy) => [oy _ yp].
 have op: ordinal_pair z by split => //; apply: (Os_ordinal (proj1 (proj1 cy))).
 set b0 := (ord_pair_max z); set b := osucc b0.
 have ib0y: inc b0 y by  rewrite /b0;case: (ordering_pair1 op); move=> [_ -> ].
-have iby: inc b y  by apply yp. 
+have iby: inc b y  by apply yp.
 move: (Os_ordinal oy iby) (Os_ordinal oy ay) => ob oa.
 have opab: ordinal_pair (J b a) by split => //; aww.
 have bsba:= (proj1 (omax_p1 ob oa)).
 have ult: ord_pair_max z <o omax b a.
   apply: (olt_leT _ bsba); exact (oltS (Os_ordinal oy ib0y)).
-have nzj: z <> J b a. 
+have nzj: z <> J b a.
   by move => zj; case: (proj2 ult); rewrite zj/ord_pair_max; aw.
-have sa: inc (Vf f (J b a)) (Vg g a) 
+have sa: inc (Vf f (J b a)) (Vg g a)
    by rewrite /g LgV//; apply /funI_P; ex_tac.
 have wy: inc (Vf f z) y by  rewrite - tf; Wtac.
 have wy': inc (Vf f (J b a)) y by rewrite - tf; Wtac; rewrite sf; fprops.
@@ -661,7 +661,7 @@ have ynz:= infinite_nz iy.
 have ia := (cofinality_infinite_cardinal iy).
 case: (cleT_el (proj1 ia) (proj1 xi)) => le2 //.
 case: (cltNge (power_cofinality1 iy)).
-rewrite -{3} (csquare_inf xi) cpow_pow; exact:(cpow_Meqle ynz le2). 
+rewrite -{3} (csquare_inf xi) cpow_pow; exact:(cpow_Meqle ynz le2).
 Qed.
 
 Lemma power_cofinality3: aleph0 <c \cf (\2c ^c aleph0).
@@ -685,8 +685,8 @@ case: (cleT_el (proj1 ww) (proj1 icy)) => // cy.
 case: (proj2 lt1);rewrite (cprod_inf cy icy (infinite_nz ww)) //.
 Qed.
 
-Lemma infinite_power7b x y: 
-  infinite_c x -> y <c \cf x -> 
+Lemma infinite_power7b x y:
+  infinite_c x -> y <c \cf x ->
   x ^c y <=c cardinal (unionb (Lg x (functions y))).
 Proof.
 move=> icx yc.
@@ -716,9 +716,9 @@ pose sf1 f := osucc (sf f).
 have pa: forall f, inc f (functions y x) -> (sf1 f) <o x.
   have qc:= (proj33 (infinite_card_limit2 icx)).
   move => f /functionsP fp; apply /(oltP ox); apply: qc; exact: (ha _ fp).
-have pb:forall f, inc f (functions y x) -> 
+have pb:forall f, inc f (functions y x) ->
   (forall t, inc t (source f) -> inc (Vf f t) (sf1 f)).
-  move => f /functionsP fpp t tsf. 
+  move => f /functionsP fpp t tsf.
   have osT := (Ha f fpp).
   apply /oleP; first by apply: OS_sup.
   apply: ord_sup_ub => //; apply /(Imf_P (proj31 fpp)); ex_tac.
@@ -727,12 +727,12 @@ have pc: forall f, inc f (functions y x) ->
   restriction2_axioms f (source f) (sf1 f).
   move=> f fp; move: (fp) => /functionsP [qc qd qe].
   split => //.
-    by rewrite qe; move: (pa _ fp) => [[_ _ ok] _]. 
+    by rewrite qe; move: (pa _ fp) => [[_ _ ok] _].
   by move=>t /(Imf_P qc) [u usf ->]; apply: (pb _ fp).
 have pd: forall f, inc f (functions y x) ->
     inc (R f) (functions y (sf1 f)).
   move=> f fh; move: (restriction2_prop (pc _ fh)) => [p1 p2 p3].
-  apply /functionsP;split => //; rewrite /R p2. 
+  apply /functionsP;split => //; rewrite /R p2.
   by move: fh => /functionsP [q1 q2 q3].
 set t1:= unionb _.
 have pe: forall f, inc f (functions y x) ->  inc (R f) t1.
@@ -750,7 +750,7 @@ by rewrite restriction2_V  // sv - su.
 Qed.
 
 Lemma infinite_power2 n m (x:=\aleph n) (y:= \aleph (osucc n)):
-   ordinalp n -> m <> \0c -> 
+   ordinalp n -> m <> \0c ->
    y ^c m = (x ^c m) *c y.
 Proof.
 move => on mnz.
@@ -777,11 +777,11 @@ case: (cleT_el cy cm') => cmx.
   rewrite (infinite_power1_a (cleT lex2 lexy) cmx im).
   apply: cprod_M1le => //; fprops.
   apply: (aleph_nz (OS_succ on)).
-have ha: m' <c \cf y. 
+have ha: m' <c \cf y.
   by move: (regular_initial_successor on) => /regular_cardinalP [_ ->].
 have hb:= (infinite_power7b icy ha).
 apply: (cleT hb); apply: (cleT (csum_pr1 (Lg y (functions m')))).
-rewrite /csumb; aw; set f := Lg _ _. 
+rewrite /csumb; aw; set f := Lg _ _.
 have df: domain f = y by rewrite /f; aw.
 rewrite - df /f; apply:csum_of_small_b1.
 split; [ fprops | hnf; aw; move =>i ix; rewrite !LgV//].
@@ -793,7 +793,7 @@ Qed.
 
 
 Lemma infinite_power2_bis x (y:= cnext x) m:
-  infinite_c x -> m <> \0c -> 
+  infinite_c x -> m <> \0c ->
    y ^c m = (x ^c m) *c y.
 Proof.
 move=> ix mnz; rewrite /y;move: (ord_index_pr1 ix)=> [on <-].
@@ -802,10 +802,10 @@ Qed.
 
 
 Lemma infinite_power3 n m (x:=\aleph n):
-   natp n -> m <> \0c -> 
+   natp n -> m <> \0c ->
    x ^c m = (\2c ^c m) *c x.
 Proof.
-move=> nN mz. 
+move=> nN mz.
 rewrite - (cpowcr x m) - (cpowcr \2c m).
 set m':= cardinal m.
 have cm': cardinalp m' by  rewrite /m'; fprops.
@@ -816,8 +816,8 @@ case: (finite_or_infinite cm') => fm.
   have on:=(OS_nat nN).
   have io:=(CIS_aleph on).
   rewrite (cpow_inf io mN m'nz)  cprodC.
-  symmetry; apply: cprod_inf => //; last by apply: cpow2_nz. 
-  apply: cle_fin_inf => //. 
+  symmetry; apply: cprod_inf => //; last by apply: cpow2_nz.
+  apply: cle_fin_inf => //.
   apply /NatP; apply: NS_pow; fprops.
 have io: infinite_c omega0 by rewrite - aleph0E; apply: CIS_aleph; fprops.
 have pa: \2c <=c omega0 by apply: infinite_ge2.
@@ -841,22 +841,22 @@ Proof.
 move => H0 n nN nz.
 move: (cpred_pr nN nz) => [ cp ->]; move: (cpred n) cp; clear n nN nz.
 apply: Nat_induction; first by rewrite succ_zero.
-move => n nN. 
+move => n nN.
 rewrite (succ_of_nat (NS_succ nN)) (succ_of_nat nN) => Hrec.
 have on :=(OS_nat nN).
 have osn := (OS_succ on).
 rewrite (infinite_power2 osn omega_nz) Hrec cprodC cprod_inf //.
-- by apply: aleph_le_lec; apply /oleSSP; apply: (oleS on).   
+- by apply: aleph_le_lec; apply /oleSSP; apply: (oleS on).
 - exact: (CIS_aleph (OS_succ osn)).
 - exact: (aleph_nz osn).
 Qed.
 
 Lemma infinite_power4 a (b:= \2c ^c a): infinite_c a ->
-  [/\ b ^c a = b, b ^c a <c (cnext b) ^c a, 
+  [/\ b ^c a = b, b ^c a <c (cnext b) ^c a,
     (forall c, \2c <=c c -> c ^c a = c -> b <=c c) &
      (forall c, infinite_c c -> c ^c a <c (cnext c) ^c a -> b <=c c)].
-Proof.  
-move=> ica. 
+Proof.
+move=> ica.
 have anz: a <> \0c by apply: infinite_nz.
 have ib: infinite_c b by apply: infinite_pow2.
 have p1: b ^c a = b by rewrite/b - cpow_pow csquare_inf.
@@ -873,18 +873,18 @@ have p2: b ^c a <c cnext b ^c a.
   by rewrite cprodC (cprod_inf le1 isc bnz).
 split => //.
 move=> c ic; rewrite (infinite_power2_bis ic  anz) => ha.
-have c1: cardinalp (c ^c a) by fprops. 
+have c1: cardinalp (c ^c a) by fprops.
 have c2 := (CS_cnext (proj1 ic)).
 case:  (cleT_el c2 c1) => h.
   have ip: infinite_c (c ^c a) by apply: CIS_pow2.
   by move: (cleNgt (cprod_inf1 h ip) ha).
 move: (cnext_pr4 (proj1 ic) h) => h1.
 apply: (p3 _ (infinite_ge2 ic)).
-apply: cleA => //; apply: (cpow_Mle1 (proj32 h1) anz). 
+apply: cleA => //; apply: (cpow_Mle1 (proj32 h1) anz).
 Qed.
 
 Lemma infinite_power5 n p m (x:=\aleph n) (y:= \aleph (n +o p)):
-   ordinalp n -> ordinalp p -> m <> \0o -> 
+   ordinalp n -> ordinalp p -> m <> \0o ->
    cardinal p <=c m ->
    y ^c m = (x ^c m) *c (y ^c (cardinal p)).
 Proof.
@@ -917,7 +917,7 @@ case: (ordinal_limA oq) => h.
   move: (icy1) (icy2) (icx) => [cy1 _ ] [cy2 _] [cx _].
   have le1 :=(cpow_Mleeq m (aleph_le_lec (osum_Mle0 on or)) xnz).
   have le0 := (aleph_le_lec(proj1 (oltS (OS_sum2 on or)))).
-  have le2:= (cpow_Mleeq m le0 y1nz). 
+  have le2:= (cpow_Mleeq m le0 y1nz).
   move: (cpow_Meqle y2nz pa'); rewrite !cpowcr qv => lexx.
   have paa:=(cpow_Mle1 (proj1 icx) mnz).
   have icxm:= (cle_inf_inf icx paa).
@@ -945,7 +945,7 @@ case: (ordinal_limA oq) => h.
       apply: sub_smaller; rewrite /osucc; fprops.
   move: (cpow_Mlele y1nz le0 crr1); rewrite !cpowcr -r9 -r1 => le3.
   by rewrite (cleA lexx le3) cprodC (cprod_inf (cleT le1 le2) icy2m xmnz).
-have onq:=(OS_sum2 on oq). 
+have onq:=(OS_sum2 on oq).
 apply cleA; last first.
    move: (CIS_pow (CIS_aleph onq) mnz) => r1.
    have r2 :=(cpow_Mleeq m (aleph_le_lec (osum_Mle0 on oq)) xnz).
@@ -955,7 +955,7 @@ set f := Lg q (fun z => \aleph (n +o z)).
 have r2: E = range f by rewrite Lg_range.
 have r1 :  \aleph (n +o q) = \osup E.
   move: (normal_ofs_compose  aleph_normal (osum_normal on)) => [xa xb].
-  by move: (xb _ h) => /= ->. 
+  by move: (xb _ h) => /= ->.
 have fgf: fgraph f by rewrite /f; fprops.
 have r3: forall i, inc i (domain f) -> \2c <=c Vg f i.
    rewrite /f; aw; move=> i idf; rewrite LgV//; apply: infinite_ge2.
@@ -971,21 +971,21 @@ have r5: \aleph (n +o q) <=c cprod f.
    rewrite r4; apply: compare_sum_prod2 => //.
    move=> i idf; move: (r3 _ idf) => [_ c _]; fprops.
 move: (cpow_Mleeq m r5 (aleph_nz onq)).
-rewrite cpow_prod {1} /f Lgd /cprodb. 
-have ->: (Lg q (fun i => Vg f i ^c m)) = 
+rewrite cpow_prod {1} /f Lgd /cprodb.
+have ->: (Lg q (fun i => Vg f i ^c m)) =
    Lg q (fun t => x ^c m *c \aleph (n +o t) ^c (cardinal t)).
   apply: Lg_exten; move=> t tq.
   have tq1: t <o q by apply /(oltP oq).
   rewrite /f LgV//; apply (pb _ tq); apply: (cleT _ pa).
   apply:(ocle1 (proj1 tq1)).
-rewrite -/(cprodb q _) -prod_of_prods cprod_of_same - cpow_pow. 
+rewrite -/(cprodb q _) -prod_of_prods cprod_of_same - cpow_pow.
 have icq: infinite_c (cardinal q).
   apply: (cle_inf_inf CIS_omega).
   by move:(sub_smaller (proj33 (limit_ge_omega h))); rewrite cardinal_Nat.
 have ->: (m *c q) = m.
   have icm:= (cle_inf_inf icq  pa).
   move: (cprod_inf pa icm (infinite_nz icq)).
-  by rewrite cprod2cr. 
+  by rewrite cprod2cr.
 set f2:= \aleph (n +o q) ^c (cardinal q).
 set ff:= (fun i => \aleph (n +o i) ^c (cardinal i)).
 move => r6.
@@ -999,7 +999,7 @@ have: cprod (Lg q ff) <=c f2 ^c (cardinal q).
    exact: (aleph_le_lec (osum_Meqle tq1 on)).
 rewrite /f2 - cpow_pow (csquare_inf icq) => r7.
 apply: (cleT r6); apply: (cprod_Mlele _ r7); fprops.
-Qed. 
+Qed.
 
 
 Lemma infinite_power5' n p m (x:=\aleph n) (y:= \aleph (n +o p)):
@@ -1057,7 +1057,7 @@ rewrite cprodC (cprod_inf le1 iy omega_nz).
 by rewrite cprodC (cprod_inf le2 iy (@cpow2_nz m)).
 Qed.
 
-Lemma infinite_power6_0  p m (y:= \aleph p): 
+Lemma infinite_power6_0  p m (y:= \aleph p):
   ordinalp p -> infinite_c m -> cardinal p <=c m ->
    y ^c m = (\2c ^c m) *c (y ^c (cardinal p)).
 Proof.
@@ -1065,7 +1065,7 @@ move=> op icm cp.
 exact: (infinite_power6 op (infinite_nz icm) cp (or_introl icm)).
 Qed.
 
-Lemma infinite_power6_ct  p m (y:= \aleph p): 
+Lemma infinite_power6_ct  p m (y:= \aleph p):
   ordinalp p -> infinite_c m -> cardinal p <=c omega0  ->
    y ^c m = (\2c ^c m) *c (y ^c aleph0).
 Proof.
@@ -1080,12 +1080,12 @@ case: (equal_or_not p \0c) => epz.
 move/clt_omegaP => nn.
 have pN: natp p by apply/NatP;apply:(ordinal_finite1 ha); apply/NatP.
 rewrite (cpow_inf (CIS_aleph ha) nn (card_nonempty0 epz)).
-by rewrite (infinite_power3 pN omega_nz) cprodA - cpow_sum2 (csum_inf hb' hb). 
+by rewrite (infinite_power3 pN omega_nz) cprodA - cpow_sum2 (csum_inf hb' hb).
 Qed.
 
 Lemma infinite_power5_ex:
   \aleph (omega1 +o omega0) ^c (\aleph \2o) =
-  (\2c ^c  (\aleph \2o)) *c ((\aleph omega1) ^c aleph1) 
+  (\2c ^c  (\aleph \2o)) *c ((\aleph omega1) ^c aleph1)
    *c (\aleph (omega1 +o omega0) ^c aleph0).
 Proof.
 have ha:= OS_aleph OS1.
@@ -1100,7 +1100,7 @@ by rewrite (infinite_power5 ha hb hd he) (infinite_power6_0 ha hc hf) hi.
 Qed.
 
 Lemma infinite_power6_1 a: a <o omega1 ->
-  (\aleph a) ^c aleph1 = 
+  (\aleph a) ^c aleph1 =
   (\aleph a) ^c aleph0 *c \2c  ^c aleph1.
 Proof.
 move => ao.
@@ -1121,7 +1121,7 @@ apply: cprod_inf4.
 Qed.
 
 Lemma infinite_power6_2 b: b <o omega2 ->
-  (\aleph b) ^c aleph2 = 
+  (\aleph b) ^c aleph2 =
   (\aleph b) ^c aleph1 *c \2c  ^c aleph2.
 Proof.
 move => ao.
@@ -1141,7 +1141,7 @@ apply: cprod_inf4.
 Qed.
 
 Lemma infinite_power6_3:
-  (\aleph omega0) ^c aleph1 = 
+  (\aleph omega0) ^c aleph1 =
   (\aleph omega0) ^c aleph0 *c \2c  ^c aleph1.
 Proof.
 apply: infinite_power6_1.
@@ -1150,7 +1150,7 @@ Qed.
 
 Lemma infinite_power6_4 a b:
   infinite_o a -> a <o omega1 -> ordinalp b ->
-  (\aleph a) ^c (\aleph b) = 
+  (\aleph a) ^c (\aleph b) =
   (\aleph a) ^c aleph0 *c \2c  ^c (\aleph b).
 Proof.
 move => ioa a1 ob.
@@ -1167,7 +1167,7 @@ by rewrite (infinite_power6_0 oa iob ca2) cprodC eq1 aleph0E.
 Qed.
 
 
-Lemma infinite_power6_5 a b c : 
+Lemma infinite_power6_5 a b c :
   ordinalp a -> ordinalp b ->
   \aleph (\omega a) = c ^c (\aleph b)  ->
   b <o a.
@@ -1207,15 +1207,15 @@ Qed.
 
 Definition gimel_fct x := x ^c (\cf x).
 
-Lemma gimel_prop1 x: regular_cardinal x -> 
+Lemma gimel_prop1 x: regular_cardinal x ->
   gimel_fct x = \2c ^c x.
 Proof.
 by move=> /regular_cardinalP[ic xc]; rewrite /gimel_fct xc infinite_power1_b.
 Qed.
 
-Lemma gimel_prop2 x: infinite_c x -> 
+Lemma gimel_prop2 x: infinite_c x ->
   gimel_fct x <=c \2c ^c x.
-Proof. 
+Proof.
 move=> ic; rewrite /gimel_fct - (infinite_power1_b ic).
 move: (cofinality_small ic) => cg.
 apply: cpow_Mlele => //; [ by apply: infinite_nz | apply: (cleR (proj1 ic))].
@@ -1256,7 +1256,7 @@ have pc:= (aleph_nz OS_omega).
 have x1nz := (aleph_nz (OS_aleph OS1)).
 move: (aleph_le_lec ole_01); rewrite  aleph0E => pd.
 have pe:= (aleph_le_lec (ocle pd)).
-have pf := (cpow_Mleeq aleph0 pe pc). 
+have pf := (cpow_Mleeq aleph0 pe pc).
 symmetry;apply: cleA.
   apply: (cleT pf); apply: cpow_Meqle => //; apply: aleph_nz.
 have:  x1 ^c \aleph \1o  <=c x2 ^c \aleph \1o by apply: cpow_Mleeq.
@@ -1283,7 +1283,7 @@ Lemma infinite_power6_7e:
 Proof.
 set o1 := \aleph \1o.
 move => h;  rewrite /gimel_fct.
-have h1: \aleph omega0 <=c \aleph o1. 
+have h1: \aleph omega0 <=c \aleph o1.
    rewrite - aleph0E; apply: aleph_le_lec; apply: (aleph_le_leo ole_01).
 move: (cleT h1 h) => h2.
 move: (regular_initial_limit1 (aleph_limit OS0)); rewrite aleph0E.
@@ -1304,7 +1304,7 @@ have aux: (omega0 *c o1) = o1.
    rewrite cprodC; apply: (cprod_inf _ pb omega_nz).
    rewrite - aleph0E; exact (aleph_le_lec ole_01).
 apply: cleA.
-  move: (cpow_Mleeq o1 h (infinite_nz io1)). 
+  move: (cpow_Mleeq o1 h (infinite_nz io1)).
   by rewrite - cpow_pow aux.
 exact: (cpow_Mleeq _ (infinite_ge2 io1) cn2).
 Qed.
@@ -1320,7 +1320,7 @@ have icy: infinite_c y by apply: CIS_aleph; apply: OS_aleph; fprops.
 have la: limit_ordinal omega1 by apply: aleph_limit; fprops.
 split.
   move: (power_cofinality1 icx).
-  by rewrite (regular_initial_limit1 omega_limit)  (proj2 (regular_omega)). 
+  by rewrite (regular_initial_limit1 omega_limit)  (proj2 (regular_omega)).
 move: (power_cofinality1 icy).
 move: (regular_cardinal_aleph1)=> [pa <-].
 by rewrite (cofinality_card pa)(regular_initial_limit1 la).
@@ -1332,7 +1332,7 @@ Proof.
 by move => lx; rewrite ((proj2 aleph_normal) _ lx) Lg_range.
 Qed.
 
-Lemma infinite_increasing_power1 X b: 
+Lemma infinite_increasing_power1 X b:
   ofg_Mle_leo X -> domain X = \omega b -> ordinalp b ->
   cprod (Lg (domain X) (fun z => \aleph (Vg X z))) =
   \aleph (\osup (range X)) ^c \aleph b.
@@ -1355,8 +1355,8 @@ by rewrite (sup_range_aleph fgx pa nedx) dY.
 Qed.
 
 
-Lemma infinite_increasing_power2 X b: 
-  ofg_Mlt_lto X -> domain X = \omega b -> ordinalp b -> 
+Lemma infinite_increasing_power2 X b:
+  ofg_Mlt_lto X -> domain X = \omega b -> ordinalp b ->
   cprod (Lg (domain X) (fun z => \aleph (Vg X z))) =
   \aleph (\osup (range X)) ^c \aleph b.
 Proof.
@@ -1377,7 +1377,7 @@ Qed.
 
 Lemma cprod_inf_eq x y i:
    fgraph x -> fgraph y -> (domain x = domain y) ->
-   inc i (domain x) ->  (Vg x i) <> \0c -> Vg y i <> \0c -> 
+   inc i (domain x) ->  (Vg x i) <> \0c -> Vg y i <> \0c ->
    (exists j, [/\ inc j (domain x), j <> i, infinite_c (Vg x j),
      Vg x i <=c Vg x j & Vg y i <=c Vg x j]) ->
    (forall j, inc j (domain x) -> j = i \/ Vg x j = Vg y j) ->
@@ -1388,8 +1388,8 @@ set x' := Lg (domain x) (fun z => Yo (z = i) (Vg x j) (Vg x z)).
 set y' := Lg (domain y) (fun z => Yo (z = i) (Vg y j) (Vg y z)).
 have svj: Vg x j = Vg y j by case: (ph _ qa) => // aux; by case: qb.
 have sp: x' = y'.
-  rewrite /x' /y' -pc; apply: Lg_exten => k kdx; aw; Ytac xeq; Ytac0 => //. 
-  case: (ph _ kdx) => // aux. 
+  rewrite /x' /y' -pc; apply: Lg_exten => k kdx; aw; Ytac xeq; Ytac0 => //.
+  case: (ph _ kdx) => // aux.
 suff: forall z, fgraph z ->  inc i (domain z) -> Vg z i <> \0c ->
     inc j (domain z) -> j <> i -> infinite_c (Vg z j) -> Vg z i <=c Vg z j ->
   cprod z = cprod (Lg (domain z)(fun t => Yo (t = i)(Vg z j) (Vg z t))).
@@ -1422,10 +1422,10 @@ rewrite dr1 -dr2 in pE.
 rewrite (induction_prod1 pE aux2)  - cprodA - cprodA.
 have sc: sub j2 j1 by move => t  /setC1_P []; rewrite dr1.
 move: (sub_trans sc pC) => sd.
-rewrite (double_restr _ sc) (double_restr _ sc). 
+rewrite (double_restr _ sc) (double_restr _ sc).
 rewrite /z1 !LgV//; Ytac0; Ytac0; apply:f_equal2.
   apply:f_equal; apply: fgraph_exten; aww.
-   move=> k kj2. 
+   move=> k kj2.
    have k2: inc k (domain z) by apply: sd.
    by rewrite !LgV//;Ytac ki; [ move: (sc _ kj2); rewrite ki |].
 by rewrite (cprod_inf jv iv jdz) (csquare_inf iv).
@@ -1435,13 +1435,13 @@ Lemma infinite_prod_pA:
   cprodb Nat csucc = cprodb Nat (fun z => (csucc (csucc z))).
 Proof.
 set j := Nat -s1 \0c.
-set f := (Lg Nat csucc). 
+set f := (Lg Nat csucc).
 have fgf: fgraph f by rewrite /f; fprops.
 have sj:sub j (domain f) by rewrite /f; aw;apply sub_setC.
 have sj1: sub (singleton \0c) Nat by move=> t /set1_P ->; apply:NS0.
 have f1: (forall i, inc i ((domain f) -s j) -> (Vg f i) = \1c).
   rewrite /f/j; aw => i /setC_P [iN] /setC_P nv; rewrite LgV//.
-  rewrite - succ_zero; ex_middle aux; case: nv;split => //. 
+  rewrite - succ_zero; ex_middle aux; case: nv;split => //.
   by dneg i0; move /set1_P: i0 => ->.
 rewrite /cprodb (cprod_one_unit sj f1).
 have ->: cprodb j (Vg f) = cprodb j csucc.
@@ -1470,13 +1470,13 @@ apply:cleSS; apply: cleSS. apply:(cle0n xN).
 Qed.
 
 Lemma cprod_An1 a b f: ordinalp a -> ordinalp b ->
-  cprodb (a +o b) f = 
+  cprodb (a +o b) f =
   cprodb a f *c cprodb b (fun z => f (a +o z)).
 Proof.
 move => oa ob.
 rewrite {1} /cprodb; set g := Lg (a +o b) f.
 have fgg: fgraph g by rewrite /g; fprops.
-have sab:= proj33 (osum_Mle0 oa ob). 
+have sab:= proj33 (osum_Mle0 oa ob).
 move: (is_partition_with_complement sab).
 have -> : a +o b = domain g by rewrite /g; aw.
 move=> pfa.
@@ -1488,14 +1488,14 @@ have ->: cprodb a f = ff C0.
   by rewrite LgV//;apply: sab.
 suff: (cprodb b (fun z => f (a +o z))) = ff C1
    by move => ->; apply doubleton_fam_canon.
-rewrite /ff /g;aw. 
+rewrite /ff /g;aw.
 have -> : cprodb ((a +o b) -s a)(Vg (Lg (a +o b) f)) = cprodb ((a +o b) -s a) f.
    apply: cprodb_exten  => i /setC_P[ii _]; rewrite LgV//.
 symmetry;apply:cprod_Cn2; split.
 + move => t tb; apply/setC_P; rewrite (osum_rec_def oa ob);split.
     apply /setU2_P; right; apply/funI_P; ex_tac.
   by move=> /(oltP oa) h1; move:(oltNge h1(osum_Mle0 oa (Os_ordinal ob tb))).
-+ move => u v uo vo su. 
++ move => u v uo vo su.
   move: (Os_ordinal ob uo) (Os_ordinal ob vo) => ou ov.
   exact (osum2_simpl ou ov oa su).
 + by rewrite (osum_rec_def oa ob); move => y /setC_P [/setU2_P] [] // /funI_P.
@@ -1518,7 +1518,7 @@ have fgf: fgraph x by rewrite / x; fprops.
 have icy: infinite_c (domain x) by rewrite /x; aw; apply: CIS_omega.
 have pa: cardinal_pos_fam x.
   move;rewrite /x; aw; move=> a adx; rewrite /x LgV//;apply: succ_positive.
-have pb:  fg_Mle_lec x. 
+have pb:  fg_Mle_lec x.
   move;rewrite /x; aw; move => a b aN bN [_ _ ab]; rewrite !LgV//.
   move:(CS_nat aN) (CS_nat bN) => ca cb.
   apply /(cleSSP ca cb); split => //.
@@ -1527,7 +1527,7 @@ rewrite /x infinite_prod_pB1; aw.
 rewrite infinite_power1_b //;exact CIS_omega.
 Qed.
 
-Lemma infinite_prod_pC: 
+Lemma infinite_prod_pC:
    cprodb  Nat \aleph = (\aleph omega0) ^c omega0.
 Proof.
 set x := (Lg Nat \aleph).
@@ -1536,7 +1536,7 @@ have icy: infinite_c (domain x) by rewrite /x; aw; apply: CIS_omega.
 have pa:  cardinal_pos_fam x.
   move;rewrite /x; aw; move=> a adx; rewrite /x LgV//; apply: aleph_nz1.
   exact (OS_nat adx).
-have pb:   fg_Mle_lec x. 
+have pb:   fg_Mle_lec x.
 move;rewrite /x; aw; move => a b aB bB ab.
 rewrite  !LgV//;exact (aleph_le_lec  ab).
 rewrite /cprodb (infinite_increasing_power fgf icy pa pb).
@@ -1561,7 +1561,7 @@ have icy: infinite_c (domain x) by rewrite /x; aw; apply: CIS_omega.
 have pa: cardinal_pos_fam x.
   move;rewrite /x; aw; move=> a adx; rewrite /x LgV//; apply: aleph_nz1.
    by apply: OS_sum2 => //; apply(Os_ordinal ioo adx).
-have pb: fg_Mle_lec x. 
+have pb: fg_Mle_lec x.
   move;rewrite /x; aw; move => a b aB bB ab; rewrite !LgV//.
   exact (aleph_le_lec (osum_Meqle ab ioo)).
 move: (infinite_increasing_power fgf icy pa pb).
@@ -1612,7 +1612,7 @@ have <- : cprod  (Lg omega0 (fun z => (\aleph (o1 +o z) ^c o1)))
   move: pa; set f:= Lg omega0 _.
   have pb:  fgraph f by rewrite /f; fprops.
   move: (cpow_prod o1 f); rewrite /cprodb.
-  have -> :  (Lg (domain f) (fun i => Vg f i ^c o1)) = 
+  have -> :  (Lg (domain f) (fun i => Vg f i ^c o1)) =
     (Lg omega0 (fun z => \aleph (o1 +o z) ^c o1)).
     rewrite /f; aw; apply: Lg_exten => t te;rewrite LgV//.
   move => <- ->.
@@ -1713,7 +1713,7 @@ have ->: cprod Y ^c cardinal b = cprod f.
   rewrite (cprod_An pa) (cpow_prod _ Y) dY /g; aw; congr cprod.
   apply: Lg_exten; move => x xb.
   set s:= ((singleton x) \times b).
-  have xx: cardinal s = cardinal b.  
+  have xx: cardinal s = cardinal b.
     symmetry; apply /card_eqP; apply: Eq_rindexed.
   rewrite - xx cpowcr - cprod_of_same; rewrite LgV//; apply: cprodb_exten.
   move => v vd; aw; rewrite /f LgV//.
@@ -1724,12 +1724,12 @@ have pg: partition_w_fam g (domain f).
   split => //; rewrite /g /coarse/mutually_disjoint; aw.
   - fprops.
   - move => i j ib jb; case: (equal_or_not i j) => ij; [ by left | right ].
-    rewrite !LgV//;apply: disjoint_pr => u /Zo_hi p1 /Zo_hi p2; case: ij. 
+    rewrite !LgV//;apply: disjoint_pr => u /Zo_hi p1 /Zo_hi p2; case: ij.
     by rewrite - p1 - p2.
   - rewrite df /coarse;set_extens t.
       by move /setUb_P; aw; move => [y yb]; rewrite LgV//; move => /Zo_P [].
     move: lb => [ob _ _] tb.
-    move: (tb) => /setX_P [pt /(oltP ob) p1 /(oltP ob) p2]. 
+    move: (tb) => /setX_P [pt /(oltP ob) p1 /(oltP ob) p2].
     have pa: inc (natural_sum (P t) (Q t)) b.
       by apply /(oltP ob);  apply:natural_small.
     by apply /setUb_P; aw; ex_tac; rewrite LgV//;apply: Zo_i.
@@ -1758,7 +1758,7 @@ have ix: infinite_c (Vg Y x).
 rewrite - (cpow_inf ix pa pb) cpowcr - cprod_of_same LgV //.
 apply: cprod_increasing; aw; trivial => t tE.
 by rewrite LgV// LgV//; apply: le1.
-Qed. 
+Qed.
 
 Lemma infinite_prod3_bis X m (Y:= Lg (domain X) (fun z => \aleph (Vg X z))):
   infinite_c m ->  ofg_Mlt_lto X -> domain X = m ->
@@ -1801,7 +1801,7 @@ move => oa ca cdx ofx av.
 have oc:=(OS_cofinality (proj31 oa)).
 have icc:=(CIS_aleph oc).
 have lc:= (infinite_card_limit2 icc).
-move: (infinite_prod3_bis icc ofx cdx). 
+move: (infinite_prod3_bis icc ofx cdx).
 rewrite - cdx in lc.
 move:(increasing_sup_limit4 ofx lc); rewrite - av;  move => [pa _ ->] => pd.
 move: (f_equal (fun z => z ^c \aleph b) pd).
@@ -1862,12 +1862,12 @@ Lemma infinite_prod5 a:
   cprodb a \aleph = (\aleph a) ^c (cardinal a).
 Proof.
 move => la.
-pose p j := limit_ordinal j -> 
+pose p j := limit_ordinal j ->
   cprodb j \omega = \omega j ^c cardinal j.
 apply: (least_ordinal2 (p:=p))  (proj31 la) la => y oy etc ly.
 move: (cantor_of_limit ly) => [c [n [oc on nz yv cp]]].
 have np := (ord_ne0_pos on nz).
-have op:= (OS_pow OS_omega on). 
+have op:= (OS_pow OS_omega on).
 case: (equal_or_not c \0o) => cz.
   move: yv; rewrite cz (osum0l op) => yv.
   set X := (Lg y id).
@@ -1899,7 +1899,7 @@ have l1: limit_ordinal (omega0 ^o n) by apply:indecomp_limit2.
 have ->: union (range L2) = \omega y.
   move: (normal_ofs_compose  aleph_normal (osum_normal oc)) => [_ xb].
   by move: (xb _ l1); rewrite -/L2 /= yv; move => ->; rewrite /L2 Lg_range.
-move => ->;clear L1 L2. 
+move => ->;clear L1 L2.
 have cnz: cardinal y <> \0c.
   by apply:card_nonempty1; move: ly => [_ ok _]; exists \0c.
 have le2: cardinal (omega0 ^o n) <=c cardinal y.
@@ -1908,23 +1908,23 @@ by move: (infinite_power5 oc op cnz le2); rewrite -yv => ->.
 Qed.
 
 Lemma infinite_prod6 a:
-  ordinalp a -> a <> \0o -> 
+  ordinalp a -> a <> \0o ->
   cprodb (osucc a) \aleph = (\aleph a) ^c (cardinal a).
 Proof.
 move => oa anz.
-pose p j := j <> \0o -> 
+pose p j := j <> \0o ->
   cprodb (osucc j) \omega = \omega j ^c cardinal j.
 apply: (least_ordinal2 (p:= p)) oa anz => y oy lyp ynz.
-have ->: cprodb (osucc y) \aleph = 
+have ->: cprodb (osucc y) \aleph =
     (cprodb y \omega) *c (\aleph y).
   rewrite - (osucc_pr oy) (cprod_An1 \aleph oy OS1); congr (_ *c _).
   rewrite /cprodb;set f := Lg _ _.
   have fg: fgraph f by rewrite /f; fprops.
   have df: domain f = singleton \0o by rewrite /f; aw.
-  have f0: Vg f \0o = \omega y. 
+  have f0: Vg f \0o = \omega y.
     rewrite /f LgV; [by rewrite (osum0r oy) | by apply /set1_P ].
-    by rewrite (cprod_trivial1 df) card_card // f0; apply: CS_aleph. 
-have cny: cardinal y <> \0c. 
+    by rewrite (cprod_trivial1 df) card_card // f0; apply: CS_aleph.
+have cny: cardinal y <> \0c.
     case: (emptyset_dichot y) => ey; first by contradiction.
     by apply card_nonempty1.
 case: (ordinal_limA oy) => h; first contradiction; last first.
@@ -1939,7 +1939,7 @@ case: (equal_or_not z \0o) => znz.
   set f := Lg _ _.
   have fg: fgraph f by rewrite /f; fprops.
   have df: domain f = singleton \0o by rewrite /f; aw.
-  have f0: Vg f \0o = \omega \0o. 
+  have f0: Vg f \0o = \omega \0o.
     by rewrite /f LgV//; apply /set1_P.
   have cv: cardinalp (Vg f \0o) by rewrite  f0; apply: CS_aleph; fprops.
   rewrite (cprod_trivial1 df) f0 (card_card CS1) cprod2cl cprodC.
@@ -1947,7 +1947,7 @@ case: (equal_or_not z \0o) => znz.
     by  apply: aleph_le_lec; apply: ole_01.
   by rewrite (cprod_inf p1 (CIS_aleph OS1) (aleph_nz OS0)) (cpowx1 (proj32 p1)).
 have lt1:  z <o y by rewrite zv; apply: oltS.
-rewrite zv in cny.  
+rewrite zv in cny.
 rewrite zv (lyp _ lt1 znz) (infinite_power2 oz cny); apply: f_equal2;last exact.
 case: (p_or_not_p (infinite_o z)) => zi.
   hnf in zi; have <- //: cardinal z = cardinal (osucc z).
@@ -1969,7 +1969,7 @@ Lemma infinite_power7c x y:
   cardinalp x -> cardinalp y ->
   cardinal (unionb (Lg x (functions y)))
   <=c (csum (Lg (cardinals_lt x) (fun z => z ^c y))) *c x.
-Proof. 
+Proof.
 move => cx cy.
 set g :=  Lg _ _.
 have fg: fgraph g by rewrite /g; fprops.
@@ -1983,7 +1983,7 @@ have mh: mutually_disjoint h.
   by apply mutually_disjoint_prop2 => i j z id jd /Zo_hi => <- /Zo_hi <-.
 move: (proj1 cx) => ox.
 have ph: partition_w_fam h (domain f).
-  split => //; rewrite /f;aw; set_extens t. 
+  split => //; rewrite /f;aw; set_extens t.
      move /setUb_P => [z za];rewrite /h LgV ; [by move => /Zo_P [] | ue].
   move => tx; apply /setUb_P.
   have ot:= (Os_ordinal ox tx).
@@ -2017,7 +2017,7 @@ Qed.
 
 
 Lemma infinite_power7d x (y := cardinal (cardinals_lt x)):
-   cardinalp x -> x <> \0c -> 
+   cardinalp x -> x <> \0c ->
    (y <=c x /\ y <> \0c).
 Proof.
 move=> cx xnz;rewrite -(card_card cx); split.
@@ -2027,7 +2027,7 @@ apply: card_nonempty1; exists \0c.
 by apply /(cardinals_ltP cx); split; [apply: cle0x | apply:nesym ].
 Qed.
 
-Lemma infinite_power7 x y: 
+Lemma infinite_power7 x y:
   infinite_c x -> y <c \cf x -> y <> \0c ->
   x ^c y =  (csumb (cardinals_lt x) (fun z => z ^c y)) *c x.
 Proof.
@@ -2053,26 +2053,26 @@ move: (csum_of_small_b1 (conj fgf fl)); rewrite {2}/f; aw.
 rewrite - cprod2cr cprod_inf//; exact: (cleT pe1 pd).
 Qed.
 
-Lemma infinite_power7e a y: 
+Lemma infinite_power7e a y:
   limit_ordinal a -> y <> \0c ->
-  \aleph a <=c \osup (fun_image a (fun z => (\aleph z) ^c y)). 
+  \aleph a <=c \osup (fun_image a (fun z => (\aleph z) ^c y)).
 Proof.
 move=> ln ynz.
 move: aleph_normal => [qa qb]; rewrite (qb _ ln).
 set T2:= fun_image _ _.
 set T := fun_image _ _.
-have csr: cardinal_set T by move=> t /funI_P [z zn ->]; fprops. 
+have csr: cardinal_set T by move=> t /funI_P [z zn ->]; fprops.
 apply:card_ub_sup; first by apply: (CS_sup csr).
 move => // i /funI_P [z zn ->].
 have sr1: inc ((\aleph z) ^c y) T by apply  /funI_P; ex_tac.
 apply: cleT (card_sup_ub csr sr1).
 have oz:= (Os_ordinal (proj31 ln) zn).
-exact:(cpow_Mle1 (CS_aleph oz) ynz). 
+exact:(cpow_Mle1 (CS_aleph oz) ynz).
 Qed.
 
-Lemma infinite_power7f a y: 
+Lemma infinite_power7f a y:
   limit_ordinal a -> y <c \cf a ->
-  (\aleph a) ^c y = \osup (fun_image a (fun z => (\aleph z) ^c y)). 
+  (\aleph a) ^c y = \osup (fun_image a (fun z => (\aleph z) ^c y)).
 Proof.
 move => p1 p2.
 have on:= (proj31 p1).
@@ -2091,7 +2091,7 @@ have s3: s <=c x ^c y.
    apply: card_ub_sup; first by fprops.
    move => i /funI_P [z zn ->].
    have [zn1 _]: z <o a by  apply /oltP.
-   exact: cpow_Mleeq (aleph_le_lec zn1) (aleph_nz (proj31 zn1)).  
+   exact: cpow_Mleeq (aleph_le_lec zn1) (aleph_nz (proj31 zn1)).
 move: aux; set f := (Lg (cardinals_lt x) (cpow^~ y)) => aux.
 have cff: cardinal_fam f by rewrite /f; hnf; aw; move=> i ad; rewrite LgV//; fprops.
 have cx:= proj1 icx.
@@ -2099,7 +2099,7 @@ have cdf1: cardinal (domain f) <=c x.
   rewrite /f Lgd; exact (proj1 (infinite_power7d cx (infinite_nz icx))).
 have fgf: fgraph f by rewrite /f; fprops.
 have osr: ordinal_set (range f).
-  move=> t /(range_gP fgf). rewrite /f;aw; move=> [z zv -> ]. 
+  move=> t /(range_gP fgf). rewrite /f;aw; move=> [z zv -> ].
   rewrite LgV//;apply: OS_cardinal; fprops.
 have sr: s = \osup (range f).
   rewrite /s /T /f; apply: ord_sup_1cofinal => //; split.
@@ -2120,7 +2120,7 @@ have sr: s = \osup (range f).
      exact: (CIS_omega).
   move:(ord_index_pr1 fc) => [om uv].
   exists (u ^c y).
-    apply /funI_P; exists (ord_index u); rewrite ? uv  => //. 
+    apply /funI_P; exists (ord_index u); rewrite ? uv  => //.
     apply /(oltP on); apply: aleph_ltc_lt => //; ue.
   exact: (ocle(cleR (CS_pow u y))).
 move: (infinite_power7e p1 yz).
@@ -2133,19 +2133,19 @@ by apply: cprod_inf => //;apply: infinite_nz.
 Qed.
 
 
-Lemma infinite_power7f1 a y: 
+Lemma infinite_power7f1 a y:
   limit_ordinal a -> y <c \cf a -> y <> \0c ->
-  (\aleph a) ^c y = csumb a (fun z => (\aleph z) ^c y). 
+  (\aleph a) ^c y = csumb a (fun z => (\aleph z) ^c y).
 Proof.
 move => pa pb pc.
 have on:= (proj31 pa).
 move: (infinite_power7f pa pb); rewrite - Lg_range=> eq0.
 move: (ocle1 (aleph_pr6 on)); rewrite (card_card (CS_aleph on)) => le2.
-rewrite eq0;symmetry; apply: csum_of_small_b4. 
+rewrite eq0;symmetry; apply: csum_of_small_b4.
 - fprops.
 - by hnf; aw; move=> i an; rewrite LgV//; fprops.
 - by rewrite - eq0;  apply: CIS_pow => //; apply: CIS_aleph.
-- by rewrite - eq0 Lgd; exact: (cleT le2  (cpow_Mle1 (proj32 le2) pc)). 
+- by rewrite - eq0 Lgd; exact: (cleT le2  (cpow_Mle1 (proj32 le2) pc)).
 Qed.
 
 Lemma infinite_prod_pI:
@@ -2154,7 +2154,7 @@ Proof.
 have la: limit_ordinal omega1 by apply: aleph_limit; fprops.
 have ic: infinite_c omega1 by apply: CIS_aleph; fprops.
 have cf:  omega0 <c cofinality aleph1.
-    move: (proj2 (regular_cardinal_aleph1)). 
+    move: (proj2 (regular_cardinal_aleph1)).
     rewrite (cofinality_card ic) => ->.
   rewrite - aleph0E; apply: aleph_lt_ltc; apply: olt_01.
 rewrite (infinite_power7f1 la cf) //; first by apply: omega_nz.
@@ -2166,7 +2166,7 @@ Lemma infinite_power8 n (x:= \aleph n) (z:= \cf x) y:
 Proof.
 move=> ln cy.
 set T := fun_image _ _.
-have cst: cardinal_set T. 
+have cst: cardinal_set T.
    move=> t /funI_P [zs _ ->]; rewrite /cpow; fprops. clear cst.
 have icx: infinite_c x by apply: CIS_aleph.
 have cxy: cardinalp (x ^c y) by rewrite /cpow; fprops.
@@ -2183,7 +2183,7 @@ have sx: \osup T <=c x ^c y.
 apply: cleA; last first.
   have znz: z <> \0c by apply: infinite_nz.
   case: (equal_or_not (\osup T) \0c) => snz.
-    by rewrite snz cpow0x => //; apply cle0x. 
+    by rewrite snz cpow0x => //; apply cle0x.
   have : (\osup T) ^c z <=c   (x ^c y) ^c z by apply: cpow_Mleeq => //.
   rewrite - cpow_pow (cprod_inf cy) //.
 move: (cofinality_c_pr3 icx) => [f [[[pc1 pc2 pd pe] pf] pc]].
@@ -2209,12 +2209,12 @@ Lemma infinite_power9 x y: infinite_c x -> infinite_c y ->
        /\ (\cf x <=c y -> x ^c y = x ^c (\cf x))))].
 Proof.
 move => icx icy.
-have ynz:=(infinite_nz icy). 
+have ynz:=(infinite_nz icy).
 have xnz:= (infinite_nz icx).
 split.
     by move => h; apply: infinite_power1_a => //; apply: infinite_ge2.
   move=> z le1 le2; apply: cleA.
-    rewrite - {2} (csquare_inf icy) cpow_pow. 
+    rewrite - {2} (csquare_inf icy) cpow_pow.
     by apply: cpow_Mleeq.
   have znz: z <> \0c.
     move=> bad; case: xnz; move: le2; rewrite bad cpow0x // => b1.
@@ -2292,14 +2292,14 @@ have le3:= (cleT le2 (cprod_inf1 (cleT pb  pa) pd)).
 apply:cleA; last by apply: cprod_inf4.
 apply: cleT (cprod_M1le (proj31 le3) (infinite_nz icx)).
 have d2: inc \2c (cardinals_lt x).
-   apply/(cardinals_ltP cx). 
-   apply: (clt_fin_inf finite_2 icx). 
+   apply/(cardinals_ltP cx).
+   apply: (clt_fin_inf finite_2 icx).
 move:(proj1 pd).
 have ->:  \2c ^c y = Vg f \2c by rewrite /f LgV.
 by move => cc;apply(csum_increasing6 cc); rewrite/f Lgd.
 Qed.
 
-Lemma infinite_power7h x y: 
+Lemma infinite_power7h x y:
   regular_cardinal x -> \0c <c y ->
   x ^c y =  (csumb (cardinals_lt x) (fun z => z ^c y)) *c x.
 Proof.
@@ -2345,18 +2345,18 @@ apply: cpow_Mlele.
 by rewrite (cofinality_card ict) cft; apply /infinite_c_P2.
 Qed.
 
-Definition cpow_less x y := 
+Definition cpow_less x y :=
   \csup (fun_image (cardinals_lt y) (fun t => x ^c t)).
 
 Notation "x ^<c y" := (cpow_less x y) (at level 30).
 
-Lemma cpow_less_pr0 x y: 
+Lemma cpow_less_pr0 x y:
   cardinal_set (fun_image (cardinals_lt y) (fun t => x ^c t)).
 Proof. move => t /funI_P [z _ ->]; fprops. Qed.
 
 Lemma cpow_less_alt x y :
-  infinite_c y -> \2c <=c x -> 
-  x ^<c y = csumb (cardinals_lt y) (fun t => x ^c t). 
+  infinite_c y -> \2c <=c x ->
+  x ^<c y = csumb (cardinals_lt y) (fun t => x ^c t).
 Proof.
 move=> icy xy.
 rewrite /cpow_less; set E :=  (cardinals_lt y).
@@ -2368,8 +2368,8 @@ have cy:=(proj1 icy).
 move: (infinite_power7d cy (infinite_nz icy)); rewrite -/E; move => [pw _].
 suff aux: y <=c s.
   symmetry; apply: csum_of_small_b4; fprops.
-  - apply: (cle_inf_inf icy aux). 
-  - by  move: (cleT pw aux); aw. 
+  - apply: (cle_inf_inf icy aux).
+  - by  move: (cleT pw aux); aw.
 have fgf: fgraph f by rewrite /f; fprops.
 have csr: cardinal_set (range f).
   move => t /(range_gP fgf); rewrite /f;aw;move => [z ze ->]; rewrite LgV//; fprops.
@@ -2377,29 +2377,27 @@ case: (cleT_el cy (CS_sup csr)) => //; rewrite -/s => sy.
 move: (cantor (CS_sup csr)); rewrite -/s => /cltNge; case.
 have sE: inc s E by apply /(cardinals_ltP cy).
 apply: (cleT (cpow_Mleeq s xy card2_nz)).
-apply: card_sup_ub => //; apply /(range_gP fgf). 
+apply: card_sup_ub => //; apply /(range_gP fgf).
 by rewrite /f; aw;ex_tac; rewrite LgV.
 Qed.
 
 Lemma cpow_less_pr1 x y:  \0c <c x -> cardinalp y -> x ^<c y <=c x ^c y.
-Proof. 
+Proof.
 move=> [[_ cx _] xnz] cy; apply:card_ub_sup; fprops.
 move => t /funI_P [z zy ->]; apply: cpow_Mlele => //.
-- by apply:nesym.
-- by apply:cleR.
-- by move: zy => /cardinals_ltP [].
+by move: zy => /cardinals_ltP [].
 Qed.
 
 Lemma cpow_less_pr2 x y z: z <c y -> x ^c z <=c (x ^<c y).
-Proof. 
-move=> lt1; apply: card_sup_ub; first by apply: cpow_less_pr0. 
+Proof.
+move=> lt1; apply: card_sup_ub; first by apply: cpow_less_pr0.
 apply /funI_P;exists z => //; apply /(cardinals_ltP (proj32_1 lt1)) => //.
 Qed.
 
 
 Lemma cpow_less_pr3 x y: \0c <c x -> natp y ->
   x ^<c (csucc y) = x ^c y.
-Proof.  
+Proof.
 move=> [[_ cx _] xnz] yN.
 apply: cleA; last by apply: cpow_less_pr2; apply: cltS.
 apply: card_ub_sup.
@@ -2411,14 +2409,14 @@ Qed.
 
 Lemma cpow_less_pr4 x y: \0c <c x -> infinite_c y ->
   x ^<c (cnext y) = x ^c y.
-Proof.  
+Proof.
 move=> [[_ cx _] xnz] yi.
 have cy := proj1 yi.
 apply: cleA; last by (apply: cpow_less_pr2; apply:(cnext_pr2 cy)).
 apply: card_ub_sup.
 - fprops.
 - move => i /funI_P [z /Zo_hi zi ->]; apply: cpow_Meqle;fprops.
-  apply: cnext_pr4 => //. 
+  apply: cnext_pr4 => //.
 Qed.
 
 Lemma CS_cpow_less x y: cardinalp (x ^<c y).
@@ -2433,20 +2431,20 @@ split.
   move: (@cpow_less_pr0 \2c x) => aux.
   case: (cleT_el cx (CS_cpow_less \2c x)) => // pa.
   set u := \2c ^<c x.
-  have le : \2c ^c u <=c u. 
+  have le : \2c ^c u <=c u.
      apply: card_sup_ub => //; apply /funI_P;exists u => //.
      apply /cardinals_ltP => //.
   case: (cleNgt le (cantor (proj31_1 pa))).
 split.
   apply: card_sup_image; move=> t tx; apply: (cpow_Mleeq _ x2);fprops.
-apply: cpow_less_pr1 => //; split; first by apply: cle0x. 
+apply: cpow_less_pr1 => //; split; first by apply: cle0x.
 exact: (nesym (infinite_nz icx)).
 Qed.
 
 
 Lemma cpow_less_pr5a x y: cardinalp x -> \2c <=c y -> x <=c x ^<c y.
 Proof.
-move=> cx y2. 
+move=> cx y2.
 move: (cpow_less_pr2 x (clt_leT (clt_12) y2)).
 by rewrite cpowx1.
 Qed.
@@ -2498,7 +2496,7 @@ Proof.
 move => icx t2.
 move: (cofinality_c_pr3 icx) => [f [ [[pa1 pa2 pb pc] pd] _]].
 apply: cleA.
-  rewrite - (cofinality_card icx) -{1} pd (cpow_sum _ f). 
+  rewrite - (cofinality_card icx) -{1} pd (cpow_sum _ f).
   rewrite - pc - cprod_of_same /cst_graph; aw.
   apply: cprod_increasing; aww => t td; rewrite !LgV//.
   by apply: cpow_less_pr2; apply: pb.
@@ -2526,7 +2524,7 @@ set a := cardinals_lt x.
 have h1P:= (cardinals_ltP cx).
 have h2P:= (cardinals_leP cx).
 have fgf: fgraph f by rewrite /f; fprops.
-have pa:  (a +s1 x) =  (domain f). 
+have pa:  (a +s1 x) =  (domain f).
   rewrite /f /a; aw; set_extens t.
     case/setU1_P => ha;apply /h2P; [by move/h1P: ha => []| rewrite ha; fprops].
   move /h2P=> aux; apply /setU1_P; case:(equal_or_not t x) => tx; [by right |].
@@ -2584,15 +2582,15 @@ Proof.
 move => icx; move: (icx) => [cx _].
 have sp:= (cle_ltT(cle0x cx) (cnext_pr2 cx)).
 rewrite (cpow_less_pr4 clt_02 icx) (cpow_less_pr4 sp icx).
-by rewrite (infinite_power1_c icx). 
+by rewrite (infinite_power1_c icx).
 Qed.
 
 
-Definition cpow_less_ecb x := 
+Definition cpow_less_ecb x :=
  (exists2 a, a <c x & forall b, a <=c b -> b <c x -> \2c ^c a = \2c ^c b).
 
 Lemma cpow_less_pr10 x: singular_cardinal x -> (cpow_less_ecb x)
-  -> \2c ^c x = \2c ^<c x. 
+  -> \2c ^c x = \2c ^<c x.
 Proof.
 move => [icx sx] [a ax ha].
 have H:=(cofinality_card icx).
@@ -2600,7 +2598,7 @@ have cg:= (cofinality_small icx).
 have [c [ac cf cx]]: exists c, [/\ a <=c c, \cf x <=c c& c <c x].
   have ca:= proj31_1 ax.
   have cx:=(proj31 cg); have le1:= (cleR cx); have le2:= (cleR ca).
-  case: (cleT_ee ca cx) => h; first by exists  (\cf x). 
+  case: (cleT_ee ca cx) => h; first by exists  (\cf x).
   by exists a.
 have p2: (\2c ^<c x) = \2c ^c c.
   apply: cleA (cpow_less_pr2 \2c cx).
@@ -2619,9 +2617,9 @@ Qed.
 Lemma gimel_prop n (x:= \aleph n): ordinalp n ->
  [/\  (n = \0c  -> \2c ^c x = gimel_fct x),
     (osuccp n) -> \2c ^c x = gimel_fct x,
-    (limit_ordinal n -> cpow_less_ecb x -> 
+    (limit_ordinal n -> cpow_less_ecb x ->
        \2c ^c x = \2c ^<c x *c  gimel_fct x)&
-    (limit_ordinal n -> not (cpow_less_ecb x) -> 
+    (limit_ordinal n -> not (cpow_less_ecb x) ->
        \2c ^c x = gimel_fct (\2c ^<c x))].
 Proof.
 move => on.
@@ -2656,7 +2654,7 @@ suff aux: \cf (\2c ^<c x) = \cf  x by ue.
 have ox: ordinalp x by apply: OS_cardinal.
 have oy: ordinalp  (\2c ^<c x) by move: paln => [pb _]; apply: OS_cardinal.
 move: (cofinality_rw ox) (cofinality_rw oy) => [qa qb qc] [qd qe qf].
-have x1: forall t, t <c x -> \2c ^c t <c \2c ^<c x. 
+have x1: forall t, t <c x -> \2c ^c t <c \2c ^<c x.
   move => t tx; split; first by apply:  cpow_less_pr2.
   move => ub; case: nl; exists t => //.
   move => b b1 b2.
@@ -2686,7 +2684,7 @@ have x2: forall t,  t <o \2c ^<c x -> exists2 u, t <=o \2c ^c u & u <c x.
       by move: H => [u ua ub]; move: (x1 _ ua) => [_ xbad].
     have bad2: forall w, w <c x -> \2c ^c w <=c (cardinal t).
       move=> w wc;apply: (cnext_pr4 (proj1 ict));  rewrite -/st bad; split.
-        exact: (cpow_less_pr2 \2c wc). 
+        exact: (cpow_less_pr2 \2c wc).
       by move => eq; case: H; exists w.
     have bad3: \2c ^<c x <=c cardinal t.
       apply: card_ub_sup; first apply: CS_cardinal.
@@ -2709,12 +2707,12 @@ apply: oleA.
     have zzx: zz <c x by apply:colt1=> //;rewrite -tf; fprops.
     move: (cpow_less_pr2 \2c zzx) => [a1 a2 a3].
     case: (ordinal_sub (OS_cardinal a1) (OS_cardinal a2) a3) => // eq1.
-    by move: (proj2 (x1 _ zzx)); rewrite eq1. 
+    by move: (proj2 (x1 _ zzx)); rewrite eq1.
   have fg: function g by apply: lf_function.
   apply: (qf _ qa); exists g.
   split; [ by hnf; rewrite /g; split => //; aw | move  => t tp].
   have tl: t <o (\2c ^<c x) by apply/oltP.
-  move: (x2 _ tl) => [u u1 u2]. 
+  move: (x2 _ tl) => [u u1 u2].
   have ui: inc u x by move: (oclt u2) => /oltP0 [_ _].
   move: (cf _ ui) => [z zx le2]; exists z => //.
   rewrite /g LfV//.
@@ -2730,14 +2728,14 @@ have gp: forall t, inc t (source f)-> (Vf f t <o \2c ^c (g t) /\ (g t) <c x).
    by apply choose_pr; exists u.
 set G:= Lf g (cofinality (\2c ^<c x)) x.
 have ta: lf_axiom g (cofinality (\2c ^<c x)) x.
-  move => t;  rewrite - sf => stf; move: (gp _ stf) => [_]. 
+  move => t;  rewrite - sf => stf; move: (gp _ stf) => [_].
   by move /oclt =>/(oltP0) [_ _].
 apply: qc => //; exists G; split.
   by rewrite /G; hnf; aw;split => //; apply: lf_function.
 move=> t tx; ex_middle bad.
 have pb: forall z, inc z (cofinality (\2c ^<c x)) -> Vf G z <o t.
   move => z zsf; move: (zsf); rewrite - sf => zt.
-  have ow: ordinalp (Vf G z). 
+  have ow: ordinalp (Vf G z).
     rewrite /G !LfV//;exact: (OS_cardinal (proj31_1 (proj2 (gp _ zt)))).
   case: (oleT_el (Os_ordinal ox tx) ow) => // yy; case: bad; ex_tac.
 have pc: forall z, inc z (cofinality (\2c ^<c x)) -> Vf f z <o \2c ^c t.
@@ -2757,7 +2755,7 @@ Qed.
 Lemma gimel_prop3 x: infinite_c x ->
   [/\ (regular_cardinal x -> \2c ^c x = gimel_fct x),
       (singular_cardinal x -> cpow_less_ecb x ->  \2c ^c x = \2c ^<c x) &
-     (singular_cardinal x -> not (cpow_less_ecb x) ->  
+     (singular_cardinal x -> not (cpow_less_ecb x) ->
      \2c ^c x = gimel_fct (\2c ^<c x))].
 Proof.
 move => icx.
@@ -2767,7 +2765,7 @@ have qa: singular_cardinal x -> limit_ordinal n.
 move: (gimel_prop pa) => [pc pd pe pf].
 rewrite pb in pe pf.
 split; first by symmetry;apply: gimel_prop1.
-   by move  => qb qc;  rewrite cpow_less_pr10. 
+   by move  => qb qc;  rewrite cpow_less_pr10.
 by move => qb qc; exact (pf (qa qb) qc).
 Qed.
 
@@ -2806,7 +2804,7 @@ Qed.
 Lemma cpow_less_ec_pr2 x y a:
   cpow_less_ec_prop x y a -> \2c <=c x ->
   forall b,  a<=c b -> b <c y  ->  x ^<c y = x ^c b.
-Proof.  
+Proof.
 move =>[ay h] x2 b le1 le2.
 have xnz := (card_ge2_nz x2).
 apply: cleA; last by apply: cpow_less_pr2.
@@ -2854,7 +2852,7 @@ case: (ordinal_limA oi) => li.
     move: ha => [ay h1].
     rewrite (hb _ (cleR (proj31_1 ay)) ay).
     move: (oclt ay); rewrite yo => /olt_omegaP aN.
-    have sN:= (NS_succ aN). 
+    have sN:= (NS_succ aN).
     have sy: (csucc a) <c y.
       rewrite yo; apply: clt_fin_inf => //; first by apply /NatP.
       apply: CIS_omega.
@@ -2871,11 +2869,11 @@ case: (ordinal_limA oi) => li.
   rewrite (cpow_less_pr4 xnz ipy).
   by move: (power_cofinality5 x2 ipy)(cnext_pr1 (proj1 ipy)) => s [_ _]; apply.
 rewrite -yv.
-rewrite {1} (proj2 (aleph_normal) _ li). 
+rewrite {1} (proj2 (aleph_normal) _ li).
 move: (ha) => [ay _]; move: (ay) => [[ca _] _ _].
 have aa:= cleR ca.
 have [c [ic ac cy]]: exists c, [/\  infinite_c c, a <=c c & c <c y].
-  case: (finite_or_infinite ca); last by exists a. 
+  case: (finite_or_infinite ca); last by exists a.
   have io:= CIS_omega.
   move => fa; exists omega0; split => //; first by apply: cle_fin_inf.
   rewrite - aleph0E -yv; apply: aleph_lt_ltc.
@@ -2914,9 +2912,9 @@ case: (equal_or_not c \0c)=> cz.
     have bnz: b <> \0c by  move/cge1P:b1 => [_ /nesym].
     by rewrite(cpowx1 (proj1 fcx)) (cpow_inf fcx) //;apply /clt_omegaP.
   exists (Lg y id); simpl; rewrite yo; split => //.
-  - by aw; rewrite (proj2 (regular_omega)).  
+  - by aw; rewrite (proj2 (regular_omega)).
   - by hnf;aw;move => a ay; rewrite LgV//; apply/clt_omegaP.
-  - aw => i ib; rewrite !LgV//; rewrite (cpow_less_pr5c x2 fcx). 
+  - aw => i ib; rewrite !LgV//; rewrite (cpow_less_pr5c x2 fcx).
     by apply/clt_omegaP; fprops.
   - aw; rewrite /cpow_less Lg_range; congr union.
     set_extens t;move /funI_P => [z zo ->]; apply/funI_P.
@@ -2928,7 +2926,7 @@ case: (ordinal_limA oc) => // lc.
   move: lc => [d od dv]; case: ha; exists (\aleph d).
   have ipy := (CIS_aleph od).
   move: (cnext_pr1 (proj1 ipy)) => [pb pc pd].
-  move: (cnextE od); rewrite -dv yv => <-; split => //. 
+  move: (cnextE od); rewrite -dv yv => <-; split => //.
   by move => b l1 /(cnext_pr4 (proj1 ipy)) pe; rewrite (cleA l1 pe).
 have xnz:= (card_ge2_nz x2).
 have pa: forall a, a <c y -> exists b, [/\ a <c b, b <c y & x ^c a <c x^c b].
@@ -2940,9 +2938,9 @@ have cfy:= (regular_initial_limit1 lc).
 move: (cofinality_pr4 (proj31 lc)); rewrite - cfy yv; move=> [f fa qe].
 move: fa; set cy := \cf y; move => [[[ff sf tf]] cff [_ nf nf1]].
 set X := Lg cy (fun z => \aleph (Vf f z)).
-have fap: forall z, inc z cy -> inc (Vf f z) c. 
+have fap: forall z, inc z cy -> inc (Vf f z) c.
   by move => z zx; rewrite -tf; Wtac.
-have faq: forall z, inc z cy -> ordinalp (Vf f z). 
+have faq: forall z, inc z cy -> ordinalp (Vf f z).
    move=> z zx; exact: (Os_ordinal oc (fap _ zx)).
 have pb: cardinal_fam X.
   by rewrite /X;hnf;aw; move => a ay; rewrite LgV//;apply: CS_aleph; apply: faq.
@@ -2955,23 +2953,23 @@ have pd: cardinal_set (range X).
 have pe: \osup (range X) = y.
   set S := \osup (range X); move: (proj1 icy) => ccy.
   case: (cleT_el ccy (CS_sup pd)) => pr1.
-    apply:cleA => //; apply: card_ub_sup=> // i /(range_gP pb'). 
+    apply:cleA => //; apply: card_ub_sup=> // i /(range_gP pb').
     rewrite /X; aw; move => [z zy ->]; rewrite LgV//; move /(oltP oc): (fap _ zy) => [].
     by rewrite - yv => /aleph_le_lec.
   have [ra rb rc]: limit_ordinal cy.
     apply: infinite_card_limit2.
     by rewrite /cy  - yv cfy; apply: cofinality_infinite_limit.
-  have: infinite_c S. 
+  have: infinite_c S.
      have: inc (\aleph (Vf f \0c)) (range X).
        by apply /(range_gP pb'); rewrite /X; aw; ex_tac; rewrite LgV.
      move /(card_sup_ub pd); apply: cle_inf_inf; apply: CIS_aleph.
      by apply: faq.
   move/ord_index_pr1 => []; set s := ord_index S => os sv.
-  move: pr1; rewrite - /S - sv - yv; move /(aleph_ltc_lt os oc). 
+  move: pr1; rewrite - /S - sv - yv; move /(aleph_ltc_lt os oc).
   move: lc => [_ c0 cl]; move => /(oltP oc) /cl /cff [z zc h].
-  have: inc (\aleph (Vf f z)) (range X). 
+  have: inc (\aleph (Vf f z)) (range X).
      by apply /(range_gP pb'); rewrite /X; aw; ex_tac; rewrite LgV.
-  move/(card_sup_ub pd); rewrite -/S - sv; move /(aleph_lec_le(proj32 h) os). 
+  move/(card_sup_ub pd); rewrite -/S - sv; move /(aleph_lec_le(proj32 h) os).
   by move /oltSleP => /(oleNgt h).
 have pi : card_nz_fam X.
   by rewrite /X; hnf; aw; move => i idx; rewrite LgV//; apply: aleph_nz; apply: faq.
@@ -2982,7 +2980,7 @@ have ph: (forall i, inc i (domain X) -> Vg X i <c y).
 set Y := (Lg (domain X) (fun z => x ^c (Vg X z))).
 have pf: forall i, inc i (domain X) -> Vg Y i <c x ^<c y.
   move => i idx; rewrite /Y LgV//.
-  move: (ph _ idx) => /pa [b [ba /(cpow_less_pr2 x) bb bc]]. 
+  move: (ph _ idx) => /pa [b [ba /(cpow_less_pr2 x) bb bc]].
   exact:(clt_leT bc bb).
 have pg: union (range Y) = x ^<c y.
   have rb: fgraph Y by rewrite /Y;fprops.
@@ -2992,12 +2990,12 @@ have pg: union (range Y) = x ^<c y.
   have rd: cardinalp (union (range Y)) by apply: CS_sup.
   move: (@cpow_less_pr0 x y) => re.
   apply: cleA.
-    apply: card_ub_sup => // i /(range_gP rb). 
+    apply: card_ub_sup => // i /(range_gP rb).
     by move=> [z]; rewrite {1}/ Y; aw => /pf [] h _ ->.
   apply: card_ub_sup => // i /funI_P [z].
   move /(cardinals_ltP (proj1 icy)) => rf ->.
   have [t tr xt]: exists2 t, inc t (range X) & z <=c t.
-     ex_middle bad; case:(cltNge rf). 
+     ex_middle bad; case:(cltNge rf).
      have ccz := proj31_1 rf.
      rewrite -pe; apply : card_ub_sup => //.
      move => j jr; case: (cleT_ee (pd _ jr) (proj31_1 rf)) => //.
@@ -3031,19 +3029,19 @@ apply: cleA; last first.
   have h: sub v (x ^<c y).
      move => t /(range_gP fgY);aw; move => [z /q3 h ->].
      by move :(oclt h) => /(oltP oz).
-  move: (cofinality_pr8 oz h e1).  
+  move: (cofinality_pr8 oz h e1).
   move: (range_smaller fgY); rewrite -/v q1 Lgd.
   rewrite (card_card (CS_cofinality (proj1 (proj1 pa)))) => l1 l2.
   exact: cleT l2 l1.
 move: (cofinality_pr4 oz).
 move => [f [[[ff sf tf] cff] fb] fc].
-have xnz:= (card_ge2_nz pb). 
+have xnz:= (card_ge2_nz pb).
 have ra: forall a, a <c y -> exists b, [/\ a <c b, b <c y & x ^c a <c x^c b].
   move => a ay; ex_middle bad; case: pc; exists a; split => //.
   move => b ab lby; ex_middle ne.
   case: bad; exists b; split => //; split => //; first by dneg eq0; rewrite eq0.
   exact  (cpow_Meqle xnz ab).
-have rb: forall i, inc i (source f) -> 
+have rb: forall i, inc i (source f) ->
    exists t, inc t y /\ cardinal (Vf f i) <=c x ^c t.
   move => i isf.
   have /(oltP oz) la: inc  (Vf f i) (x ^<c y) by rewrite - tf; Wtac.
@@ -3074,7 +3072,7 @@ have: inc (x ^c b) (x ^<c y).
    apply: oclt.
 rewrite - sf in cff; move /cff => [c c1 /ocle1 c2].
 exists (g c); first by apply/funI_P; ex_tac.
-move/gp: c1 => [sd se]. 
+move/gp: c1 => [sd se].
 move: (cleT c2 se); rewrite (card_card (CS_pow x b)) => sg.
 case: (oleT_ee oa (Os_ordinal oy sd)) => //.
 move /ocle1 => /(cpow_Meqle xnz); rewrite cpowcr => l3.
@@ -3092,7 +3090,7 @@ have ia:= (cpow_less_ec_pr0 icy x2).
 have ca := proj1 ia.
 have aux: forall z, infinite_c z -> \cf z <=c z.
   move =>t icz;move: (icz) => [cz _]; move:(cz) => [oz _].
-  apply: ocle3 => //; first by apply: CS_cofinality. 
+  apply: ocle3 => //; first by apply: CS_cofinality.
   by apply: cofinality_pr3.
 have cfys := (aux _ icy).
 case: (p_or_not_p (exists a, cpow_less_ec_prop x y a)).
@@ -3141,7 +3139,7 @@ have q10: csum Y = x ^<c y.
   have pa: infinite_c (union (range Y)) by rewrite q5.
   have pb: cardinal (domain Y) <=c union (range Y).
     rewrite  q5 in pa.
-    have pb := aux _ pa. 
+    have pb := aux _ pa.
     by rewrite q5 /Y; aw; rewrite q1 -hb (card_card (proj31 pb)).
   by rewrite (csum_of_small_b4 fgY q6 pa pb) q5.
 have xx: \1c <=c z -> z <c \cf y -> p = x ^<c y.
@@ -3173,7 +3171,7 @@ have xx: \1c <=c z -> z <c \cf y -> p = x ^<c y.
   move: (infinite_power7d ca (infinite_nz ia)).
   set t := cardinal _; move=> [le2 tnz].
   have snz: csum T <> \0c.
-    have zt: inc \1c (domain T). 
+    have zt: inc \1c (domain T).
       rewrite /T;aw; apply /(cardinals_ltP ca).
       apply: (clt_fin_inf finite_1 ia).
     move: (csum_increasing6 (ct _ zt) zt).
@@ -3205,7 +3203,7 @@ have pa: forall z,  infinite_c z -> (x ^<c y) ^c z <=c
   have le1 := (compare_sum_prod1 fgY pb).
   have le0: csum Y <> \0c by rewrite q10; apply: infinite_nz.
   apply: (cleT  (cpow_Mleeq w le1 le0)).
-  rewrite (cpow_prod _ Y) cpow_sum /Y. 
+  rewrite (cpow_prod _ Y) cpow_sum /Y.
   rewrite /cprodb.
   rewrite !Lgd; set f1 := Lg _ _; set f2 := Lg _ _.
   have ->: f1 = f2  by apply: Lg_exten => t te; rewrite !LgV// - cpow_pow.
@@ -3224,7 +3222,7 @@ split => //.
     move: (csum_of_small_b1 (conj cf0 cf2)).
     by rewrite df (cprod_inf cfys icy (infinite_nz cyi)).
   apply:cleA; first by apply: (cleT pb (cpow_Meqle xnz pc)).
-  rewrite /p (cpow_less_pr6 icy x2); 
+  rewrite /p (cpow_less_pr6 icy x2);
   apply: (cpow_Meqle (infinite_nz ia) p1).
 move => p1.
 have icz: (infinite_c z) by apply: (cle_inf_inf icy p1).
@@ -3238,9 +3236,9 @@ have pb:  x ^c csum f <=c x ^c z.
     exact (cleT (proj1 (q2 _ idx)) p1).
   have df: domain f = \cf y by rewrite /f; aw; ue.
   move: (csum_of_small_b1 (conj cf1 cf2))=> l3; apply:(cleT l3).
-  rewrite  df; exact: (cprod_inf1 (cleT cfys p1) icz). 
+  rewrite  df; exact: (cprod_inf1 (cleT cfys p1) icz).
 apply: (cleA (cleT p2 pb)).
-exact: (cpow_Mleeq z (cpow_less_pr5a (proj32 x2) (infinite_ge2 icy)) xnz). 
+exact: (cpow_Mleeq z (cpow_less_pr5a (proj32 x2) (infinite_ge2 icy)) xnz).
 Qed.
 
 (** inaccessible cardinals *)
@@ -3259,7 +3257,7 @@ have lx: limit_ordinal x.
    apply:aleph_inj => //; [ by move: ln => [] | by ue].
 have oo:= OS_aleph ox.
 have pa: forall i, inc i x -> inc (\aleph (osucc i)) S.
-    move=> i ix; apply: Zo_i. 
+    move=> i ix; apply: Zo_i.
      rewrite xx; apply /(oltP oo); apply: aleph_lt_lto.
      by  apply/(oltP ox); move: lx => [_ _ ]; apply.
    apply: regular_initial_successor; apply: (Os_ordinal ox ix).
@@ -3306,7 +3304,7 @@ have [c [ca cb ccx]]: exists c, [/\ a <=c c, b <=c c & c <c x].
 have h1 : a ^c b <=c c ^c c by apply: cpow_Mlele.
 apply (cle_ltT h1).
 case: (finite_or_infinite (proj31_1 ccx)) => fc.
-   apply: clt_fin_inf => //. 
+   apply: clt_fin_inf => //.
    by apply /NatP; apply NS_pow; apply /NatP.
 by rewrite (infinite_power1_b fc); apply h.
 Qed.
@@ -3328,7 +3326,7 @@ Lemma next_dominant_pr x (y:= next_dominant x): cardinalp x ->
    (forall z,  card_dominant z -> x <c z -> y <=c z)].
 Proof.
 move => cx; rewrite /y /next_dominant; clear y.
-rewrite /the_least_fixedpoint_ge. 
+rewrite /the_least_fixedpoint_ge.
 move: (induction_defined_pr (cpow \2c) x).
 set f := induction_defined _ _; move=> [sf [ff sjf f0 fnz]].
 have cs1: forall n, natp n -> cardinalp (Vf f n).
@@ -3337,7 +3335,7 @@ have cs1: forall n, natp n -> cardinalp (Vf f n).
 have cs: cardinal_set (target f).
   by move => t /sjf; rewrite sf; move=> [u ub ->]; apply: cs1.
 set y:= \osup (target f).
-have ltxy: x <c y. 
+have ltxy: x <c y.
   apply (clt_leT (cantor cx)); apply: (card_sup_ub cs).
   rewrite - f0 - (fnz _ NS0); Wtac; rewrite sf; apply:NS_succ; fprops.
 split => //.
@@ -3396,9 +3394,9 @@ have rd: cardinal_fam (Lg omega0 (Vf f)) by hnf; aw => t tw;rewrite LgV; fprops.
 have bv2: y = csum (Lg omega0 (Vf f)).
   by rewrite csum_of_small_b4 // - bv1 // Lgd  (card_card co).
 rewrite {1} bv2 cpow_sum Lgd - cprod_of_same.
-have cs1: (cardinal_set (target f)).  
+have cs1: (cardinal_set (target f)).
   by move => t /qb2 [u usf ->];apply: rd0; rewrite /natp - qa.
-apply: cprod_increasing; aw; trivial => t tN; rewrite !LgV//. 
+apply: cprod_increasing; aw; trivial => t tN; rewrite !LgV//.
 by rewrite -(qd _ tN); apply: (card_sup_ub cs1); Wtac;rewrite qa; apply:NS_succ.
 Qed.
 
@@ -3413,7 +3411,7 @@ Lemma card_dominant_pr4 (b:=  least_non_trivial_dominant):
     (b ^c omega0 = (\2c ^c b) ^c b) ].
 Proof.
 have co:= CS_omega.
-move: (next_dominant_pr co) (card_dominant_pr3 co). 
+move: (next_dominant_pr co) (card_dominant_pr3 co).
 rewrite (_: (next_dominant omega0) = b ) //.
 move => [pa pb pc] pd; move: (pa) => [pf _].
 have io: infinite_c omega0 by rewrite - aleph0E; apply: CIS_aleph; fprops.
@@ -3421,11 +3419,11 @@ have pe: omega0 ^c b = \2c ^c b.
    apply: infinite_power1_a => //.
    apply: cle_fin_inf;fprops.
    apply: (proj1 pb).
-by rewrite - cpow_pow (csquare_inf pf) pe pd. 
+by rewrite - cpow_pow (csquare_inf pf) pe pd.
 Qed.
 
 
-Lemma dominant_limit a: ordinalp a -> 
+Lemma dominant_limit a: ordinalp a ->
   ~ (card_dominant (\aleph (osucc a))).
 Proof.
 move=> oa [cd1 cd2].
@@ -3438,9 +3436,9 @@ Qed.
 
 Lemma card_dominant_pr5 x: card_dominant x ->
   (\2c ^<c x = x /\ \2c ^c x = gimel_fct x).
-Proof.  
+Proof.
 move => [icx cdx].
-suff pa: \2c ^<c x = x. 
+suff pa: \2c ^<c x = x.
   split; [ by exact | by rewrite (cpow_less_pr6a icx) pa ].
 move: (icx) => [cx _].
 have aux:= (@cpow_less_pr0 \2c x).
@@ -3455,12 +3453,12 @@ Qed.
 
 (* x is y-strong *)
 
-Definition rel_strong_card x y:= 
+Definition rel_strong_card x y:=
    forall t, t <c x -> t ^c y <c x.
 
 Lemma card_dominant_pr7 a (A := \aleph a) B
   (s := \osup (fun_image a (fun z=> \aleph z ^c B))):
-  rel_strong_card A B -> B <> \0c -> ordinalp a -> 
+  rel_strong_card A B -> B <> \0c -> ordinalp a ->
   (s <=c A /\ (limit_ordinal a -> s = A)).
 Proof.
 move => sab bnz oa.
@@ -3468,7 +3466,7 @@ have cA:= (CS_aleph oa).
 move: (CIS_aleph oa); rewrite -/A => iA.
 have pa: s <=c A.
   apply: card_ub_sup => // i /funI_P [z za ->].
-  have lt1: \omega z <c A. 
+  have lt1: \omega z <c A.
      by apply: aleph_lt_ltc; move: za =>  /oltP [].
   exact: (proj1 (sab _ lt1)).
 split => // la.
@@ -3502,7 +3500,7 @@ Lemma the_nondominant_least_pr1 A B (C:= the_nondominant_least A B):
   ~ (rel_strong_card A B) -> cardinalp A ->
   [/\ C <c A, A <=c C ^c B  &
     (forall t, t <c A -> A <=c t ^c B -> C <=c t)].
-Proof.  
+Proof.
 move => h cA.
 rewrite /C/the_nondominant_least.
 apply select_pr; last first.
@@ -3520,7 +3518,7 @@ move: (least_ordinal4 oc cp);set z :=  least_ordinal _ _.
 move=> [_ [p1 p2] p3].
 have iaa: inc z A.
    by move: (oclt p1) => /oltP0 [_ _].
-ex_tac;split => // => t ta le. 
+ex_tac;split => // => t ta le.
 have pt: (p t) by split.
 have ot: ordinalp t by move: pt => [[[[cx _] _] _] _].
 move: (ocle1 (p3 _ ot pt)).
@@ -3529,7 +3527,7 @@ by rewrite (card_card (proj31_1 (proj1 pt))).
 Qed.
 
 
-Lemma the_nondominant_least_pr2 a b  (A := \aleph a) (B:= \aleph b) 
+Lemma the_nondominant_least_pr2 a b  (A := \aleph a) (B:= \aleph b)
    (c := (ord_index (the_nondominant_least A B))):
   ~ (rel_strong_card A B) -> ordinalp a -> ordinalp b ->
    (A <=c \2c ^c B) \/
@@ -3572,7 +3570,7 @@ case: (equal_or_not C \0c) => cnz.
   case: (clt0 (clt_leT ca az)).
 have anz: A <> \0c.
   move=> h; rewrite h in ca; case: (clt0 ca).
-move: (cpow_Mleeq B le1 anz). 
+move: (cpow_Mleeq B le1 anz).
 rewrite - cpow_pow (csquare_inf ib) -/B => le4.
 exact: (cleA le4 (cpow_Mleeq B (proj1 ca) cnz)).
 Qed.
@@ -3580,7 +3578,7 @@ Qed.
 Lemma card_dominant_pr10 a b  (A := \aleph a) (B:= \aleph b) (X := A ^c B)
   (C := (the_nondominant_least A B)):
   ordinalp a -> ordinalp b ->
-  \2c ^c B <c X -> ~ (rel_strong_card A B) -> 
+  \2c ^c B <c X -> ~ (rel_strong_card A B) ->
   [/\ rel_strong_card C B, singular_cardinal C,
     \cf C <=c B, B <c C & X = gimel_fct C].
 Proof.
@@ -3591,7 +3589,7 @@ rewrite -/C; move => [pa pb pc].
 move: (card_dominant_pr9 ib pa pb); rewrite -/A -/B -/C => eq1.
 have na2b: ~(A <=c \2c ^c B).
   move => bad.
-  move: (cpow_Mleeq B bad (aleph_nz oa)). 
+  move: (cpow_Mleeq B bad (aleph_nz oa)).
   by rewrite - cpow_pow (csquare_inf ib) => /(cltNge lt2).
 have cc:=(proj31_1 pa).
 case: (cleT_el cc (proj1 ib)) => lBC.
@@ -3617,12 +3615,12 @@ move: (card_dominant_pr8 oc ob pd); rewrite qb -/B; move => [pe pf].
 rewrite qb in  pd.
 case: (cleT_el (CS_cofinality (proj1 cc)) (proj1 ib)) => h.
   move: (cle_ltT h lBC) => [_ ne].
-  by rewrite  - (pf h) - eq1. 
+  by rewrite  - (pf h) - eq1.
 by move: pb; rewrite (pe h) => /(cltNge pa).
 Qed.
 
 Lemma card_dominant_pr11 A B (X := A ^c B):
-  infinite_c A -> infinite_c B -> 
+  infinite_c A -> infinite_c B ->
   [\/ X = A, X =  \2c ^c B |
   exists C, [/\ infinite_c C, rel_strong_card C B,
     \cf C <=c B , B <c C & X = gimel_fct C]].
@@ -3631,7 +3629,7 @@ move => ia ib.
 move: (ord_index_pr1 ia); set a:= (ord_index A); move => [oa qa].
 move: (ord_index_pr1 ib); set b:= (ord_index B); move => [ob qb].
 case: (equal_or_not (\2c ^c B) (A ^c B)) => eq0; first by constructor 2.
-have pa: \2c ^c B <c A ^c B. 
+have pa: \2c ^c B <c A ^c B.
   split => //; apply: (cpow_Mleeq B (infinite_ge2 ia) card2_nz).
 case: (cleT_el (proj1 ia) (proj1 ib)) => cab.
   constructor 2; exact :(infinite_power1_a (infinite_ge2 ia) cab ib).
@@ -3659,7 +3657,7 @@ Definition cprod_of_small f x:=
 
 Lemma inaccessible_dominant x: inaccessible x -> card_dominant x.
 Proof.
-move => [[pa1 pa2] pb]. 
+move => [[pa1 pa2] pb].
 move: pa2 => [n [on _ _] xv].
 move: (CIS_aleph on); rewrite - xv => icx.
 apply: (card_dominant_pr1 (proj1 icx) (infinite_nz icx) pb).
@@ -3675,7 +3673,7 @@ apply: card_dominant_pr1 => //.
    move => p; rewrite p in cx; case: (clt0 cx).
 move => m mx; rewrite - cprod_of_same; apply: h; hnf; aw; split => //.
   hnf;aw => t te; rewrite LgV; fprops.
-by move => t te; rewrite LgV. 
+by move => t te; rewrite LgV.
 Qed.
 
 Lemma inaccessible_pr4 x: \2c <c x ->
@@ -3686,9 +3684,9 @@ move=> x2 h.
 move: (inaccessible_pr3 x2 h) => [pa pb].
 move: (ord_index_pr1 pa) => [on xv]; rewrite -xv.
 case: (ordinal_limA on) => ln; last by right; exists (ord_index x).
-  left; rewrite ln; apply: aleph0E.  
+  left; rewrite ln; apply: aleph0E.
 move: ln => [m om mv].
-move: (cnext_pr1 (CS_aleph om)). 
+move: (cnext_pr1 (CS_aleph om)).
 rewrite (cnextE om) - mv xv; move => [pc pd pe].
 move: (pb _ _ pd pd); rewrite (infinite_power1_b (CIS_aleph om)).
 rewrite - {1} xv mv => /(aleph_pr10a om) => l2.
@@ -3722,7 +3720,7 @@ move => [[[cx rx] pb] pc] f [pe pf pg].
 set z := domain f in pg.
 set f' := (Lg z (Vg f)).
 have df' : domain f' = z by rewrite /f'; aw.
-have pa: csum_of_small1 x f'.  
+have pa: csum_of_small1 x f'.
   by rewrite /f';split; fprops;hnf; aw => i idf; rewrite LgV//; apply: pf.
 have cff: cardinal_fam f' by move => t /(proj2 pa) /proj31_1.
 set su := csum f'.
@@ -3734,7 +3732,7 @@ case: (equal_or_not su x) => sux1.
     move: (cofinality_c_rw (infinite_ge2 cx)) => [_ _ cfxp].
     by apply: (cfxp _ (proj1 (proj31_1 pg))); exists f'.
   by move: (oclt pg); rewrite rx => qa /(oltNge qa).
-have dx:card_dominant x.  
+have dx:card_dominant x.
   apply: card_dominant_pr1 => //; [ exact: (proj32 sux) | by apply infinite_nz].
 apply: cle_ltT ((proj2 dx) _ _ (conj sux sux1) pg).
 rewrite - cprod_of_same; apply cprod_increasing;rewrite /cst_graph; aw; trivial.
@@ -3748,7 +3746,7 @@ Lemma inaccessible_pr7 x y:  inaccessible x ->
 Proof.
 move => [[[icx cfx] pb] pc] pd pe.
 rewrite (cofinality_card icx) in cfx.
-rewrite - cfx in pe. 
+rewrite - cfx in pe.
 move: (icx) => [cx _].
 rewrite (infinite_power7 icx pe pd) /csumb.
 set f := Lg _ _.
@@ -3761,14 +3759,14 @@ have snz: csum f <> \0c.
   have <-: Vg f \1c = \1c by rewrite/f LgV// cpow1x.
   by move => cc;apply:(csum_increasing6 cc zi1).
 rewrite cprodC; apply: (cprod_inf) => //.
-have dx:card_dominant x.  
+have dx:card_dominant x.
   by apply: card_dominant_pr1 => //; apply infinite_nz.
 rewrite cfx in pe.
 have pf: csum_of_small1 x f.
   rewrite /f;split; fprops; hnf;  aw; move => i idf; rewrite LgV//.
   by move: idf => /(cardinals_ltP cx) => idf;apply (proj2 dx).
 move: (csum_of_small_b2 pf) => le1.
-have df: cardinal (domain f) <=c x. 
+have df: cardinal (domain f) <=c x.
   rewrite Lgd.
   by case: (infinite_power7d cx (infinite_nz icx)).
 by move: (cprod_inf1 df icx);rewrite cprod2cr; apply: cleT.
@@ -3788,8 +3786,8 @@ move: (inaccessible_pr7 h xnz z1) => ->.
 apply: (cleR (proj32_1 z1)).
 Qed.
 
-Lemma inaccessible_dominant1 x: 
-   card_dominant x -> 
+Lemma inaccessible_dominant1 x:
+   card_dominant x ->
    (x = omega0 \/ (exists2 n, limit_ordinal n & x = \aleph n)).
 Proof.
 move => [pa pb].
@@ -3805,7 +3803,7 @@ by move: (cnext_pr3(CS_aleph om));rewrite (cnextE om) -mv pe => /(cltNge le1).
 Qed.
 
 
-Lemma inaccessible_dominant2 x 
+Lemma inaccessible_dominant2 x
   (p1 := forall z, \0c <c z -> z <c x -> x ^c z = x)
   (p2:= forall z, \0c <c z ->  x ^c z = x *c \2c ^c z):
   [/\ (infinite_c x -> p1 -> p2),
@@ -3821,9 +3819,9 @@ have r1:infinite_c x -> p1 -> p2.
   case: (cleT_ee (proj1 icx) (CS_pow \2c z)) => le1.
     have icp:= (cle_inf_inf icx le1).
     case: (finite_or_infinite cz) => icz.
-      have f1: finite_c (\2c ^c z). 
+      have f1: finite_c (\2c ^c z).
         by apply /NatP; apply NS_pow; fprops.
-      case: (finite_not_infinite f1 icp). 
+      case: (finite_not_infinite f1 icp).
     rewrite (infinite_power1 x2 le1 icz).
     by rewrite cprodC cprod_inf.
   have pnz: \2c ^c z <> \0c by apply: cpow2_nz.
@@ -3839,12 +3837,12 @@ have r3:  card_dominant x -> p1 -> x = omega0 \/ inaccessible x.
   move => pa pc; case: (inaccessible_dominant1 pa); first by left.
   move => h; right.
   move: pa => [pa pb].
-  split; last first. 
+  split; last first.
     by move => t tx; apply: pb => //; apply: (clt_fin_inf finite_2 pa).
   split; last by exact.
   have h1:= (cofinality_c_small (proj1 pa)).
   split => //; ex_middle eq1.
-  have pd: \0c <c cofinality_c x. 
+  have pd: \0c <c cofinality_c x.
     apply: (clt_fin_inf  finite_0 (cofinality_infinite pa)).
   move: (power_cofinality (infinite_ge2 pa)).
   by rewrite (pc _ pd (conj h1 eq1)); move => [_].
@@ -3874,7 +3872,7 @@ by case: (pc (conj ix h3) h4) => // eq; move: h2; rewrite eq.
 Qed.
 
 
-Lemma cofinality_sum1 a: ordinalp a -> 
+Lemma cofinality_sum1 a: ordinalp a ->
    \cf (\aleph(a +o omega0)) = omega0.
 Proof.
 move => oa.
@@ -3883,7 +3881,7 @@ rewrite (cofinality_sum oa olt_0omega).
 exact (proj2 regular_omega).
 Qed.
 
-Lemma cofinality_sum2 a: ordinalp a ->  
+Lemma cofinality_sum2 a: ordinalp a ->
    singular_cardinal (\aleph(a +o omega0)).
 Proof.
 move => oa; move: (OS_sum2 oa OS_omega) => os.
@@ -3893,7 +3891,7 @@ symmetry in h; move: (aleph_inj os OS0 h) => /(osum2_zero oa OS_omega) [_].
 by move: omega_nz.
 Qed.
 
-Lemma singular_non_collectivizing: 
+Lemma singular_non_collectivizing:
   not (exists E, forall x, singular_cardinal x -> inc x E).
 Proof.
 move=> [E ep].
@@ -3917,8 +3915,8 @@ Proof.
 move => ob h.
 have oo:= OS_omega.
 case: (oleT_el oo ob) => // lob.
-pose p x := b <o x +o b. 
-have pb: p b. 
+pose p x := b <o x +o b.
+have pb: p b.
   have pa: \0o <o omega0 by apply ordinal_finite3; fprops;apply emptyset_finite.
   move: (osum_Meqlt (olt_leT pa lob) ob); rewrite osum0r //.
 move: (least_ordinal4 ob pb); set a :=  least_ordinal p b.
@@ -3929,10 +3927,10 @@ have a0: \0o <o a.
 have paa : a <o a +o a by move: (osum_Meqlt a0 oa); rewrite osum0r.
 case: (ordinal_limA oa) => nz; first by case: (proj2 a0).
   move: nz => [m om mv].
-  have pm: p m. 
+  have pm: p m.
     move: OS1 pa; rewrite /p mv => o1.
     rewrite - osucc_pr // - osumA // osum_1inf //.
-  by move: (al _ om pm); rewrite mv; move/(oltNge (oltS om)). 
+  by move: (al _ om pm); rewrite mv; move/(oltNge (oltS om)).
 set k := \aleph (a +o a).
 have oaa:=(OS_sum2 oa oa).
 have sk: singular_cardinal k.
@@ -3942,7 +3940,7 @@ have sk: singular_cardinal k.
   rewrite /k (regular_initial_limit1 laa) (cofinality_sum oa a0).
   move=> bad; move: (cofinality_pr3 oa); rewrite bad.
   move: (aleph_pr6 oaa) => le1 le2.
-  case: (oltNge paa (oleT le1 le2)). 
+  case: (oltNge paa (oleT le1 le2)).
 set s1 := \aleph (a +o b).
 have pc : forall c, c<o a -> \2c ^c (\aleph (a +o c)) = s1.
   move => c ca.
@@ -3958,7 +3956,7 @@ have pd: forall c, a<=o c -> c<o a +o a ->  \2c ^c (\aleph c) = s1.
   rewrite qb in caa; move: (osum_Meqltr qa oa oa caa) => da.
   by move: (pc _ da); rewrite -qb.
 have px:  (cpow_less_ecb k).
-   exists (\aleph a); first by apply: (aleph_lt_ltc paa).  
+   exists (\aleph a); first by apply: (aleph_lt_ltc paa).
    move=> c c1 c2.
    move: (cle_inf_inf (CIS_aleph oa) c1) => ic.
    move: (ord_index_pr1 ic) => [om mv].
@@ -3969,7 +3967,7 @@ have px:  (cpow_less_ecb k).
   by rewrite -mv  (pd _ p1 p2).
 move: (cpow_less_pr10 sk px); rewrite (h _ oaa).
 set s2 := \aleph ((a +o a) +o b) => eq1.
-have c12: s1 <c s2. 
+have c12: s1 <c s2.
   apply: aleph_lt_ltc; rewrite - osumA //; apply: osum_Meqlt => //.
 suff: \2c ^<c k <=c s1 by rewrite - eq1 => /(cltNge c12).
 apply:card_ub_sup; first exact: (proj31_1 c12).
@@ -4038,10 +4036,10 @@ have fl:  forall i, inc i (domain f) -> Vg f i <=c x.
   have ci:= proj31_1 lt.
   case: (Nat_dichot cy) => yN.
     case: (Nat_dichot ci) => iN.
-      by apply: (cle_fin_inf _ ic); apply /NatP;apply: NS_pow. 
+      by apply: (cle_fin_inf _ ic); apply /NatP;apply: NS_pow.
     exact: (cleT (cpow_inf1 iN yN) (proj1 lt)).
   have ra: forall t, infinite_c t -> t <c x -> \2c ^c t <=c x.
-    move=> t it tx. 
+    move=> t it tx.
     by rewrite - (gch it); move: (cnext_pr1 (proj1 it))=> [ _ _]; apply.
   have ray:  \2c ^c y <=c x.
     by apply: ra => //; apply: (clt_leT ycx); apply: cofinality_small.
@@ -4075,14 +4073,14 @@ apply: pa => //;apply (cleR (proj31 h)).
 Qed.
 
 Lemma infinite_power10_b x y:
-  infinite_c x -> y <c  (\cf x) -> y <> \0c -> 
+  infinite_c x -> y <c  (\cf x) -> y <> \0c ->
   x ^c y = x.
 Proof.
 move=> icx yc ynz.
 by move:  (infinite_power10 y icx) => [_ pb _ _]; apply: pb.
 Qed.
 
-Lemma cpow_less_pr11a x y: 
+Lemma cpow_less_pr11a x y:
   infinite_c y -> \2c <=c x -> finite_c x ->
   x ^<c y = y.
 Proof.
@@ -4109,7 +4107,7 @@ Lemma cpow_less_pr11b x: infinite_c x -> \2c ^<c  x = x.
 Proof. move => icx; apply: cpow_less_pr11a;fprops. Qed.
 
 
-Lemma cpow_less_pr12 x: regular_cardinal x -> 
+Lemma cpow_less_pr12 x: regular_cardinal x ->
   x ^<c  x = x.
 Proof.
 move => /regular_cardinalP [ix cx]; move: (ix) => [cax _].
@@ -4120,7 +4118,7 @@ apply: (card_ub_sup cax) => i.
 move /funI_P => [z] /(cardinals_ltP cax)  zx ->.
 case: (equal_or_not z \0c) => zz.
   by rewrite zz cpowx0; move: x1 => [].
-rewrite (infinite_power10_b); fprops; ue. 
+rewrite (infinite_power10_b); fprops; ue.
 Qed.
 
 Lemma inaccessible_weak_strong x:
@@ -4129,7 +4127,7 @@ Proof.
 move => h; split => // t th.
 move: h => [[pa pb] [n [on _ ln xv]]].
 case: (finite_or_infinite (proj31_1 th)) => it.
-  apply:(clt_fin_inf) => //. 
+  apply:(clt_fin_inf) => //.
   apply /NatP; apply: NS_pow; apply /NatP;fprops.
 move: th; rewrite - (gch it).
 move: (ord_index_pr1  it) => [om <-]; rewrite (cnextE om) xv => le1.
@@ -4156,9 +4154,9 @@ have aux: p -> x = x ^<c x.
   have i1:=(CIS_aleph on).
   by rewrite xv - (cnextE on) (gch i1) - cpow_pow (csquare_inf).
 split.
-   case =>//; first by move ->; symmetry; apply: cpow_less_pr5f. 
+   case =>//; first by move ->; symmetry; apply: cpow_less_pr5f.
    by apply: inaccessible_pr8.
-move => h. 
+move => h.
 case: (finite_or_infinite cx) => fx.
   have xN: natp x by apply /NatP.
   move: (cpred_pr xN xnz)=>  [ub uv].
@@ -4172,7 +4170,7 @@ move: (ord_index_pr1 fx) => [om xv]; symmetry in xv.
 case: (ordinal_limA om) => ln.
     by constructor 1; rewrite - aleph0E - ln.
   move: ln => [n on nv]; constructor 2; exists n => //.
-   by rewrite -nv. 
+   by rewrite -nv.
 constructor 3;apply: inaccessible_weak_strong.
 split; last by exists (ord_index x).
 split => //; ex_middle cs.
@@ -4181,10 +4179,10 @@ move: (cpow_less_pr2 x (conj cs1 cs)); rewrite -h => lt1.
 case: (cleNgt lt1(power_cofinality (proj1 x2))).
 Qed.
 
-Lemma infinite_power7h_rev x: \0c <c x ->  
+Lemma infinite_power7h_rev x: \0c <c x ->
   (forall y, \0c <c y ->
   x ^c y =  (csumb (cardinals_lt x) (fun z => z ^c y)) *c x)
-  -> regular_cardinal x. 
+  -> regular_cardinal x.
 Proof.
 move => xp h.
 move: (xp) => [_ /nesym xnz].
@@ -4194,7 +4192,7 @@ case: (equal_or_not x \1c) => x1.
   have ->: (cardinals_lt \1c) = singleton \0c.
      apply : set1_pr; first  by apply /(cardinals_ltP CS1).
      by move => t /(cardinals_ltP CS1) /clt1.
-  rewrite csum_trivial3 (cpow0x card2_nz) (card_card CS0) cprod0l. 
+  rewrite csum_trivial3 (cpow0x card2_nz) (card_card CS0) cprod0l.
   by move => /card1_nz.
 case: (equal_or_not x \2c) => x2.
   move: (h _ (clt_02)); rewrite x2; rewrite x2 in xp.
@@ -4203,7 +4201,7 @@ case: (equal_or_not x \2c) => x2.
         move => aux; apply /set2_P; apply: clt2.
         by apply /(cardinals_ltP CS2).
      case /set2_P => ->; apply /(cardinals_ltP CS2);
-        [apply: clt_02 | apply: clt_12].  
+        [apply: clt_02 | apply: clt_12].
   rewrite csum2_pr0 cpowx2 cprod_22 cpow1x (cpow0x card2_nz) (csum0l CS1).
   rewrite  (cprod1l CS2) => eq3.
     by case: (proj2 (clt_leT (cltS NS2) (proj1 (cltS NS3)))).
@@ -4220,7 +4218,7 @@ case: (Nat_dichot cx) => fx.
 have H:= (cofinality_card fx).
 split => //.
 move: (cofinality_infinite fx); rewrite H => coi.
-move: (h _ (clt_fin_inf finite_0 coi)). 
+move: (h _ (clt_fin_inf finite_0 coi)).
 rewrite /csumb; set f :=  Lg _ _.
 rewrite (infinite_power10_a fx) => pa.
 ex_middle cnx.
@@ -4252,11 +4250,11 @@ by move: (cnext_pr1 cx) => [_ aa _ ]=> /(cltNge aa).
 Qed.
 
 
-Lemma infinite_increasing_power5gch X 
+Lemma infinite_increasing_power5gch X
   (Y:= Lg (domain X) (fun z => \aleph (Vg X z)))
   (a := \osup (range X)):
-  ofg_Mlt_lto X -> limit_ordinal (domain X) -> 
-  ((cprod Y) = \aleph a ^c (cardinal (domain X)) /\ 
+  ofg_Mlt_lto X -> limit_ordinal (domain X) ->
+  ((cprod Y) = \aleph a ^c (cardinal (domain X)) /\
    (cprod Y) = \aleph (osucc a)).
 Proof.
 move => pa pb.
@@ -4269,7 +4267,7 @@ move: (cnext_pr1 (proj1 ia)) => [_].
 set A := \omega a; set B := A ^c cardinal (domain X).
 move=> _ qa [qb qc qd].
 have qe:= (qa _ qb).
-have bv := (cleA qc (cleT qd qe)).  
+have bv := (cleA qc (cleT qd qe)).
 by split => //; apply:cleA => //; rewrite bv.
 Qed.
 
@@ -4288,16 +4286,16 @@ have sp1' := proj1 sp1.
 split.
     move => pa; move: (cpow_less_pr5a cx (infinite_ge2 icy)) => le1.
     apply: cleA; last by exact.
-    apply: (card_ub_sup cx)  => i /funI_P [t ta ->]; move: ta. 
-    move/ (cardinals_ltP cy) => ty. 
+    apply: (card_ub_sup cx)  => i /funI_P [t ta ->]; move: ta.
+    move/ (cardinals_ltP cy) => ty.
     move: (clt_leT ty pa) => lt2.
     case: (equal_or_not t \0c) => tnz.
       rewrite tnz cpowx0; apply: (cle_fin_inf finite_1 icx).
     rewrite (infinite_power10_b icx  lt2 tnz); fprops.
   move => p1 p2;  apply: cleA; last first.
     by move: (cpow_less_pr2 x p1); rewrite (infinite_power10_a icx).
-  apply: (card_ub_sup (proj32 p2)) => i /funI_P [t ta ->]; move: ta. 
-  move /(cardinals_ltP cy) => ty. 
+  apply: (card_ub_sup (proj32 p2)) => i /funI_P [t ta ->]; move: ta.
+  move /(cardinals_ltP cy) => ty.
   move: (infinite_power10 t icx) => [pa pb pc pd].
   case: (equal_or_not t \0c) => tz.
     rewrite (pa tz); apply: cleT p2.
@@ -4308,8 +4306,8 @@ split.
 move => qa.
 apply: cleA.
   apply: (card_ub_sup cy).
-  move => i /funI_P [t ta ->]; move: ta. 
-  move /(cardinals_ltP cy) => ty. 
+  move => i /funI_P [t ta ->]; move: ta.
+  move /(cardinals_ltP cy) => ty.
   move: (infinite_power10 t icx) => [pa pb pc pd].
   case: (equal_or_not t \0c) => tz.
     by rewrite (pa tz); apply: (cle_fin_inf finite_1 icy).
@@ -4326,20 +4324,20 @@ move: (qa); rewrite - {1} qe -qc (cnextE qd) => qa1.
 move: (aleph_ltc_lt (OS_succ qd) qb qa1) => qa2.
 case: (ordinal_limA qb) => ln.
     rewrite ln in qa2;case: (olt0 qa2).
-   move:ln => [e oe se]. 
+   move:ln => [e oe se].
    move: (cnextE oe); rewrite - se => <-.
    move: (CIS_aleph oe) => icz.
    rewrite (cpow_less_pr4 (clt_fin_inf finite_0 icx) icz).
    move: (infinite_power10 ( \omega e) icx) => [ra rb rc rd].
    have xe: x <c \omega e.
      by rewrite -qe; apply: aleph_lt_ltc; apply /oltSSP; ue.
-   by rewrite (rd xe); apply: cleR; rewrite (cnextE oe) - se qc. 
+   by rewrite (rd xe); apply: cleR; rewrite (cnextE oe) - se qc.
 rewrite {1} (proj2 (aleph_normal) _ ln).
 apply: card_ub_sup; first by apply: CS_cpow_less.
 move => i /funI_P [w wi ->].
 have wc: w <o c by apply /oltP.
 move: (aleph_lt_ltc wc) => le1.
-apply: cleT (cpow_less_pr2 x le1). 
+apply: cleT (cpow_less_pr2 x le1).
 apply: (cleT (proj1 (cantor (proj31_1 le1)))).
 apply: (cpow_Mleeq (\omega w) (infinite_ge2 icx) card2_nz).
 Qed.
@@ -4348,13 +4346,13 @@ End GenContHypothesis_Props.
 
 Definition beth x :=
   let p := fun z => \2c ^c z in
-  let osup := fun y f => \osup (fun_image y (fun z => (p (f z)))) in 
+  let osup := fun y f => \osup (fun_image y (fun z => (p (f z)))) in
   let osupp:= fun f =>  Yo (domain f = \0o) omega0 (osup (domain f) (Vg f)) in
   let  f:= transdef_ord osupp in
   f x.
 
 Lemma beth_prop:
-  [/\ normal_ofs beth, beth \0o = omega0 & 
+  [/\ normal_ofs beth, beth \0o = omega0 &
    (forall x,  ordinalp x -> beth (osucc x) = \2c ^c (beth x)) ].
 Proof.
 apply: normal_ofs_existence.
@@ -4379,13 +4377,13 @@ Lemma beth_normal: normal_ofs beth.
 Proof. by  move: (beth_prop) => [pa _ _ ]. Qed.
 
 Lemma CS_beth x: ordinalp x -> cardinalp (beth x).
-Proof. 
+Proof.
 move: (beth_prop) => [pa pb pc] ox.
 case: (least_ordinal6 (fun z => cardinalp (beth z)) ox) => //.
 set y := least_ordinal _ _;move=> [pd pe]; case.
 case: (ordinal_limA pd).
 - move ->; rewrite pb; apply: CS_omega.
-- move => [z oz za]; rewrite za pc; fprops. 
+- move => [z oz za]; rewrite za pc; fprops.
 - by move /(proj2 pa) => ->; apply: CS_sup => t /funI_P [z zy ->]; apply: pe.
 Qed.
 
@@ -4413,7 +4411,7 @@ case:(least_ordinal6 (fun z => beth z = \aleph z) ox) => //.
 set y := least_ordinal _ _; move =>[pa pb];case.
 case: (ordinal_limA pa).
 - by move => ->; rewrite aleph0E beth0.
-- move=> [u ou u1]. 
+- move=> [u ou u1].
   rewrite u1 (beth_succ ou) - (cnextE ou) (h _ (CIS_aleph ou)).
   rewrite pb // u1; fprops.
 move=> lt.
@@ -4421,7 +4419,7 @@ rewrite (proj2 beth_normal _ lt)  (proj2 aleph_normal _ lt).
 by apply: ord_sup_2funI => s st; apply: pb.
 Qed.
 
-Lemma beth_fixed_point x: 
+Lemma beth_fixed_point x:
    ordinalp x -> beth x = x -> card_dominant x.
 Proof.
 move => ox bfx.
@@ -4454,20 +4452,20 @@ Lemma cofinality_least_fp_beth x y:
 Proof. apply: (cofinality_least_fp_normal beth_normal). Qed.
 
 
-Lemma aleph_and_beth a: ordinalp a -> 
+Lemma aleph_and_beth a: ordinalp a ->
    exists b, [/\ ordinalp b, beth b <=c \aleph a & \aleph a <c beth (osucc b)].
 Proof.
 move => oa; case: (normal_ofs_bounded (OS_aleph oa) (beth_normal)).
   by rewrite beth0 => /(oleNgt (aleph_pr5 oa)).
-move => [y [oy ha hb]]. 
+move => [y [oy ha hb]].
 have hc:=(CS_aleph oa).
 have hd:= (ocle3 (proj1 (beth_pr1 oy)) hc ha).
 have he:= (oclt3 hc (proj1 (beth_pr1 (OS_succ oy))) hb).
-by exists y. 
+by exists y.
 Qed.
 
 
-Lemma beth_limit a: limit_ordinal a -> 
+Lemma beth_limit a: limit_ordinal a ->
    exists2 b, limit_ordinal b & beth a = \aleph b.
 Proof.
 move => la.
@@ -4484,7 +4482,7 @@ case: (ordinal_limA ob) =>lb.
      by case: (proj2 la); rewrite lb.
    by case : (cltNge la (proj1(beth_M lb))).
   case: (cltNge (beth_M (al _ (al _ lb)))).
-  move: (cleT (aleph_pr12f oc) (cpow_M2le (proj1 hb))). 
+  move: (cleT (aleph_pr12f oc) (cpow_M2le (proj1 hb))).
   by rewrite ea - (beth_succ (OS_succ od)).
 - by exists b.
 Qed.
@@ -4495,17 +4493,17 @@ Lemma beth_inaccessible a k : inaccessible k ->
   a <o k -> beth a <c k.
 Proof.
 move => [ina inb] sb.
-have oa:= (proj31_1 sb).  
+have oa:= (proj31_1 sb).
 move: sb.
 case: (least_ordinal6 (fun a => a <o k -> beth a <c k) oa) => //.
 set y:= least_ordinal _ _; move => [oy pb]; case => lyk.
 case: (ordinal_limA oy).
 - by move ->; rewrite beth0; move: (inaccessible_uncountable ina).
-- move => [x ox yv]. 
+- move => [x ox yv].
   have xy: inc x y by rewrite yv; fprops.
   have lxk: x <o k by apply:olt_ltT lyk; move /(oltP oy): xy.
   rewrite yv (beth_succ ox); exact: (inb _ (pb _ xy lxk)).
-- move => ly; rewrite (proj2 beth_normal _ ly). 
+- move => ly; rewrite (proj2 beth_normal _ ly).
   have ck:=  (proj1 (proj1(proj1 ina))).
   move/(ocle2P ck (proj31_1 lyk)): (lyk) => cyk.
   have ha:=(cle_ltT (fun_image_smaller y beth) cyk).
@@ -4524,9 +4522,9 @@ have infk:= (proj1 (proj1 (proj1 ik))).
 have ck := (proj1 infk); have ok := (proj1 ck).
 apply: cleA.
   rewrite (sb _ (infinite_card_limit2 infk)); apply:card_ub_sup => //.
-  move => i /funI_P [z /(oltP ok) zk ->]. 
+  move => i /funI_P [z /(oltP ok) zk ->].
   exact: (proj1(beth_inaccessible ik zk)).
-move:(ocle1 (osi_gex sa ok)). 
+move:(ocle1 (osi_gex sa ok)).
 by rewrite (card_card ck) (card_card (CS_beth ok)).
 Qed.
 
@@ -4549,7 +4547,7 @@ move: (aleph_and_beth oc) => [b [ob lt1 lt2]].
 move/limit_ordinal_P:la => [anz sa].
 have lt3: b <o a.
   have la4:= (cle_ltT lt1 lt0).
-  case: (oleT_ell oa ob) => //. 
+  case: (oleT_ell oa ob) => //.
     by move => ba; move: (proj2 la4); rewrite ba.
   move/beth_M => /cltNge; case; exact (proj1 la4).
 move: (cpow_M2le (proj1 lt2)); rewrite - (beth_succ (OS_succ ob)) => sb.
@@ -4580,10 +4578,10 @@ Qed.
 Lemma beth_pow0 m:  m <c beth \0c -> m <> \0c ->
   (beth \0c) ^c m = beth \0c.
 Proof.
-rewrite beth0; move => /clt_omegaP mN mz. 
+rewrite beth0; move => /clt_omegaP mN mz.
 exact:(cpow_inf CIS_omega mN mz).
 Qed.
-   
+
 Lemma beth_pow1 m: beth \0c <=c m ->
   (beth \0c) ^c m = \2c ^c m.
 Proof.
@@ -4613,14 +4611,14 @@ Qed.
 Lemma beth_pow4c m a: limit_ordinal a -> (beth a) <=c m  ->
   (beth a) ^c m = \2c ^c m.
 Proof.
-move => sa sb. 
+move => sa sb.
 have ib := (beth_pr1 (proj31 sa)).
 exact: (infinite_power1_a (infinite_ge2 ib) sb (cle_inf_inf ib sb)).
 Qed.
 
 (*
 
-Lemma beth_pow4b m a: limit_ordinal a -> 
+Lemma beth_pow4b m a: limit_ordinal a ->
    \cf a <=c m -> m <=c (beth a)  ->
   (beth a) ^c m = \2c ^c (beth a) /\  (beth a) ^c m = m ^c (beth a).
 Proof.
@@ -4645,9 +4643,9 @@ Lemma beth_pow4 m a: limit_ordinal a -> m <c \cf (beth a) -> m <> \0c ->
 Proof.
 move => oa lmb mnz.
 move:beth_normal => [sa sb].
-have bav:=(sb a oa). 
+have bav:=(sb a oa).
 move:(beth_limit oa) => [b ob bbv].
-have cf1: \cf (beth a) = \cf b 
+have cf1: \cf (beth a) = \cf b
    by move:(regular_initial_limit1 ob); rewrite - bbv.
 admit. (* conjecture *)
 Abort.
@@ -4659,7 +4657,7 @@ exact:(osi_gex (proj1 beth_normal) (proj1 cx)).
 Qed.
 
 
-Lemma beth_pow5a (x:= beth aleph0): 
+Lemma beth_pow5a (x:= beth aleph0):
   x ^c aleph0 = \2c ^c x /\  x ^c aleph0 = aleph0 ^c x.
 Proof.
 apply: beth_pow4b.
@@ -4674,7 +4672,7 @@ Proof.
 apply: beth_pow4.
 - apply: aleph_limit; apply OS1.
 - have ->: \cf beth aleph1 =  \cf aleph1.
-    admit.  (* conjecture *) 
+    admit.  (* conjecture *)
   move:regular_cardinal_aleph1 => [s1 s2].
   rewrite -(cofinality_card  s1) s2 /aleph0 - aleph0E.
   exact: (aleph_lt_ltc olt_01).
@@ -4682,7 +4680,7 @@ apply: beth_pow4.
 Qed.
 
 
-Lemma beth_pow5c (x:= beth aleph1): 
+Lemma beth_pow5c (x:= beth aleph1):
   x ^c aleph1 = \2c ^c x /\  x ^c aleph1 = aleph1 ^c x.
 Proof.
 apply: beth_pow4b.
@@ -4692,14 +4690,14 @@ apply: beth_pow4b.
 - apply:beth_monotone2; apply:(CS_aleph OS1).
 Qed.
 
-*) 
+*)
 
 Definition SingCardHypothesis:=
   forall x, infinite_c x ->  \2c ^c (\cf x) <c x ->
        x ^c (\cf x) = cnext x.
- 
+
 Lemma sch_gch: GenContHypothesis -> SingCardHypothesis.
-Proof.  
+Proof.
 move => gch x ix pa.
 have pb:= (cofinality_small ix).
 move: (infinite_power10 gch (\cf x) ix); move => [_ _ pc _].
@@ -4720,7 +4718,7 @@ Lemma SCH_prop2 x (p:= cpow_less_ecb x):
 Proof.
 move => sc sch; split; first by apply: cpow_less_pr10.
 move => pf.
-have aux: forall a, a <c x -> 
+have aux: forall a, a <c x ->
   exists b, [/\ a <=c b, b <c x & \2c ^c a <c \2c ^c b].
   move => a ax; ex_middle ba1.
   case: pf; exists a => //; move => b b1 b2.
@@ -4752,7 +4750,7 @@ have x2:= (infinite_ge2 icx).
 split => pa.
   apply: infinite_power1 => //.
   case: (finite_or_infinite cy) => // fy.
-  have f2: finite_c (\2c ^c y). 
+  have f2: finite_c (\2c ^c y).
     by apply /NatP; apply: NS_pow; fprops; apply /NatP.
   case: (finite_not_infinite (cle_fin_fin f2 pa) icx).
 have coi:=(cofinality_infinite_cardinal icx).
@@ -4778,7 +4776,7 @@ case: (ordinal_limA od) => ln.
     by move: icy yx => / infinite_c_P2; rewrite ln aleph0E => h1 /(cleNgt h1).
   move: ln => [e oe es].
   move: (CS_aleph oe) => ie.
-  have l1: \2c ^c y <=c \omega e.  
+  have l1: \2c ^c y <=c \omega e.
     by apply: cnext_pr4 => //; rewrite (cnextE oe) - es.
   have l2: (\aleph e) ^c y <=c \aleph d.
      case: (equal_or_not (\2c ^c y) (\aleph e)) => eq1.
@@ -4799,7 +4797,7 @@ case: (ordinal_limA od) => ln.
   by rewrite /p1 es h -es; split => // /(cltNge yx).
 have aux: forall z, z <c (\omega d) -> z ^c y <c (\omega d).
    move => z z1.
-   case: (finite_or_infinite (proj31_1 z1)) => fz.   
+   case: (finite_or_infinite (proj31_1 z1)) => fz.
       case: (equal_or_not z \0c) => znz.
          by rewrite znz (cpow0x (infinite_nz icy)) - znz.
       case: (equal_or_not z \1c) => zno.
